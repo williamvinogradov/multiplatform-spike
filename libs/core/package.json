@@ -1,0 +1,22 @@
+{
+  "name": "@dx/core",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "typings": "src/index.d.ts",
+  "scripts": {
+    "build:artifact": "tsc --project tsconfig.build.json",
+    "build:playground:angular": "tsc --project tsconfig.playground.angular.json",
+    "build:playground:angular:watch": "tsc --project tsconfig.playground.angular.json --watch",
+    "build:playground:react": "tsc --project tsconfig.playground.react.json",
+    "build:playground:react:watch": "tsc --project tsconfig.playground.react.json --watch"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^4.7.4"
+  },
+  "peerDependencies": {
+    "rxjs": "^7.5.6"
+  }
+}

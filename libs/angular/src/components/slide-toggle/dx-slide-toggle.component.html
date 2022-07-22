@@ -1,0 +1,12 @@
+<div *ngIf="viewModel$ | async as viewModel"
+     class="dx-slide-toggle"
+     [class.-left]="viewModel.textPosition === 'left'"
+     [class.-right]="viewModel.textPosition === 'right'"
+     (click)="updateValue(!viewModel.value)">
+  <dx-slide-toggle-indicator class="dx-slide-toggle__indicator"
+                             [class.-left]="viewModel.textPosition === 'right'"
+                             [class.-right]="viewModel.textPosition === 'left'"
+                             [value]="viewModel.value">
+  </dx-slide-toggle-indicator>
+  <dx-slide-toggle-text [text]="viewModel.text"></dx-slide-toggle-text>
+</div>

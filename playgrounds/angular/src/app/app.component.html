@@ -1,0 +1,15 @@
+<div style="margin-bottom: 20px;">
+  <dx-slide-toggle [value]="!!(value$ | async)"
+                   [text]="'hello'"
+                   [textPosition]="'right'"
+                   (valueChanged)="onValueChanged($event)">
+  </dx-slide-toggle>
+</div>
+
+<button (click)="toggleValueOutside()">
+  Toggle
+</button>
+
+<div>
+  value: {{ value$ | async }}
+</div>
