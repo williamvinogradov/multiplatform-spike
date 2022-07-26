@@ -13,7 +13,6 @@ export class AppComponent {
   value$ = this.valueSubject.asObservable();
 
   onValueChanged(value: boolean): void {
-    console.log('on value changed: ', value);
     this.valueSubject.next(value);
   }
 

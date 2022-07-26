@@ -1,5 +1,5 @@
 {
-  "name": "@dx/react",
+  "name": "dx-react",
   "version": "1.0.0",
   "description": "",
   "main": "src/public_api.js",

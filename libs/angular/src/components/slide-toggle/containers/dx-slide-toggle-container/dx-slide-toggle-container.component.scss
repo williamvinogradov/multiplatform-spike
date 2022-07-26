@@ -1,0 +1,7 @@
+@import '../../styles/slideToggleV2';
+
+:host {
+  display: block;
+}
+
+@include dx-slide-toggle;

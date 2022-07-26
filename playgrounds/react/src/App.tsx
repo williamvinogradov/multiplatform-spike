@@ -1,18 +1,21 @@
-import React, {useMemo, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import './App.css';
-import { DxSlideToggle } from '@dx/react';
+import { DxSlideToggle } from 'dx-react';
 
 
 function App() {
   const [state, setState] = useState(true);
 
-  const handleClick = () => setState(!state);
+  const handleClick = useCallback(() => setState(!state), [state]);
 
   return (
     <React.Fragment>
       <DxSlideToggle  value={state}
                       text={'Hello!'}
-                      valueChanged={(value) => setState(value)}/>
+                      valueChanged={(value: boolean) => {
+                        console.log('on value changed: ', value);
+                        setState(value);
+                      }}/>
       <button onClick={handleClick}>
         Toggle
       </button>

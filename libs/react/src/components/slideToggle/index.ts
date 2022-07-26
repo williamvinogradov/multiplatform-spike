@@ -1,1 +1,1 @@
-export * from './slideToggle';
+export * from './dxSlideToggle';

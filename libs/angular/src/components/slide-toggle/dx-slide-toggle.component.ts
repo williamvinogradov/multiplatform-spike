@@ -1,15 +1,16 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output} from '@angular/core';
-import {DxAngularContainer, TAngularComponentConfig, TAngularInputs, TAngularOutputs} from "../../core";
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {
-  SlideToggleLogicFacade,
+  DEFAULT_SLIDE_TOGGLE_INPUTS,
   ISlideToggleInputs,
   ISlideToggleOutputs,
-  ESlideToggleActions,
   ISlideToggleState,
-  ISlideToggleViewModel,
-  SlideToggleActionUpdateValue,
-  SlideToggleActionUpdateStateFromInputs
-} from 'dx-core';
+  SlideToggleActionUpdateStateFromInputs,
+  SlideToggleContractManager,
+  SlideToggleStore
+} from "dx-core";
+
+type TAngularInputs<TInputs> = Partial<TInputs>;
+type TAngularOutputs<TOutputs> = Record<keyof TOutputs, EventEmitter<TOutputs[keyof TOutputs]>>
 
 @Component({
   selector: 'dx-slide-toggle',
@@ -18,46 +19,47 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
-      provide: SlideToggleLogicFacade,
-      useClass: SlideToggleLogicFacade,
-    }
-  ]
+      provide: SlideToggleStore,
+      useClass: SlideToggleStore,
+    },
+    {
+      provide: SlideToggleContractManager,
+      useFactory: (store: SlideToggleStore) => new SlideToggleContractManager(store),
+      deps: [SlideToggleStore],
+    }],
 })
 export class DxSlideToggleComponent
-  extends DxAngularContainer<ISlideToggleOutputs, ESlideToggleActions, ISlideToggleState, ISlideToggleViewModel>
   implements
     TAngularInputs<ISlideToggleInputs>,
     TAngularOutputs<ISlideToggleOutputs>,
-    OnChanges {
-  @Input() value = false;
-  @Input() text = '';
-  @Input() textPosition: 'left' | 'right' = 'right';
+    OnInit {
+
+  @Input() value: boolean = DEFAULT_SLIDE_TOGGLE_INPUTS.value;
+  @Input() text: string = DEFAULT_SLIDE_TOGGLE_INPUTS.text;
+  @Input() textPosition: 'left' | 'right' = DEFAULT_SLIDE_TOGGLE_INPUTS.textPosition;
 
   @Output() valueChanged = new EventEmitter<boolean>;
 
-  protected componentConfig: TAngularComponentConfig<ISlideToggleOutputs, ESlideToggleActions, ISlideToggleState> = {
-    getUpdateStateAction: () => new SlideToggleActionUpdateStateFromInputs(this.getStateFromInputs()),
-    outputMapping: {
+  constructor(private contractManager: SlideToggleContractManager) { }
+
+  ngOnInit(): void {
+    this.contractManager.mapStateChangeToOutputs({
       valueChanged: {
-        selector: (state) => state.model.value,
-        callback: (value) => this.valueChanged.emit(value)
+        selector: (state: ISlideToggleState) => state.model.value,
+        callback: (value: boolean) => this.valueChanged.emit(value)
       },
-    }
+    });
   }
 
-  constructor(logicFacade: SlideToggleLogicFacade) {
-    super(logicFacade);
-  }
-
-  updateValue(value: boolean): void {
-    this.logicFacade.doAction(new SlideToggleActionUpdateValue(value));
-  }
-
-  protected getStateFromInputs(): ISlideToggleInputs {
-    return {
+  ngOnChanges(): void {
+    this.contractManager.mapInputChangeToState(new SlideToggleActionUpdateStateFromInputs({
       value: this.value,
       text: this.text,
       textPosition: this.textPosition,
-    }
+    }));
+  }
+
+  ngOnDestroy(): void {
+    this.contractManager.destroy();
   }
 }
