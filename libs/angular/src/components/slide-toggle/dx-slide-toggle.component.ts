@@ -1,12 +1,15 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output} from '@angular/core';
-import {Observable} from "rxjs";
+import {DxAngularContainer, TAngularComponentConfig, TAngularInputs, TAngularOutputs} from "../../core";
 import {
+  SlideToggleLogicFacade,
+  ISlideToggleInputs,
+  ISlideToggleOutputs,
   ESlideToggleActions,
-  ISlideToggleUpdateStateFromPropsAction, ISlideToggleUpdateValueAction,
+  ISlideToggleState,
   ISlideToggleViewModel,
-  SlideToggleStore
-} from "@dx/core";
-import {ISlideToggleInputs} from "@dx/core/src/components/slideToggle/props/props";
+  SlideToggleActionUpdateValue,
+  SlideToggleActionUpdateStateFromInputs
+} from 'dx-core';
 
 @Component({
   selector: 'dx-slide-toggle',
@@ -15,42 +18,46 @@ import {ISlideToggleInputs} from "@dx/core/src/components/slideToggle/props/prop
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
-      provide: SlideToggleStore,
-      useClass: SlideToggleStore,
+      provide: SlideToggleLogicFacade,
+      useClass: SlideToggleLogicFacade,
     }
   ]
 })
-export class DxSlideToggleComponent implements ISlideToggleInputs, OnChanges {
+export class DxSlideToggleComponent
+  extends DxAngularContainer<ISlideToggleOutputs, ESlideToggleActions, ISlideToggleState, ISlideToggleViewModel>
+  implements
+    TAngularInputs<ISlideToggleInputs>,
+    TAngularOutputs<ISlideToggleOutputs>,
+    OnChanges {
   @Input() value = false;
   @Input() text = '';
   @Input() textPosition: 'left' | 'right' = 'right';
 
   @Output() valueChanged = new EventEmitter<boolean>;
 
-  viewModel$: Observable<ISlideToggleViewModel> = this.store.viewModel$;
-
-  constructor(private store: SlideToggleStore) {
-    this.store.initOutputs({
-      valueChanged: (result) => this.valueChanged.emit(result)
-    });
+  protected componentConfig: TAngularComponentConfig<ISlideToggleOutputs, ESlideToggleActions, ISlideToggleState> = {
+    getUpdateStateAction: () => new SlideToggleActionUpdateStateFromInputs(this.getStateFromInputs()),
+    outputMapping: {
+      valueChanged: {
+        selector: (state) => state.model.value,
+        callback: (value) => this.valueChanged.emit(value)
+      },
+    }
   }
 
-  ngOnChanges(): void {
-    console.log('on changes');
-    this.store.doAction({
-      id: ESlideToggleActions.updateStateFromProps,
-      inputProps: {
-        value: this.value,
-        text: this.text,
-        textPosition: this.textPosition,
-      }
-    } as ISlideToggleUpdateStateFromPropsAction)
+  constructor(logicFacade: SlideToggleLogicFacade) {
+    super(logicFacade);
   }
 
   updateValue(value: boolean): void {
-    this.store.doAction({
-      id: ESlideToggleActions.updateValue,
-      value,
-    } as ISlideToggleUpdateValueAction);
+    this.logicFacade.doAction(new SlideToggleActionUpdateValue(value));
+  }
+
+  protected getStateFromInputs(): ISlideToggleInputs {
+    return {
+      value: this.value,
+      text: this.text,
+      textPosition: this.textPosition,
+    }
   }
 }

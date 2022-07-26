@@ -1,12 +1,15 @@
-import {SlideToggleState} from "../state";
-import {SlideToggleActionHandler, ISlideToggleUpdateValueAction} from "./actions";
+import {ESlideToggleActions} from "./actionTypes";
+import {SlideToggleAction, SlideToggleActionHandler} from "./base";
 
-class SlideToggleUpdateValueActionHandler extends SlideToggleActionHandler {
-  constructor(private state: SlideToggleState) {
-    super();
+class SlideToggleActionUpdateValue extends SlideToggleAction {
+  constructor(public value: boolean) {
+    super(ESlideToggleActions.updateValue);
   }
+}
 
-  handleAction({value}: ISlideToggleUpdateValueAction) {
+class SlideToggleActionHandlerUpdateValue extends SlideToggleActionHandler {
+
+  handleAction({value}: SlideToggleActionUpdateValue) {
     this.state.updateState((state) => ({
       ...state,
       model: {
@@ -17,5 +20,6 @@ class SlideToggleUpdateValueActionHandler extends SlideToggleActionHandler {
 }
 
 export {
-  SlideToggleUpdateValueActionHandler,
+  SlideToggleActionUpdateValue,
+  SlideToggleActionHandlerUpdateValue,
 }

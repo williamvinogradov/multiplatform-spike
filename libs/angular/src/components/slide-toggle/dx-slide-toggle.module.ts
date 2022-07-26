@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SlideToggleIndicatorComponent } from './views/slide-toggle-indicator/slide-toggle-indicator.component';
-import { SlideToggleTextComponent } from './views/slide-toggle-text/slide-toggle-text.component';
+import { SlideToggleIndicatorViewComponent } from './views/slide-toggle-indicator-view/slide-toggle-indicator-view.component';
+import { SlideToggleTextViewComponent } from './views/slide-toggle-text-view/slide-toggle-text-view.component';
 import {DxSlideToggleComponent} from "./dx-slide-toggle.component";
 
 
 @NgModule({
   declarations: [
-    SlideToggleIndicatorComponent,
-    SlideToggleTextComponent,
+    SlideToggleIndicatorViewComponent,
+    SlideToggleTextViewComponent,
     DxSlideToggleComponent,
   ],
   imports: [

@@ -9,7 +9,7 @@
   "peerDependencies": {
     "@angular/common": "^14.1.0",
     "@angular/core": "^14.1.0",
-    "@dx/core": "file:../../dist/dx-core",
+    "dx-core": "file:../../dist/dx-core",
     "rxjs": "^7.5.6"
   },
   "dependencies": {

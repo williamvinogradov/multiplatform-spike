@@ -23,6 +23,9 @@
       "dom"
     ],
     "skipLibCheck": true,
+    "paths": {
+      "@internal/core": ["./src/core/"]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

@@ -1,43 +1,35 @@
-import {IAction, Reducer, TActionHandlerMap} from "./actions";
-import {State} from "./state";
-import {ViewModelGenerator} from "./viewModel";
-import {map, Observable} from "rxjs";
-import {OutputManager, TOutputCallback, TOutputSelector} from "./outputManager";
+import {Action, Reducer, TActionHandlerMap} from "./actions";
+import {State, TSelectStateFunc} from "./state";
+import {distinctUntilChanged, map, Observable} from "rxjs";
 
-class Store<TActionTypes extends string, TState, TViewModel, TComponentOutputs> {
-  private viewModelGenerator: ViewModelGenerator<TState, TViewModel>;
-  private reducer: Reducer<TActionTypes>;
-  private outputManager: OutputManager<TState, TComponentOutputs>;
+class Store<TActionTypes extends string, TState> {
+  private reducer: Reducer<TActionTypes, TState>;
 
   protected state: State<TState>;
 
-  viewModel$: Observable<TViewModel>;
+  state$: Observable<TState>;
+  outputState$: Observable<TState>;
 
   constructor(
     state: State<TState>,
-    viewModelGenerator: ViewModelGenerator<TState, TViewModel>,
-    handlersMap: TActionHandlerMap<TActionTypes>,
-    selectorsMap: Record<keyof TComponentOutputs, TOutputSelector<TState, TComponentOutputs>>
+    handlersMap: TActionHandlerMap<TActionTypes, TState>,
   ) {
     this.state = state;
-    this.viewModelGenerator = viewModelGenerator;
     this.reducer = new Reducer(handlersMap);
-    this.outputManager = new OutputManager(state, selectorsMap)
 
-    this.viewModel$ = this.state.payload$
-      .pipe(map((state) => this.viewModelGenerator.generate(state)));
+    this.state$ = this.state.state$;
+    this.outputState$ = this.state.outputState$;
   }
 
-  initOutputs(callbackMap: Record<keyof TComponentOutputs, TOutputCallback<TComponentOutputs>>): void {
-    this.outputManager.startListenState(callbackMap);
+  select<TSelectResult>(selectFunc: TSelectStateFunc<TState, TSelectResult>) {
+    return this.state$.pipe(
+      map((state) => selectFunc(state)),
+      distinctUntilChanged(),
+    );
   }
 
-  doAction(action: IAction<TActionTypes>): void {
+  doAction(action: Action<TActionTypes>): void {
     this.reducer.handleAction(action);
-  }
-
-  destroy(): void {
-    this.outputManager.destroy();
   }
 }
 

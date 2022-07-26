@@ -1,0 +1,6 @@
+{
+  "name": "@dx-core/core",
+  "description": "",
+  "main": "index.js",
+  "typings": "index.d.ts"
+}

@@ -21,6 +21,7 @@
     "@dx/core": "file:dist-dep/dx-core",
     "concurrently": "^7.3.0",
     "dx-angular": "file:dist-dep/dx-angular",
+    "dx-core": "file:dist-dep/dx-core",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"

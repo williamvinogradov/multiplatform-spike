@@ -1,59 +1,44 @@
-import {BehaviorSubject, map, Observable, take, distinctUntilChanged, filter} from 'rxjs';
+import {BehaviorSubject, Observable, take, distinctUntilChanged, Subject} from 'rxjs';
 
 type TSelectStateFunc<TState, TResult> = (state: TState) => TResult;
-type TUpdateStateFunc<TState> = (state: TState) => TState;
-
-interface IStateMetadata {
-  triggerOutputs: boolean;
-}
-
-interface IState<TState> {
-  payload: TState,
-  metadata: IStateMetadata;
-}
+type TUpdateStateFunc<TState> = (state: TState) => Partial<TState>;
 
 class State<TState> {
-  private state: BehaviorSubject<IState<TState>>;
+  private state: BehaviorSubject<TState>;
+  private outputState: Subject<TState>;
 
-  payload$: Observable<TState>;
+  state$: Observable<TState>;
+  outputState$: Observable<TState>;
 
   constructor(private defaultStateValue: TState) {
-    this.state = new BehaviorSubject<IState<TState>>({
-      payload: defaultStateValue,
-      metadata: {
-        triggerOutputs: false,
-      }
-    });
-    this.payload$ = this.state.asObservable()
-      .pipe(map(({payload}: IState<TState>) => payload))
-      distinctUntilChanged()
-  }
+    this.state = new BehaviorSubject<TState>(defaultStateValue);
+    this.outputState = new Subject<TState>();
 
-  select<TSelectResult>(selectFunc: TSelectStateFunc<TState, TSelectResult>, isOutputListening = false): Observable<TSelectResult> {
-    return this.state.asObservable().pipe(
-      filter(({ metadata }: IState<TState>) => metadata.triggerOutputs === isOutputListening),
-      map(({payload}: IState<TState>) => selectFunc(payload)),
-      distinctUntilChanged(),
+    this.state$ = this.state.asObservable().pipe(
+      // TODO: Implement deep object comparison here?
+      distinctUntilChanged((prev, next) => JSON.stringify(prev) === JSON.stringify(next))
     );
+    this.outputState$ = this.outputState.asObservable().pipe(distinctUntilChanged());
   }
 
-  updateState(updateFunc: TUpdateStateFunc<TState>, metadata: IStateMetadata = { triggerOutputs: true }): void {
-    this.state.pipe(take(1)).subscribe(({payload}) => {
-      const newPayload = updateFunc(payload);
-      this.state.next({
-        payload: newPayload,
-        metadata,
-      });
-    });
+  updateState(updateFunc: TUpdateStateFunc<TState>, emitToOutputs = true): void {
+    this.state.pipe(take(1)).subscribe((oldState) => {
+      const newState = {
+        ...oldState,
+        ...updateFunc(oldState),
+      };
+      this.state.next(newState);
+
+      if (emitToOutputs) {
+        this.outputState.next(newState);
+      }
+    })
   }
 
-  resetToDefault(metadata: IStateMetadata = { triggerOutputs: true }): void {
-    this.state.next({
-      payload: this.defaultStateValue,
-      metadata,
-    });
+  resetToDefault(): void {
+    this.state.next(this.defaultStateValue);
   }
 }
 
-export type { TSelectStateFunc, TUpdateStateFunc, IState, IStateMetadata };
+export type { TSelectStateFunc, TUpdateStateFunc };
 export { State };

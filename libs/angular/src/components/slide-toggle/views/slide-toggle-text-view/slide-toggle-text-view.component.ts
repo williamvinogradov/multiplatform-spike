@@ -6,6 +6,6 @@ import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
   styleUrls: ['./slide-toggle-text.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SlideToggleTextComponent  {
+export class SlideToggleTextViewComponent {
   @Input() text = '';
 }

@@ -8,10 +8,14 @@ interface ISlideToggleOutputs {
   valueChanged: boolean;
 }
 
-interface ISlideToggleProps extends ISlideToggleInputs, ISlideToggleOutputs {}
+const DEFAULT_SLIDE_TOGGLE_INPUTS: ISlideToggleInputs = {
+  value: false,
+  text: '',
+  textPosition: 'right',
+}
 
 export {
   ISlideToggleInputs,
   ISlideToggleOutputs,
-  ISlideToggleProps,
+  DEFAULT_SLIDE_TOGGLE_INPUTS
 }

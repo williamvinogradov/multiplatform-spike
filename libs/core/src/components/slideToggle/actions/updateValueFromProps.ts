@@ -1,28 +1,29 @@
-import {SlideToggleActionHandler, ISlideToggleUpdateStateFromPropsAction} from "./actions";
-import {SlideToggleState} from "../state";
+import {ISlideToggleInputs} from "../props/props";
+import {SlideToggleAction, SlideToggleActionHandler} from "./base";
+import {ESlideToggleActions} from "./actionTypes";
 
-class SlideToggleUpdateStateFromPropsActionHandler extends SlideToggleActionHandler {
-  constructor(private state: SlideToggleState) {
-    super();
+class SlideToggleActionUpdateStateFromInputs extends SlideToggleAction {
+  constructor(public inputs: ISlideToggleInputs) {
+    super(ESlideToggleActions.updateStateFromInputs);
   }
+}
 
-  handleAction({inputProps}: ISlideToggleUpdateStateFromPropsAction): void {
+class SlideToggleActionHandlerUpdateStateFromInputs extends SlideToggleActionHandler {
+  handleAction({inputs}: SlideToggleActionUpdateStateFromInputs): void {
     this.state.updateState((state) => ({
       ...state,
       model: {
-        value: inputProps.value,
+        value: inputs.value,
       },
       viewData: {
-        text: inputProps.text,
-        textPosition: inputProps.textPosition,
+        text: inputs.text,
+        textPosition: inputs.textPosition,
       },
-    }), {
-      triggerOutputs: false,
-    })
+    }), false);
   }
 }
 
 export {
-  ISlideToggleUpdateStateFromPropsAction,
-  SlideToggleUpdateStateFromPropsActionHandler,
+  SlideToggleActionUpdateStateFromInputs,
+  SlideToggleActionHandlerUpdateStateFromInputs,
 }

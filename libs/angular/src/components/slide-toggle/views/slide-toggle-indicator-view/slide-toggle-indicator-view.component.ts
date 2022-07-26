@@ -6,6 +6,6 @@ import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
   styleUrls: ['./slide-toggle-indicator.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SlideToggleIndicatorComponent {
+export class SlideToggleIndicatorViewComponent {
   @Input() value = false;
 }

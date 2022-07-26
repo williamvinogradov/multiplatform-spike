@@ -1,5 +1,3 @@
-import {State} from "../../core";
-
 interface ISlideToggleState {
   model: {
     value: boolean;
@@ -20,13 +18,7 @@ const SLIDE_TOGGLE_DEFAULT_STATE: ISlideToggleState = {
   }
 }
 
-class SlideToggleState extends State<ISlideToggleState> {
-  constructor() {
-    super(SLIDE_TOGGLE_DEFAULT_STATE);
-  }
-}
-
 export {
   ISlideToggleState,
-  SlideToggleState,
+  SLIDE_TOGGLE_DEFAULT_STATE,
 }

@@ -2,8 +2,10 @@
   "name": "@dx/react",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/public_api.js",
+  "typings": "src/public_api.d.ts",
   "scripts": {
+    "build:styles": "sass ./src",
     "build:artifact": "tsc --project tsconfig.build.json",
     "build:playground": "tsc --project tsconfig.playground.json",
     "build:playground:watch": "tsc --project tsconfig.playground.json --watch"
@@ -23,6 +25,10 @@
     "@types/jest": "^27.5.2",
     "@types/node": "^16.11.45",
     "@types/react": "^18.0.15",
-    "@types/react-dom": "^18.0.6"
+    "@types/react-dom": "^18.0.6",
+    "sass": "^1.54.0"
+  },
+  "dependencies": {
+    "dx-core": "file:../../dist/dx-core"
   }
 }
