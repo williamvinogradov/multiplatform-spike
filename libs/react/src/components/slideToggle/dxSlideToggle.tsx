@@ -15,7 +15,9 @@ type TReactOutputs<TOutputs> = Partial<Record<keyof TOutputs, (value: TOutputs[k
 
 interface IDxSlideToggleProps extends
   TReactInputs<ISlideToggleInputs>,
-  TReactOutputs<ISlideToggleOutputs> {}
+  TReactOutputs<ISlideToggleOutputs> {
+  name?: string;
+}
 
 
 function DxSlideToggle(props: IDxSlideToggleProps) {

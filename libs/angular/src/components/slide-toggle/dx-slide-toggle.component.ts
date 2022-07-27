@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Optional, Output} from '@angular/core';
 import {
   DEFAULT_SLIDE_TOGGLE_INPUTS,
   ISlideToggleInputs,
@@ -8,9 +8,10 @@ import {
   SlideToggleContractManager,
   SlideToggleStore
 } from "dx-core";
+import {ControlValueAccessor, NgControl} from "@angular/forms";
+import {TAngularInputs, TAngularOutputs, TOnChangeCallback, TOnTouchCallback} from "../../types";
+import {Subscription} from "rxjs";
 
-type TAngularInputs<TInputs> = Partial<TInputs>;
-type TAngularOutputs<TOutputs> = Record<keyof TOutputs, EventEmitter<TOutputs[keyof TOutputs]>>
 
 @Component({
   selector: 'dx-slide-toggle',
@@ -32,7 +33,14 @@ export class DxSlideToggleComponent
   implements
     TAngularInputs<ISlideToggleInputs>,
     TAngularOutputs<ISlideToggleOutputs>,
-    OnInit {
+    OnInit,
+    ControlValueAccessor {
+
+  /* angular reactive form fields */
+  private onChangeCallback: TOnChangeCallback<boolean> = () => {};
+  private onTouchCallback: TOnTouchCallback = () => {};
+  private stateCallbackSubscription: Subscription | null = null;
+  private readonly isUsedInForm: boolean;
 
   @Input() value: boolean = DEFAULT_SLIDE_TOGGLE_INPUTS.value;
   @Input() text: string = DEFAULT_SLIDE_TOGGLE_INPUTS.text;
@@ -40,7 +48,15 @@ export class DxSlideToggleComponent
 
   @Output() valueChanged = new EventEmitter<boolean>;
 
-  constructor(private contractManager: SlideToggleContractManager) { }
+  constructor(private contractManager: SlideToggleContractManager,
+              private store: SlideToggleStore,
+              @Optional() ngControl: NgControl) {
+    if (ngControl) {
+      ngControl.valueAccessor = this;
+    }
+
+    this.isUsedInForm = !!ngControl;
+  }
 
   ngOnInit(): void {
     this.contractManager.mapStateChangeToOutputs({
@@ -49,6 +65,10 @@ export class DxSlideToggleComponent
         callback: (value: boolean) => this.valueChanged.emit(value)
       },
     });
+
+    if (this.isUsedInForm) {
+      this.initCallFormCallbacks();
+    }
   }
 
   ngOnChanges(): void {
@@ -61,5 +81,27 @@ export class DxSlideToggleComponent
 
   ngOnDestroy(): void {
     this.contractManager.destroy();
+  }
+
+  /* Support angular reactive forms methods */
+  writeValue(value: boolean): void {
+    this.value = value;
+  }
+
+  registerOnChange(onChangeCallback: TOnChangeCallback<boolean>): void {
+    this.onChangeCallback = onChangeCallback;
+  }
+
+  registerOnTouched(onTouchCallback: TOnTouchCallback): void {
+    this.onTouchCallback = onTouchCallback
+  }
+
+  private initCallFormCallbacks(): void {
+    this.stateCallbackSubscription =
+      this.store.select((state) => state.model.value)
+        .subscribe((value: boolean) => {
+          this.onChangeCallback(value);
+          this.onTouchCallback();
+        });
   }
 }

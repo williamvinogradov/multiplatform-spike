@@ -2,25 +2,32 @@ import React, {useCallback, useState} from 'react';
 import './App.css';
 import { DxSlideToggle } from 'dx-react';
 
-
 function App() {
-  const [state, setState] = useState(true);
+  const [simpleState, setSimpleState] = useState(true);
 
-  const handleClick = useCallback(() => setState(!state), [state]);
+  const handleSimpleClick = useCallback(() => setSimpleState(!simpleState), [simpleState]);
+
+  const simpleValueChange = useCallback((value: boolean) => setSimpleState(value), []);
 
   return (
     <React.Fragment>
-      <DxSlideToggle  value={state}
-                      text={'Hello!'}
-                      valueChanged={(value: boolean) => {
-                        console.log('on value changed: ', value);
-                        setState(value);
-                      }}/>
-      <button onClick={handleClick}>
-        Toggle
-      </button>
-      <div>
-        App value: {state.toString()}
+      <div className="example">
+        <div className="example__title">
+          Simple control example
+        </div>
+        <div className="example__control">
+          <DxSlideToggle  value={simpleState}
+                          text={'React passed text'}
+                          valueChanged={simpleValueChange}/>
+        </div>
+        <div className="example__info">
+          <button onClick={handleSimpleClick}>
+            Toggle
+          </button>
+          <div>
+            App value: {simpleState.toString()}
+          </div>
+        </div>
       </div>
     </React.Fragment>
   );

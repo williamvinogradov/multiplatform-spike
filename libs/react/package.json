@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "src/public_api.js",
+  "module": "src/public_api.js",
   "typings": "src/public_api.d.ts",
   "scripts": {
-    "build:styles": "sass ./src",
+    "test": "rollup -c",
     "build:artifact": "tsc --project tsconfig.build.json",
     "build:playground": "tsc --project tsconfig.playground.json",
     "build:playground:watch": "tsc --project tsconfig.playground.json --watch"
@@ -14,11 +15,15 @@
   "license": "ISC",
   "peerDependencies": {
     "@dx/core": "file:../../dist/dx-core",
+    "dx-core": "file:../../dist/dx-core",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "typescript": "^4.7.4"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^22.0.1",
+    "@rollup/plugin-node-resolve": "^13.3.0",
+    "@rollup/plugin-typescript": "^8.3.3",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
@@ -26,9 +31,14 @@
     "@types/node": "^16.11.45",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
+    "postcss": "^8.4.14",
+    "rollup": "^2.77.1",
+    "rollup-plugin-copy": "^3.4.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-postcss": "^4.0.2",
     "sass": "^1.54.0"
   },
   "dependencies": {
-    "dx-core": "file:../../dist/dx-core"
+    "tslib": "^2.3.0"
   }
 }

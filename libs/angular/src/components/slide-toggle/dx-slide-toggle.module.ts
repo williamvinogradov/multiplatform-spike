@@ -6,6 +6,7 @@ import { DxSlideToggleComponent } from './dx-slide-toggle.component';
 import { DxSlideToggleIndicatorContainerComponent } from './containers/dx-slide-toggle-indicator-container/dx-slide-toggle-indicator-container.component';
 import { DxSlideToggleTextContainerComponent } from './containers/dx-slide-toggle-text-container/dx-slide-toggle-text-container.component';
 import { DxSlideToggleContainerComponent } from './containers/dx-slide-toggle-container/dx-slide-toggle-container.component';
+import { FormsModule } from "@angular/forms";
 
 
 @NgModule({
@@ -20,6 +21,7 @@ import { DxSlideToggleContainerComponent } from './containers/dx-slide-toggle-co
   ],
   imports: [
     CommonModule,
+    FormsModule,
   ],
   exports: [
     DxSlideToggleComponent,

@@ -1,18 +1,9 @@
-@mixin dx-slide-toggle {
+@mixin dx-slide-toggle-container {
   .dx-slide-toggle {
     display: inline-flex;
+    align-items: center;
     user-select: none;
     cursor: pointer;
-
-    &__indicator {
-      &.-left {
-        margin: 0 8px 0 0;
-      }
-
-      &.-right {
-        margin: 0 0 0 8px;
-      }
-    }
 
     &.-left {
       flex-direction: row-reverse;
@@ -21,5 +12,9 @@
     &.-right {
       flex-direction: row;
     }
+  }
+
+  .dx-native-checkbox {
+    display: none;
   }
 }

@@ -6,6 +6,8 @@ import {DxSlideToggleTextContainer} from "./dxSlideToggleTextContainer";
 import {getContext} from "../../../utils";
 
 
+import "./dxSlideToggleContainer.scss";
+
 function DxSlideToggleContainer() {
   const store = getContext<SlideToggleStore>(DxSlideToggleContext);
   const [viewModel, setViewModel] = useState<IRootContainerVM>();
@@ -31,7 +33,7 @@ function DxSlideToggleContainer() {
   }, []);
 
   return (
-    <div className={'dx-slide-toggle ' + viewModel?.textPosition === 'left' ? '-left' : 'right'}
+    <div className={`dx-slide-toggle ${viewModel?.textPosition === 'left' ? '-left' : '-right'}`}
          onClick={updateValue}>
       <DxSlideToggleIndicatorContainer />
       <DxSlideToggleTextContainer />
