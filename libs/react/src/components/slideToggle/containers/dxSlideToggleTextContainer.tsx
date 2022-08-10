@@ -1,12 +1,17 @@
-import {DxSlideToggleTextView} from "../views/dxSlideToggleTextView";
 import React, {useEffect, useState} from "react";
-import {getSlideToggleTextVM, ISlideToggleTextVM, SlideToggleStore} from "dx-core";
+import {
+  getSlideToggleTextVM,
+  ISlideToggleTextVM,
+  SlideToggleStore
+} from "@dx/core/components/slideToggle";
+
+import {DxSlideToggleTextView} from "../views/dxSlideToggleTextView";
 import {DxSlideToggleContext} from "../dxSlideToggleContext";
-import {getContext} from "../../../utils";
+import {useReactContext} from "../../../utils";
 
 
 function DxSlideToggleTextContainer() {
-  const store = getContext<SlideToggleStore>(DxSlideToggleContext);
+  const store = useReactContext<SlideToggleStore>(DxSlideToggleContext);
   const [viewModel, setViewModel] = useState<ISlideToggleTextVM>();
 
   // init

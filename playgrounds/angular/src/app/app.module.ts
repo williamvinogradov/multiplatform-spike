@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { ReactiveFormsModule} from '@angular/forms';
+import { DxSlideToggleModule } from '@dx/angular/components/slide-toggle';
 
 import { AppComponent } from './app.component';
-import { DxSlideToggleModule } from "dx-angular";
-import { ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [

@@ -1,12 +1,17 @@
 import React, {useEffect, useState} from "react";
+import {
+  getSlideToggleIndicatorVM,
+  ISlideToggleIndicatorVM,
+  SlideToggleStore
+} from "@dx/core/components/slideToggle";
+
 import {DxSlideToggleContext} from "../dxSlideToggleContext";
-import {getSlideToggleIndicatorVM, ISlideToggleIndicatorVM, SlideToggleStore} from "dx-core";
 import {DxSlideToggleIndicatorView} from "../views/dxSlideToggleIndicatorView";
-import {getContext} from "../../../utils";
+import {useReactContext} from "../../../utils";
 
 
 function DxSlideToggleIndicatorContainer() {
-  const store = getContext<SlideToggleStore>(DxSlideToggleContext);
+  const store = useReactContext<SlideToggleStore>(DxSlideToggleContext);
   const [viewModel, setViewModel] = useState<ISlideToggleIndicatorVM>();
 
   // init

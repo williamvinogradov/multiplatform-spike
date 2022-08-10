@@ -1,11 +1,8 @@
 {
-  "name": "angular",
-  "version": "0.0.0",
+  "name": "angular-playground",
+  "version": "1.0.0",
   "scripts": {
     "ng": "ng",
-    "start:core": "cd ../../libs/core && npm run build:playground:angular:watch",
-    "start:lib": "cd ../../libs/angular && npm run build:playground:watch",
-    "install:local": "npm install ./dist-dep/dx-core && npm install ./dist-dep/dx-angular",
     "start": "ng serve"
   },
   "private": true,
@@ -18,10 +15,8 @@
     "@angular/platform-browser": "^14.1.0",
     "@angular/platform-browser-dynamic": "^14.1.0",
     "@angular/router": "^14.1.0",
-    "@dx/core": "file:dist-dep/dx-core",
+    "@dx/angular": "1.0.0",
     "concurrently": "^7.3.0",
-    "dx-angular": "file:dist-dep/dx-angular",
-    "dx-core": "file:dist-dep/dx-core",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"

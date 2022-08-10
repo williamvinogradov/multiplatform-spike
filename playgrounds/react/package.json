@@ -1,9 +1,10 @@
 {
-  "name": "my-app",
-  "version": "0.1.0",
+  "name": "react-playground",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@dx/core": "file:dist-dep/dx-core",
+    "@angular/material": "^14.1.1",
+    "@dx/react": "^1.0.0",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
@@ -11,8 +12,6 @@
     "@types/node": "^16.11.45",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
-    "dx-core": "file:dist-dep/dx-core",
-    "dx-react": "file:dist-dep/dx-react",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
@@ -20,9 +19,6 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start:core": "cd ../../libs/core && npm run build:playground:react:watch",
-    "start:lib": "cd ../../libs/react && npm run build:playground:watch",
-    "install:local": "npm install ./dist-dep/dx-core && npm install ./dist-dep/dx-react",
     "start": "react-scripts start"
   },
   "eslintConfig": {

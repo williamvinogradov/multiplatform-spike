@@ -1,0 +1,14 @@
+{
+  "name": "@dx/angular",
+  "version": "1.0.0",
+  "peerDependencies": {
+    "@angular/common": ">=12.x.x",
+    "@angular/core": ">=12.x.x",
+    "@angular/forms": ">=12.x.x"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0",
+    "@dx/core": "^1.0.0"
+  },
+  "sideEffects": false
+}

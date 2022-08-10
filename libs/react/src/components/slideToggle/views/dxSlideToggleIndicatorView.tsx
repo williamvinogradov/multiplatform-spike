@@ -1,5 +1,5 @@
 import React from "react";
-import {ISlideToggleIndicatorVM} from "dx-core";
+import {ISlideToggleIndicatorVM} from "@dx/core/components/slideToggle";
 
 
 import "./dxSlideToggleIndicatorView.scss";

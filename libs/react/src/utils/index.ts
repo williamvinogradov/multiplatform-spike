@@ -1,1 +1,1 @@
-export * from './getContext';
+export * from './useReactContext';

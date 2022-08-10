@@ -1,6 +1,9 @@
 import React, {useCallback, useState} from 'react';
+import { DxSlideToggle } from '@dx/react/components/slideToggle';
+
 import './App.css';
-import { DxSlideToggle } from 'dx-react';
+// TODO: Think about the distribution of the CSS styles in react lib.
+import '@dx/react/index.css';
 
 function App() {
   const [simpleState, setSimpleState] = useState(true);

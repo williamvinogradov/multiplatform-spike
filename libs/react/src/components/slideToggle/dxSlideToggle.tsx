@@ -1,13 +1,14 @@
+import React, {useEffect, useMemo} from "react";
 import {
   DEFAULT_SLIDE_TOGGLE_INPUTS,
   ISlideToggleInputs,
   ISlideToggleOutputs,
-  SlideToggleActionUpdateStateFromInputs,
   SlideToggleContractManager,
+  SlideToggleActionUpdateStateFromInputs,
   SlideToggleStore
-} from "dx-core";
+} from "@dx/core/components/slideToggle";
+
 import {DxSlideToggleContext} from "./dxSlideToggleContext";
-import React, {useEffect, useMemo} from "react";
 import {DxSlideToggleContainer} from "./containers/dxSlideToggleContainer";
 
 type TReactInputs<TInputs> = TInputs;

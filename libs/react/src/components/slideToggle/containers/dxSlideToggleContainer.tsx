@@ -1,15 +1,21 @@
 import React, {useCallback, useEffect, useState} from "react";
-import {getRootContainerVM, IRootContainerVM, SlideToggleActionUpdateValue, SlideToggleStore} from "dx-core";
+import {
+  getRootContainerVM,
+  IRootContainerVM,
+  SlideToggleActionUpdateValue,
+  SlideToggleStore
+} from "@dx/core/components/slideToggle";
+
 import {DxSlideToggleContext} from '../dxSlideToggleContext';
 import {DxSlideToggleIndicatorContainer} from "./dxSlideToggleIndicatorContainer";
 import {DxSlideToggleTextContainer} from "./dxSlideToggleTextContainer";
-import {getContext} from "../../../utils";
+import {useReactContext} from "../../../utils";
 
 
 import "./dxSlideToggleContainer.scss";
 
 function DxSlideToggleContainer() {
-  const store = getContext<SlideToggleStore>(DxSlideToggleContext);
+  const store = useReactContext<SlideToggleStore>(DxSlideToggleContext);
   const [viewModel, setViewModel] = useState<IRootContainerVM>();
 
   const updateValue = useCallback(() => {

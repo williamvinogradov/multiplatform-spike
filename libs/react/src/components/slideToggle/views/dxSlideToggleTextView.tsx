@@ -1,5 +1,5 @@
 import React from "react";
-import {ISlideToggleTextVM} from "dx-core";
+import {ISlideToggleTextVM} from "@dx/core/components/slideToggle";
 
 interface IDxSlideToggleTextViewProps {
   viewModel: ISlideToggleTextVM,
