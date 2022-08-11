@@ -7,7 +7,7 @@ import {
 
 import {DxSlideToggleContext} from "../dxSlideToggleContext";
 import {DxSlideToggleIndicatorView} from "../views/dxSlideToggleIndicatorView";
-import {useReactContext} from "../../../utils";
+import {useReactContext} from "../../../common";
 
 
 function DxSlideToggleIndicatorContainer() {
@@ -25,9 +25,7 @@ function DxSlideToggleIndicatorContainer() {
     ).subscribe(setViewModel);
 
     // destroy
-    return () => {
-      subscription.unsubscribe();
-    }
+    return () => subscription.unsubscribe();
   }, []);
 
   return <DxSlideToggleIndicatorView viewModel={viewModel} />

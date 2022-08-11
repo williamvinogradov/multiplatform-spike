@@ -9,7 +9,7 @@ import {
 import {DxSlideToggleContext} from '../dxSlideToggleContext';
 import {DxSlideToggleIndicatorContainer} from "./dxSlideToggleIndicatorContainer";
 import {DxSlideToggleTextContainer} from "./dxSlideToggleTextContainer";
-import {useReactContext} from "../../../utils";
+import {useReactContext} from "../../../common";
 
 
 import "./dxSlideToggleContainer.scss";
@@ -33,9 +33,7 @@ function DxSlideToggleContainer() {
     ).subscribe(setViewModel);
 
     // destroy
-    return () => {
-      subscribe.unsubscribe();
-    }
+    return () => subscribe.unsubscribe();
   }, []);
 
   return (

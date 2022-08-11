@@ -7,14 +7,17 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@dx/core": "^1.0.0"
+    "@dx/core": "^1.0.0",
+    "rxjs": "^7.5.6",
+    "tslib": "^2.3.0"
   },
   "peerDependencies": {
     "react": ">=17.x.x",
     "react-dom": ">=17.x.x"
   },
   "files": [
-    "index.css"
+    "slideToggle.css",
+    "simpleButton.css"
   ],
   "sideEffects": false
 }

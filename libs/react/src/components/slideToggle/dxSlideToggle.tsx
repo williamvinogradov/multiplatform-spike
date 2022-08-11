@@ -10,14 +10,11 @@ import {
 
 import {DxSlideToggleContext} from "./dxSlideToggleContext";
 import {DxSlideToggleContainer} from "./containers/dxSlideToggleContainer";
-
-type TReactInputs<TInputs> = TInputs;
-type TReactOutputs<TOutputs> = Partial<Record<keyof TOutputs, (value: TOutputs[keyof TOutputs]) => void>>;
+import {TReactInputs, TReactOutputs} from "../../common";
 
 interface IDxSlideToggleProps extends
   TReactInputs<ISlideToggleInputs>,
   TReactOutputs<ISlideToggleOutputs> {
-  name?: string;
 }
 
 
@@ -42,11 +39,11 @@ function DxSlideToggle(props: IDxSlideToggleProps) {
 
   // props changes
   useEffect(() => {
-    contractManager.mapInputChangeToState(new SlideToggleActionUpdateStateFromInputs({
+    store.doAction(new SlideToggleActionUpdateStateFromInputs({
       value: props.value,
       text: props.text,
       textPosition: props.textPosition,
-    }))
+    }));
   }, [props]);
 
   return (

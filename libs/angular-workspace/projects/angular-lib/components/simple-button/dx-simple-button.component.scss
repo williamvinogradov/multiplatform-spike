@@ -1,0 +1,7 @@
+@import '../styles/simpleButton';
+
+:host {
+  display: block;
+}
+
+@include dx-simple-button;

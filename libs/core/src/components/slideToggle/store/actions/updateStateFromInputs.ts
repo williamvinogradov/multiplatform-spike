@@ -1,4 +1,4 @@
-import {ISlideToggleInputs} from "../../contracts/contractManager";
+import {ISlideToggleInputs} from "../../contracts/contracts";
 import {SlideToggleActionHandler} from "./base";
 import {ESlideToggleActions} from "./actionTypes";
 import {UpdateStateFromInputsAction} from "../../../../core";

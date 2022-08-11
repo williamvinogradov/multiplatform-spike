@@ -1,5 +1,5 @@
 import {ContractManager} from "../../../core";
-import {ESlideToggleActions, ISlideToggleState, SlideToggleStore} from "../store";
+import {ESlideToggleActions, ISlideToggleState} from "../store";
 
 interface ISlideToggleInputs {
   value: boolean;
@@ -18,10 +18,7 @@ const DEFAULT_SLIDE_TOGGLE_INPUTS: ISlideToggleInputs = {
 }
 
 class SlideToggleContractManager
-  extends ContractManager<ISlideToggleInputs, ISlideToggleOutputs, ESlideToggleActions, ISlideToggleState> {
-  constructor(store: SlideToggleStore) {
-    super(store);
-  }
+  extends ContractManager<ISlideToggleOutputs, ESlideToggleActions, ISlideToggleState> {
 }
 
 export {

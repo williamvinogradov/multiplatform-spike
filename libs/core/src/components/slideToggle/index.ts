@@ -1,3 +1,3 @@
 export * from './store';
-export * from './contracts/contractManager';
+export * from './contracts/contracts';
 export * from './viewModels';

@@ -1,4 +1,4 @@
-import {Store, TSelectStateFunc, UpdateStateFromInputsAction} from "../store";
+import {Store, TSelectStateFunc} from "../store";
 import {map, Subscription} from "rxjs";
 
 type TOutputCallback<TOutputs> = (result: TOutputs[keyof TOutputs]) => void;
@@ -8,15 +8,10 @@ type TOutputMapping<TOutputs, TState> = Record<keyof TOutputs, {
   callback: TOutputCallback<TOutputs>
 }>;
 
-abstract class ContractManager<TInputs, TOutputs, TActionTypes extends string, TState> {
+abstract class ContractManager<TOutputs, TActionTypes extends string, TState> {
   private outputSubscriptions: Subscription[] = [];
 
-  protected constructor(protected store: Store<TActionTypes, TState>) {
-  }
-
-  mapInputChangeToState(updateStateFromInputsAction: UpdateStateFromInputsAction<TActionTypes, TInputs>): void {
-    this.store.doAction(updateStateFromInputsAction);
-  }
+  constructor(protected store: Store<TActionTypes, TState>) {}
 
   mapStateChangeToOutputs(outputMapping: TOutputMapping<TOutputs, TState>): void {
     (Object.keys(outputMapping) as Array<keyof TOutputs>).forEach((key) => {

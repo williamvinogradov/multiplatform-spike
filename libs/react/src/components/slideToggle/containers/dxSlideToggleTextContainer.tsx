@@ -7,7 +7,7 @@ import {
 
 import {DxSlideToggleTextView} from "../views/dxSlideToggleTextView";
 import {DxSlideToggleContext} from "../dxSlideToggleContext";
-import {useReactContext} from "../../../utils";
+import {useReactContext} from "../../../common";
 
 
 function DxSlideToggleTextContainer() {
@@ -22,9 +22,7 @@ function DxSlideToggleTextContainer() {
     ).subscribe(setViewModel);
 
     // destroy
-    return () => {
-      subscription.unsubscribe();
-    }
+    return () => subscription.unsubscribe();
   }, []);
 
   return <DxSlideToggleTextView viewModel={viewModel} />

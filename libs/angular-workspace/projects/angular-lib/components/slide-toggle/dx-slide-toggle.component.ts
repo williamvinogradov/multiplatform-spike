@@ -11,14 +11,12 @@ import {
 import {ControlValueAccessor, NgControl} from "@angular/forms";
 import {Subscription} from "rxjs";
 
-/* inputs & outputs */
 type TAngularInputs<TInputs> = Partial<TInputs>;
 type TAngularOutputs<TOutputs> = Record<keyof TOutputs, EventEmitter<TOutputs[keyof TOutputs]>>
 
 /* reactive forms */
 type TOnChangeCallback<TControlValue> = (value: TControlValue) => void;
 type TOnTouchCallback = () => void;
-
 
 @Component({
   selector: 'dx-slide-toggle',
@@ -79,7 +77,7 @@ export class DxSlideToggleComponent
   }
 
   ngOnChanges(): void {
-    this.contractManager.mapInputChangeToState(new SlideToggleActionUpdateStateFromInputs({
+    this.store.doAction(new SlideToggleActionUpdateStateFromInputs({
       value: this.value,
       text: this.text,
       textPosition: this.textPosition,

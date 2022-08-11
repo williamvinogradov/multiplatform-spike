@@ -1,4 +1,3 @@
-import resolve from '@rollup/plugin-node-resolve';
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import typescript from '@rollup/plugin-typescript';
 import copy from 'rollup-plugin-copy';
@@ -7,6 +6,7 @@ import del from 'rollup-plugin-delete'
 const OUTPUT_DIR = '../../dist/core';
 const COMPONENTS = [
     'slideToggle',
+    'simpleButton',
 ];
 
 function getBaseConfigForComponent(componentName, outputDir) {
@@ -24,9 +24,11 @@ function getBaseConfigForComponent(componentName, outputDir) {
         ],
         plugins: [
             peerDepsExternal(),
-            resolve(),
             typescript({
                 tsconfig: './tsconfig.json',
+                compilerOptions: {
+                    outDir: outputDir,
+                }
             }),
             copy({
                 targets: [{

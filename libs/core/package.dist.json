@@ -4,6 +4,9 @@
   "description": "",
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
   "peerDependencies": {
     "rxjs": "^7.5.6"
   },

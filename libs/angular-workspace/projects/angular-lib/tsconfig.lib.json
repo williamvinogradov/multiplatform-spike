@@ -6,10 +6,13 @@
     "declaration": true,
     "declarationMap": true,
     "inlineSources": true,
-    "types": []
+    "types": [],
+    "paths": {
+      "@common/*": ["../../common/*"]
+    }
   },
   "include": [
-    "./**/*.ts"
+    "./**/*.ts",
   ],
   "exclude": [
     "src/test.ts",

@@ -1,3 +1,3 @@
 export * from './actionTypes';
 export * from './updateValue';
-export * from './updateValueFromInputs';
+export * from './updateStateFromInputs';

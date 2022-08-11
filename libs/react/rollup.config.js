@@ -1,5 +1,5 @@
+import * as path from 'path';
 import commonjs from '@rollup/plugin-commonjs';
-import resolve from '@rollup/plugin-node-resolve';
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import typescript from '@rollup/plugin-typescript';
 import postcss from 'rollup-plugin-postcss';
@@ -9,28 +9,34 @@ import del from "rollup-plugin-delete";
 const OUTPUT_DIR = '../../dist/react';
 const COMPONENTS = [
     'slideToggle',
+    'simpleButton'
 ];
 
-function getBaseConfigForComponent(componentName, outputDir) {
+function getConfigForComponentCjs(componentName, outputDir) {
+    const inputPath = `src/components/${componentName}/index.ts`;
+
     return {
-        input: `src/components/${componentName}/index.ts`,
-        output: [
-            {
-                dir: outputDir,
-                format: 'esm',
-                sourcemap: true,
-                exports: 'named',
-                preserveModules: true,
-                preserveModulesRoot: 'src',
-            }
-        ],
+        input: inputPath,
+        output: {
+            dir: outputDir,
+            format: 'cjs',
+            sourcemap: true,
+            exports: 'named',
+            preserveModules: true,
+            preserveModulesRoot: 'src',
+        },
         plugins: [
             peerDepsExternal(),
-            resolve(),
             commonjs(),
-            typescript({ tsconfig: './tsconfig.json' }),
+            typescript({
+                tsconfig: './tsconfig.json',
+                compilerOptions: {
+                    outDir: outputDir,
+                    declaration: true,
+                }
+            }),
             postcss({
-                extract: true,
+                extract: path.resolve(__dirname, `${outputDir}/${componentName}.css`),
             }),
             copy({
                 targets: [{
@@ -38,8 +44,40 @@ function getBaseConfigForComponent(componentName, outputDir) {
                     dest: `${outputDir}/components/${componentName}`
                 }]
             })
-        ]
+        ],
     }
+}
+
+function getConfigForComponentEs6(componentName, outputDir) {
+    const inputPath = `src/components/${componentName}/index.ts`;
+    const esmOutputDir = `${outputDir}/esm`
+
+    return {
+        input: inputPath,
+        output: {
+            dir: esmOutputDir,
+            format: 'esm',
+            sourcemap: true,
+            exports: 'named',
+            preserveModules: true,
+            preserveModulesRoot: 'src',
+        },
+        plugins: [
+            peerDepsExternal(),
+            commonjs(),
+            typescript({
+                tsconfig: './tsconfig.json',
+                compilerOptions: {
+                    outDir: esmOutputDir,
+                    declaration: false,
+                }
+            }),
+            postcss({
+                inject: false,
+                extract: false,
+            }),
+        ],
+    };
 }
 
 const CONFIG = [
@@ -60,7 +98,8 @@ const CONFIG = [
             })
         ]
     },
-    ...COMPONENTS.map((componentName) => getBaseConfigForComponent(componentName, OUTPUT_DIR))
+    ...COMPONENTS.map((componentName) => getConfigForComponentCjs(componentName, OUTPUT_DIR)),
+    ...COMPONENTS.map((componentName) => getConfigForComponentEs6(componentName, OUTPUT_DIR))
 ];
 
 export default CONFIG;
