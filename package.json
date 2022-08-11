@@ -5,7 +5,6 @@
   "main": "index.js",
   "scripts": {
     "clean:dist": "del-cli ./dist",
-    "fix-types": "npm run clean:dist && npm run lib:all:build && npm install",
     "lib:core:build": "npm run build -w libs/core",
     "lib:core:watch": "npm run watch -w libs/core",
     "lib:react:build": "npm run build -w libs/react",

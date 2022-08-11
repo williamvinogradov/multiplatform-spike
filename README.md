@@ -20,8 +20,3 @@ To run angular playground project with live-reloading:
 ```bash
 npm run start:angular
 ```
-
-If IDE doesn't see libraries exports run the following command:
-```bash
-npm run fix-types
-```
