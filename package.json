@@ -4,7 +4,7 @@
   "description": "spike of the new architecture",
   "main": "index.js",
   "scripts": {
-    "clean:dist": "del ./dist",
+    "clean:dist": "del-cli ./dist",
     "fix-types": "npm run clean:dist && npm run lib:all:build && npm install",
     "lib:core:build": "npm run build -w libs/core",
     "lib:core:watch": "npm run watch -w libs/core",
