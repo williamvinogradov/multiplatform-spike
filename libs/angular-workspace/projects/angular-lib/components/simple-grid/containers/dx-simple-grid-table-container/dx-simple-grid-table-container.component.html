@@ -1,0 +1,19 @@
+<div class="dx-simple-grid-table">
+  <div *ngIf="headerVM$ | async as headerVM"
+       class="dx-simple-grid-table__header">
+    <dx-simple-grid-header-cell
+      *ngFor="let cell of headerVM.cells"
+      [label]="cell.label"
+      [template]="utils.castToTemplate(cell.template)">
+    </dx-simple-grid-header-cell>
+  </div>
+  <div *ngIf="rowsVM$ | async as rowsVM"
+    class="dx-simple-grid-table__body">
+    <dx-simple-grid-row-container
+     *ngFor="let row of rowsVM.data"
+    [rowRecordId]="row.recordId"
+    [data]="row.data"
+    [cellData]="rowsVM.cellsData">
+    </dx-simple-grid-row-container>
+  </div>
+</div>

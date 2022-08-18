@@ -1,10 +1,11 @@
 {
   "name": "@dx/angular",
-  "version": "0.0.0-watch+1660250756964",
+  "version": "1.0.0",
   "peerDependencies": {
     "@angular/common": ">=12.x.x",
     "@angular/core": ">=12.x.x",
-    "@angular/forms": ">=12.x.x"
+    "@angular/forms": ">=12.x.x",
+    "@dx/angular-common": "^1.0.0"
   },
   "dependencies": {
     "tslib": "^2.3.0",
@@ -29,13 +30,13 @@
       "node": "./fesm2015/dx-angular.mjs",
       "default": "./fesm2020/dx-angular.mjs"
     },
-    "./common": {
-      "types": "./common/index.d.ts",
-      "esm2020": "./esm2020/common/dx-angular-common.mjs",
-      "es2020": "./fesm2020/dx-angular-common.mjs",
-      "es2015": "./fesm2015/dx-angular-common.mjs",
-      "node": "./fesm2015/dx-angular-common.mjs",
-      "default": "./fesm2020/dx-angular-common.mjs"
+    "./components/pager": {
+      "types": "./components/pager/index.d.ts",
+      "esm2020": "./esm2020/components/pager/dx-angular-components-pager.mjs",
+      "es2020": "./fesm2020/dx-angular-components-pager.mjs",
+      "es2015": "./fesm2015/dx-angular-components-pager.mjs",
+      "node": "./fesm2015/dx-angular-components-pager.mjs",
+      "default": "./fesm2020/dx-angular-components-pager.mjs"
     },
     "./components/simple-button": {
       "types": "./components/simple-button/index.d.ts",
@@ -44,6 +45,14 @@
       "es2015": "./fesm2015/dx-angular-components-simple-button.mjs",
       "node": "./fesm2015/dx-angular-components-simple-button.mjs",
       "default": "./fesm2020/dx-angular-components-simple-button.mjs"
+    },
+    "./components/simple-grid": {
+      "types": "./components/simple-grid/index.d.ts",
+      "esm2020": "./esm2020/components/simple-grid/dx-angular-components-simple-grid.mjs",
+      "es2020": "./fesm2020/dx-angular-components-simple-grid.mjs",
+      "es2015": "./fesm2015/dx-angular-components-simple-grid.mjs",
+      "node": "./fesm2015/dx-angular-components-simple-grid.mjs",
+      "default": "./fesm2020/dx-angular-components-simple-grid.mjs"
     },
     "./components/slide-toggle": {
       "types": "./components/slide-toggle/index.d.ts",

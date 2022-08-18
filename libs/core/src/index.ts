@@ -1,2 +1,1 @@
-const tsModuleIndicatorApiExtractorWorkaround = true;
-export default tsModuleIndicatorApiExtractorWorkaround;
+export {}

@@ -1,3 +1,3 @@
-export * from './store';
-export * from './contracts/contracts';
-export * from './viewModels';
+export * from './dxSlideToggleLogic';
+export * from './dxSlideToggleOutputs';
+export * from './state';

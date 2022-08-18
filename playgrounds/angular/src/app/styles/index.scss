@@ -1,0 +1,20 @@
+@mixin example-page-styles {
+  .example {
+    margin: 20px;
+    padding: 0 0 20px 0;
+
+    &__title {
+      font-weight: 500;
+      font-size: 20px;
+      margin: 0 0 20px 0;
+    }
+
+    &__info {
+      margin: 20px 0 0 0;
+    }
+
+    &:not(:last-of-type) {
+      border-bottom: 1px solid #ececec;
+    }
+  }
+}

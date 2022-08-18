@@ -21,7 +21,15 @@
     "lib": [
       "es2020",
       "dom"
-    ]
+    ],
+    "paths": {
+      "@common/*": [
+        "./projects/angular-lib/common/*"
+      ],
+      "angular-common": [
+        "dist/angular-common"
+      ]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

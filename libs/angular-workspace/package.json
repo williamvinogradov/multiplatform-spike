@@ -4,7 +4,8 @@
   "scripts": {
     "ng": "ng",
     "build": "ng build @dx/angular",
-    "watch": "ng build @dx/angular --watch"
+    "watch": "ng build @dx/angular --watch",
+    "test": "ng build @dx/angular-common"
   },
   "private": true,
   "dependencies": {

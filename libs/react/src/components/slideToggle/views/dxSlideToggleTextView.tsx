@@ -1,24 +1,21 @@
 import React from "react";
-import {ISlideToggleTextVM} from "@dx/core/components/slideToggle";
 
 interface IDxSlideToggleTextViewProps {
-  viewModel: ISlideToggleTextVM,
+  text: string;
 }
 
-const DEFAULT_DX_SLIDE_TOGGLE_TEXT_VIEW_PROPS: IDxSlideToggleTextViewProps = {
-  viewModel: {
-    text: '',
-  }
-}
-
-function DxSlideToggleTextView({viewModel}: {viewModel: ISlideToggleTextVM}) {
+function DxSlideToggleTextView({text}: IDxSlideToggleTextViewProps) {
   return (
     <div>
-      {viewModel.text}
+      {text}
     </div>
   )
 }
 
-DxSlideToggleTextView.defaultProps = DEFAULT_DX_SLIDE_TOGGLE_TEXT_VIEW_PROPS;
+export type {
+  IDxSlideToggleTextViewProps,
+}
 
-export {DxSlideToggleTextView};
+export {
+  DxSlideToggleTextView,
+};

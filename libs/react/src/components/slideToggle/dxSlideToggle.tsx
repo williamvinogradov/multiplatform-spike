@@ -1,59 +1,49 @@
-import React, {useEffect, useMemo} from "react";
-import {
-  DEFAULT_SLIDE_TOGGLE_INPUTS,
-  ISlideToggleInputs,
-  ISlideToggleOutputs,
-  SlideToggleContractManager,
-  SlideToggleActionUpdateStateFromInputs,
-  SlideToggleStore
-} from "@dx/core/components/slideToggle";
+import React, {useCallback, useEffect, useMemo} from 'react';
+import {DxSlideToggleLogic, DxSlideToggleOutputs, SlideToggleState} from '@dx/core/components/slideToggle';
+import {useOutput, useViewModel} from '../../common/hooks';
+import {IDxSlideToggleProps, SLIDE_TOGGLE_DEFAULT_PROPS} from './dxSlideToggleProps';
 
-import {DxSlideToggleContext} from "./dxSlideToggleContext";
-import {DxSlideToggleContainer} from "./containers/dxSlideToggleContainer";
-import {TReactInputs, TReactOutputs} from "../../common";
-
-interface IDxSlideToggleProps extends
-  TReactInputs<ISlideToggleInputs>,
-  TReactOutputs<ISlideToggleOutputs> {
-}
-
+import './dxSlideToggle.scss';
 
 function DxSlideToggle(props: IDxSlideToggleProps) {
-  const store = useMemo(() => new SlideToggleStore(), []);
-  const contractManager = useMemo(() => new SlideToggleContractManager(store), []);
+  const state = useMemo(() => new SlideToggleState(), []);
+  const logic = useMemo(() => new DxSlideToggleLogic(state), []);
+  const {outputs$} = useMemo(() => new DxSlideToggleOutputs(state), []);
 
-  // init
-  useEffect(() => {
-    contractManager.mapStateChangeToOutputs({
-      valueChanged: {
-        selector: (state) => state.model.value,
-        callback: (value: boolean) => props.valueChanged ? props.valueChanged(value) : undefined,
-      }
-    })
+  const viewModel = useViewModel(logic.viewModel$);
 
-    // destroy
-    return () => {
-      contractManager.destroy();
-    };
-  }, []);
+  useEffect(() => logic.updateStateFromPropsAction({
+    text: props.text,
+    textPosition: props.textPosition,
+    value: props.value,
+  }), [props]);
+  useOutput(outputs$.valueChange, props.valueChange);
 
-  // props changes
-  useEffect(() => {
-    store.doAction(new SlideToggleActionUpdateStateFromInputs({
-      value: props.value,
-      text: props.text,
-      textPosition: props.textPosition,
-    }));
-  }, [props]);
+  const updateValue = useCallback(() => logic.updateValueAction(!viewModel?.value || false), [viewModel]);
 
   return (
-    <DxSlideToggleContext.Provider value={store} >
-      <DxSlideToggleContainer />
-    </DxSlideToggleContext.Provider>
+    <React.Fragment>
+      {
+        viewModel &&
+        <div className={`dx-slide-toggle ${viewModel?.textPosition === 'left' ? '-left' : '-right'}`}
+             onClick={updateValue}>
+          {
+            props.indicatorView && props.indicatorView({
+            ...viewModel,
+          })
+          }
+          {
+            props.textView && props.textView({
+              ...viewModel,
+            })
+          }
+        </div>
+      }
+    </React.Fragment>
   )
 }
 
-DxSlideToggle.defaultProps = DEFAULT_SLIDE_TOGGLE_INPUTS;
+DxSlideToggle.defaultProps = SLIDE_TOGGLE_DEFAULT_PROPS;
 
 export {
   IDxSlideToggleProps,

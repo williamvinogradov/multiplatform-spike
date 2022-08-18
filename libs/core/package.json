@@ -11,6 +11,7 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^22.0.1",
     "@rollup/plugin-typescript": "^8.3.3",
+    "rollup-plugin-dts": "^4.2.2",
     "rollup": "^2.77.1",
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-delete": "^2.0.0",
@@ -23,5 +24,8 @@
   },
   "peerDependencies": {
     "rxjs": ">=7.x.x"
+  },
+  "exports": {
+    "./pager": ""
   }
 }

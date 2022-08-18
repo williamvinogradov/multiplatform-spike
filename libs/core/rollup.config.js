@@ -7,6 +7,8 @@ const OUTPUT_DIR = '../../dist/core';
 const COMPONENTS = [
     'slideToggle',
     'simpleButton',
+    'simpleGrid',
+    'pager'
 ];
 
 function getBaseConfigForComponent(componentName, outputDir) {
@@ -28,29 +30,57 @@ function getBaseConfigForComponent(componentName, outputDir) {
                 tsconfig: './tsconfig.json',
                 compilerOptions: {
                     outDir: outputDir,
+                    declaration: false,
                 }
-            }),
-            copy({
-                targets: [{
-                    src: `src/components/${componentName}/package.json`,
-                    dest: `${outputDir}/components/${componentName}`
-                }]
             })
         ]
     }
 }
+
+function getTypeConfigForComponent(componentName, outputDir) {
+    return {
+        input: `src/types/${componentName}/index.ts`,
+        output: [
+            {
+                dir: outputDir,
+                format: 'esm',
+                sourcemap: true,
+                exports: 'named',
+                preserveModules: true,
+                preserveModulesRoot: 'src',
+            }
+        ],
+        plugins: [
+            peerDepsExternal(),
+            typescript({
+                tsconfig: './tsconfig.json',
+                compilerOptions: {
+                    outDir: outputDir,
+                    declaration: false,
+                }
+            })
+        ]
+    }
+}
+
 
 const CONFIG = [
     {
         input: './src/index.ts',
         output: {
             dir: OUTPUT_DIR,
-            format: 'esm',
-            preserveModules: true,
-            preserveModulesRoot: 'src',
         },
         plugins: [
             del({ targets: [OUTPUT_DIR], force: true}),
+            typescript({
+                tsconfig: './tsconfig.json',
+                compilerOptions: {
+                    outDir: OUTPUT_DIR,
+                    rootDir: './src',
+                    declaration: true,
+                    emitDeclarationOnly: true,
+                }
+            }),
             copy({
                 targets: [
                     {src: './package.dist.json', dest: OUTPUT_DIR, rename: 'package.json'}
@@ -58,7 +88,8 @@ const CONFIG = [
             })
         ]
     },
-    ...COMPONENTS.map((inputPath) => getBaseConfigForComponent(inputPath, OUTPUT_DIR)),
+    ...COMPONENTS.map((componentName) => getBaseConfigForComponent(componentName, OUTPUT_DIR)),
+    ...COMPONENTS.map((componentName) => getTypeConfigForComponent(componentName, OUTPUT_DIR))
 ];
 
 export default CONFIG;

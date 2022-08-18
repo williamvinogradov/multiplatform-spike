@@ -1,19 +1,7 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges} from '@angular/core';
-import {
-  SimpleButtonStore,
-  ISimpleButtonInputs,
-  SimpleButtonActionUpdateStateFromInputs,
-  SIMPLE_BUTTON_DEFAULT_INPUTS,
-  ISimpleButtonVM,
-} from '@dx/core/components/simpleButton';
-import {Observable} from "rxjs";
-
-type TAngularInputs<TInputs> = Partial<TInputs>;
-type TAngularOutputs<TOutputs> = Record<keyof TOutputs, EventEmitter<TOutputs[keyof TOutputs]>>
-
-/* reactive forms */
-type TOnChangeCallback<TControlValue> = (value: TControlValue) => void;
-type TOnTouchCallback = () => void;
+import {ChangeDetectionStrategy, Component, Input, OnChanges} from '@angular/core';
+import {DxSimpleButtonLogic, SimpleButtonState} from '@dx/core/components/simpleButton';
+import {ISimpleButtonState, SIMPLE_BUTTON_DEFAULT_STATE} from '@dx/core/types/simpleButton';
+import {TAngularInputs} from '@dx/angular-common';
 
 
 @Component({
@@ -22,26 +10,28 @@ type TOnTouchCallback = () => void;
   styleUrls: ['./dx-simple-button.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
+    { provide: SimpleButtonState, useClass: SimpleButtonState },
     {
-      provide: SimpleButtonStore,
-      useClass: SimpleButtonStore,
+      provide: DxSimpleButtonLogic,
+      useFactory: (state: SimpleButtonState) => new DxSimpleButtonLogic(state),
+      deps: [SimpleButtonState],
     }
   ]
 })
 export class DxSimpleButtonComponent implements
   OnChanges,
-  TAngularInputs<ISimpleButtonInputs>{
+  TAngularInputs<ISimpleButtonState> {
 
   @Input()
-  text = SIMPLE_BUTTON_DEFAULT_INPUTS.text;
+  text = SIMPLE_BUTTON_DEFAULT_STATE.text;
 
-  viewModel$: Observable<ISimpleButtonVM> = this.store.select(({text}) => ({text}));
+  viewModel$ = this.logic.viewModel$;
 
-  constructor(private store: SimpleButtonStore) { }
+  constructor(private logic: DxSimpleButtonLogic) { }
 
   ngOnChanges(): void {
-    this.store.doAction(new SimpleButtonActionUpdateStateFromInputs({
+    this.logic.updateStateFromProps({
       text: this.text,
-    }));
+    });
   }
 }

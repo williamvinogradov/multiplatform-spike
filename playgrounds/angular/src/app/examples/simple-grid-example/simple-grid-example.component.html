@@ -1,0 +1,23 @@
+<div class="example">
+  <div class="example__title">Simple grid example</div>
+  <div class="example__control">
+    <dx-simple-grid [columns]="myColumns"
+                    [data]="myData">
+      <dx-pager
+        dxSimpleGridPager
+        [pageSizes]="[10, 20, 30]"
+        [selectedPage]="1"
+        [selectedPageSize]="20">
+        >
+      </dx-pager>
+    </dx-simple-grid>
+
+    <ng-template #headerTemplate let-label>
+      {{ label }}
+    </ng-template>
+
+    <ng-template #dataTemplate let-data>
+      {{ data }}
+    </ng-template>
+  </div>
+</div>

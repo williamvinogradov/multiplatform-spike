@@ -9,7 +9,9 @@ import del from "rollup-plugin-delete";
 const OUTPUT_DIR = '../../dist/react';
 const COMPONENTS = [
     'slideToggle',
-    'simpleButton'
+    'simpleButton',
+    'simpleGrid',
+    'pager',
 ];
 
 function getConfigForComponentCjs(componentName, outputDir) {

@@ -1,0 +1,41 @@
+@mixin dx-pager {
+  .dx-pager {
+    display: flex;
+    justify-content: space-between;
+    user-select: none;
+  }
+
+  .dx-pager-page-size {
+    display: flex;
+
+    &__item {
+      color: #333;
+      border-radius: 3px;
+      padding: 7px 9px 8px 10px;
+      cursor: pointer;
+
+      &.-selected {
+        background-color: #d4d4d4;
+      }
+    }
+  }
+
+  .dx-pager-pages {
+    display: flex;
+
+    &__item {
+      color: #333;
+      border-radius: 3px;
+      padding: 7px 9px 8px 10px;
+      cursor: default;
+
+      &.-selected {
+        background-color: #d4d4d4;
+      }
+
+      &.-selectable {
+        cursor: pointer;
+      }
+    }
+  }
+}

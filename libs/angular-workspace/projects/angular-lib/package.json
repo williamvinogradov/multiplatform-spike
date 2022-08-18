@@ -4,7 +4,8 @@
   "peerDependencies": {
     "@angular/common": ">=12.x.x",
     "@angular/core": ">=12.x.x",
-    "@angular/forms": ">=12.x.x"
+    "@angular/forms": ">=12.x.x",
+    "@dx/angular-common": "^1.0.0"
   },
   "dependencies": {
     "tslib": "^2.3.0",

@@ -7,9 +7,6 @@
     "declarationMap": true,
     "inlineSources": true,
     "types": [],
-    "paths": {
-      "@common/*": ["../../common/*"]
-    }
   },
   "include": [
     "./**/*.ts",
