@@ -1,4 +1,3 @@
-import {DxSimpleButton} from '@dx/react/components/simpleButton';
 import React from 'react';
 import {DxSimpleGrid, DxSimpleGridPagerAdapter} from '@dx/react/components/simpleGrid';
 import {DxPager} from '@dx/react/components/pager';
@@ -7,6 +6,7 @@ import '@dx/react/pager.css';
 
 import {MY_GRID_DATA} from './gridData/data';
 import {MY_COLUMNS} from './gridData/columns';
+
 
 function SimpleGridExample() {
   return <React.Fragment>

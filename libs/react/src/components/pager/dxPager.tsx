@@ -1,5 +1,5 @@
+import {DxPagerLogic, DxPagerOutputs, PagerState} from '@dx/core/components/pager';
 import React, {useCallback, useEffect, useMemo} from 'react';
-import {DxPagerLogic, PagerState, DxPagerOutputs} from '@dx/core/components/pager';
 import {useOutput, useViewModel} from '../../common/hooks';
 import {IDxPagerProps} from './dxPagerProps';
 

@@ -1,4 +1,4 @@
-import {TUpdateStateActionFunc} from '../../../core';
+import {TUpdateStateActionFunc} from '../../../common';
 import {IPagerState} from '../../../types/pager';
 
 function updateStateFromPropsAction(props: Partial<IPagerState>): TUpdateStateActionFunc<IPagerState> {

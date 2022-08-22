@@ -1,27 +1,22 @@
-import * as path from 'path';
-import commonjs from '@rollup/plugin-commonjs';
-import peerDepsExternal from 'rollup-plugin-peer-deps-external';
-import typescript from '@rollup/plugin-typescript';
-import postcss from 'rollup-plugin-postcss';
-import copy from 'rollup-plugin-copy';
-import del from "rollup-plugin-delete";
+import peerDepsExternal from "rollup-plugin-peer-deps-external";
+import commonjs from "@rollup/plugin-commonjs";
+import typescript from "@rollup/plugin-typescript";
+import postcss from "rollup-plugin-postcss";
+import copy from "rollup-plugin-copy";
 
-const OUTPUT_DIR = '../../dist/react';
-const COMPONENTS = [
-    'slideToggle',
-    'simpleButton',
-    'simpleGrid',
-    'pager',
-];
+function checkExternalPackage(id) {
+    return ['@dx'].includes(id.split('/')[0]);
+}
 
-function getConfigForComponentCjs(componentName, outputDir) {
+function getEsmConfig(componentName, outputDir) {
     const inputPath = `src/components/${componentName}/index.ts`;
 
     return {
         input: inputPath,
         output: {
             dir: outputDir,
-            format: 'cjs',
+            entryFileNames: '[name].mjs',
+            format: 'esm',
             sourcemap: true,
             exports: 'named',
             preserveModules: true,
@@ -38,7 +33,7 @@ function getConfigForComponentCjs(componentName, outputDir) {
                 }
             }),
             postcss({
-                extract: path.resolve(__dirname, `${outputDir}/${componentName}.css`),
+                extract: `${componentName}.css`,
             }),
             copy({
                 targets: [{
@@ -47,18 +42,19 @@ function getConfigForComponentCjs(componentName, outputDir) {
                 }]
             })
         ],
+        external: checkExternalPackage,
     }
 }
 
-function getConfigForComponentEs6(componentName, outputDir) {
+function getCjsConfig(componentName, outputDir) {
     const inputPath = `src/components/${componentName}/index.ts`;
-    const esmOutputDir = `${outputDir}/esm`
 
     return {
         input: inputPath,
         output: {
-            dir: esmOutputDir,
-            format: 'esm',
+            dir: `${outputDir}/cjs`,
+            entryFileNames: '[name].cjs',
+            format: 'cjs',
             sourcemap: true,
             exports: 'named',
             preserveModules: true,
@@ -70,7 +66,7 @@ function getConfigForComponentEs6(componentName, outputDir) {
             typescript({
                 tsconfig: './tsconfig.json',
                 compilerOptions: {
-                    outDir: esmOutputDir,
+                    outDir: `${outputDir}/cjs`,
                     declaration: false,
                 }
             }),
@@ -79,29 +75,52 @@ function getConfigForComponentEs6(componentName, outputDir) {
                 extract: false,
             }),
         ],
+        external: checkExternalPackage,
     };
 }
 
-const CONFIG = [
-    {
+function getRootConfig(outputDir) {
+    return {
         input: './src/index.ts',
         output: {
-            dir: OUTPUT_DIR,
+            dir: outputDir,
             format: 'esm',
             preserveModules: true,
             preserveModulesRoot: 'src',
         },
         plugins: [
-            del({ targets: [OUTPUT_DIR], force: true}),
+            typescript({
+                tsconfig: './tsconfig.json',
+                compilerOptions: {
+                    outDir: `${outputDir}`,
+                    declaration: false,
+                }
+            }),
+            postcss({
+                inject: false,
+                extract: false,
+            }),
             copy({
                 targets: [
-                    {src: './package.dist.json', dest: OUTPUT_DIR, rename: 'package.json'}
+                    {src: './rollup/package.build.json', dest: outputDir, rename: 'package.json'}
                 ]
             })
-        ]
-    },
-    ...COMPONENTS.map((componentName) => getConfigForComponentCjs(componentName, OUTPUT_DIR)),
-    ...COMPONENTS.map((componentName) => getConfigForComponentEs6(componentName, OUTPUT_DIR))
-];
+        ],
+        external: checkExternalPackage,
+    };
+}
 
-export default CONFIG;
+function getRollupConfig(components, outputPath) {
+    return [
+        ...components.map((componentName) => getEsmConfig(componentName, outputPath)),
+        ...components.map((componentName) => getCjsConfig(componentName, outputPath)),
+        getRootConfig(outputPath),
+    ];
+}
+
+export {
+    getEsmConfig,
+    getCjsConfig,
+    getRootConfig,
+    getRollupConfig,
+}

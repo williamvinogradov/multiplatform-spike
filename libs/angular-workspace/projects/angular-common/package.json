@@ -2,9 +2,9 @@
   "name": "@dx/angular-common",
   "version": "1.0.0",
   "peerDependencies": {
-    "@angular/common": ">=12.x.x",
-    "@angular/core": ">=12.x.x",
-    "@angular/forms": ">=12.x.x",
+    "@angular/common": "14.x.x",
+    "@angular/core": "14.x.x",
+    "@angular/forms": "14.x.x"
   },
   "dependencies": {
     "tslib": "^2.3.0",

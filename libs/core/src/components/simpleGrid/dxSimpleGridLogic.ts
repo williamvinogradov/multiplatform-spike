@@ -1,4 +1,4 @@
-import {DxLogic, getViewModel} from '../../core';
+import {DxLogic, getViewModel} from '../../common';
 import {ISimpleGridInputs, ISimpleGridPaging, ISimpleGridState} from '../../types/simpleGrid';
 import {updatePagingActions} from './actions/updatePagingActions';
 import {updateStateFromPropsAction} from './actions/updateStateFromPropsAction';

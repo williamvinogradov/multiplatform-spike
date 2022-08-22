@@ -1,4 +1,4 @@
-import {State} from '../../core';
+import {State} from '../../common';
 import {ISlideToggleState, SLIDE_TOGGLE_DEFAULT_STATE} from '../../types/slideToggle';
 
 class SlideToggleState extends State<ISlideToggleState> {

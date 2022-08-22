@@ -1,5 +1,6 @@
-import {ChangeDetectorRef, Component, EventEmitter, Injectable, Input, OnChanges, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {IPagerOutputs, IPagerState, PAGER_DEFAULT_STATE} from '@dx/core/types/pager';
+
 import {TAngularInputs, TAngularOutputs} from '../types';
 
 @Component({ template: '' })

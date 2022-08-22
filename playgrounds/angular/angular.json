@@ -27,6 +27,7 @@
               "src/favicon.ico",
               "src/assets"
             ],
+            "preserveSymlinks": true,
             "styles": [
               "src/styles.scss"
             ],

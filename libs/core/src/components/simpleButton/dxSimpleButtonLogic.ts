@@ -1,4 +1,4 @@
-import {DxLogic, watch} from '../../core';
+import {DxLogic, watch} from '../../common';
 import {ISimpleButtonState} from '../../types/simpleButton';
 
 // NOTE: This is short class logic, but it's bad for unit testing.

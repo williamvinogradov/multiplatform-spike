@@ -1,8 +1,10 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, OnChanges, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnChanges, OnInit} from '@angular/core';
+import {forwardRef} from '@angular/core';
+import {DxPagerContracts} from '@dx/angular-common';
 import {DxPagerLogic, DxPagerOutputs, PagerState} from '@dx/core/components/pager';
 import {IPagerState} from '@dx/core/types/pager';
 import {map, Subject, takeUntil} from 'rxjs';
-import {DxPagerContracts} from '@dx/angular-common';
+
 
 @Component({
   selector: 'dx-pager',

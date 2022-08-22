@@ -1,5 +1,4 @@
-import {DxSimpleGridLogic} from '@dx/core/components/simpleGrid';
-import {ISimpleGridPagingVM} from 'dx-core-lib/src/components/simpleGrid';
+import {DxSimpleGridLogic, ISimpleGridPagingVM} from '@dx/core/components/simpleGrid';
 import React, {useEffect, useMemo} from 'react';
 import {useAdapterViewModel, useReactContext} from '../../../common/hooks';
 import {DxSimpleGridContext} from '../dxSimpleGridContext';

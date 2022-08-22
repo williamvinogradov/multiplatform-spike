@@ -1,4 +1,4 @@
-import {DxOutputs} from '../../core';
+import {DxOutputs} from '../../common';
 import {ISlideToggleOutputs, ISlideToggleState} from '../../types/slideToggle';
 
 class DxSlideToggleOutputs extends DxOutputs<ISlideToggleState, ISlideToggleOutputs> {

@@ -1,4 +1,4 @@
-import {TUpdateStateActionFunc} from '../../../core';
+import {TUpdateStateActionFunc} from '../../../common';
 import {ISlideToggleState} from '../../../types/slideToggle';
 
 function updateStateFromPropsAction(props: Partial<ISlideToggleState>): TUpdateStateActionFunc<ISlideToggleState> {

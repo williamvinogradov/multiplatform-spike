@@ -1,4 +1,4 @@
-import {State} from '../../core';
+import {State} from '../../common';
 import {ISimpleButtonState, SIMPLE_BUTTON_DEFAULT_STATE} from '../../types/simpleButton';
 
 class SimpleButtonState extends State<ISimpleButtonState> {

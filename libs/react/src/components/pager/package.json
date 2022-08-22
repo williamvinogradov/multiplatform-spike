@@ -1,6 +1,6 @@
 {
   "sideEffects": false,
-  "main": "index.js",
-  "module": "../../esm/components/pager/index.js",
-  "types": "index.d.ts"
+  "typings": "./index.d.ts",
+  "main": "../../cjs/components/pager/index.cjs",
+  "module": "index.mjs"
 }

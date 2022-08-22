@@ -1,7 +1,7 @@
 import {
   DxLogic,
   getViewModel,
-} from '../../core';
+} from '../../common';
 import {IPagerState} from '../../types/pager';
 import {selectPageAction} from './actions/selectPageAction';
 import {selectPageSizeAction} from './actions/selectPageSizeAction';

@@ -1,4 +1,4 @@
-import {DxLogic, watch} from '../../core';
+import {DxLogic, watch} from '../../common';
 import {ISlideToggleState} from '../../types/slideToggle';
 import {updateStateFromPropsAction} from './actions/updateStateFromPropsAction';
 import {updateValueAction} from './actions/updateValue';

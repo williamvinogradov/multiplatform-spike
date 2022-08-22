@@ -1,10 +1,10 @@
 {
-  "name": "dx-react-lib",
+  "name": "@dx/react",
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "rollup -c",
-    "watch": "rollup -c --watch"
+    "build": "rollup -c ./rollup/rollup.config.js",
+    "watch": "rollup -c ./rollup/rollup.config.js --watch"
   },
   "author": "",
   "license": "ISC",
@@ -31,9 +31,20 @@
     "postcss": "^8.4.14",
     "rollup": "^2.77.1",
     "rollup-plugin-copy": "^3.4.0",
+    "rollup-plugin-delete": "^2.0.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^4.0.2",
     "sass": "^1.54.0",
     "typescript": "^4.7.4"
+  },
+  "exports": {
+    "./components/pager/css": {
+      "import": "./pager.css",
+      "require": "./pager.css"
+    },
+    "./components/pager": {
+      "types": "./dist/components/pager/index.d.ts",
+      "import": "./dist/components/pager/index.mjs"
+    }
   }
 }

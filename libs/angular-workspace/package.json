@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "scripts": {
     "ng": "ng",
-    "build": "ng build @dx/angular",
-    "watch": "ng build @dx/angular --watch",
-    "test": "ng build @dx/angular-common"
+    "build:lib": "ng build @dx/angular",
+    "watch:lib": "ng build @dx/angular --watch",
+    "build:common": "ng build @dx/angular-common",
+    "watch:common": "ng build @dx/angular-common --watch",
+    "build:all": "npm run build:common && npm run build:lib"
   },
   "private": true,
   "dependencies": {
@@ -19,7 +21,8 @@
     "@angular/router": "^14.1.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
-    "zone.js": "~0.11.4"
+    "zone.js": "~0.11.4",
+    "@dx/core": "^1.0.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^14.1.1",
@@ -33,6 +36,7 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.0.0",
     "ng-packagr": "^14.1.0",
-    "typescript": "~4.7.2"
+    "typescript": "~4.7.2",
+    "wait-on": "^6.0.1"
   }
 }

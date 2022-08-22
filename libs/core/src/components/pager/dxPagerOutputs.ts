@@ -1,4 +1,4 @@
-import {DxOutputs} from '../../core';
+import {DxOutputs} from '../../common';
 import {IPagerOutputs, IPagerState} from '../../types/pager';
 
 class DxPagerOutputs extends DxOutputs<IPagerState, IPagerOutputs> {

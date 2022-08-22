@@ -1,0 +1,6 @@
+{
+  "sideEffects": false,
+  "typings": "index.d.ts",
+  "main": "../cjs/common/index.cjs",
+  "module": "../esm/comon/index.mjs"
+}

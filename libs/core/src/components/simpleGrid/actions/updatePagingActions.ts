@@ -1,4 +1,4 @@
-import {TUpdateStateActionFunc} from '../../../core';
+import {TUpdateStateActionFunc} from '../../../common';
 import {ISimpleGridPaging, ISimpleGridState, SIMPLE_GRID_DEFAULT_PAGING} from '../../../types/simpleGrid';
 
 function updatePagingActions<TData>(

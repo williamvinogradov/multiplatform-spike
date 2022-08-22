@@ -2,6 +2,7 @@ import React, {useCallback, useState} from 'react';
 import {DxSlideToggle} from '@dx/react/components/slideToggle';
 import '@dx/react/slideToggle.css';
 
+
 function SlideToggleExample() {
   const [simpleState, setSimpleState] = useState(true);
   const handleSimpleClick = useCallback(() => setSimpleState(!simpleState), [simpleState]);
@@ -14,8 +15,8 @@ function SlideToggleExample() {
       </div>
       <div className="example__control">
         <DxSlideToggle value={simpleState}
-        text={'React passed text'}
-        valueChange={simpleValueChange}/>
+                       text={'React passed text'}
+                       valueChange={simpleValueChange}/>
       </div>
       <div className="example__info">
         <button onClick={handleSimpleClick}>

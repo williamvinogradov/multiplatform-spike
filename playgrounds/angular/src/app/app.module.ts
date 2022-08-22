@@ -1,3 +1,4 @@
+import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {ReactiveFormsModule} from '@angular/forms';
@@ -26,6 +27,7 @@ import {SimpleGridExampleComponent} from './examples/simple-grid-example/simple-
   ],
   imports: [
     BrowserModule,
+    CommonModule,
     ReactiveFormsModule,
     DxSlideToggleModule,
     DxSimpleButtonModule,

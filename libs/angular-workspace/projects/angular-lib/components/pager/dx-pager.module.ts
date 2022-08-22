@@ -1,6 +1,6 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { DxPagerComponent } from './dx-pager.component';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {DxPagerComponent} from './dx-pager.component';
 
 
 @NgModule({
@@ -14,4 +14,5 @@ import { DxPagerComponent } from './dx-pager.component';
     CommonModule
   ]
 })
-export class DxPagerModule { }
+export class DxPagerModule {
+}

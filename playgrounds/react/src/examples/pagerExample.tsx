@@ -1,7 +1,7 @@
-import {DxSimpleButton} from '@dx/react/components/simpleButton';
 import React from 'react';
 import {DxPager} from '@dx/react/components/pager';
 import '@dx/react/pager.css';
+
 
 function PagerExample() {
   return <React.Fragment>
