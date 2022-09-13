@@ -15,13 +15,13 @@ function SimpleGridExample() {
         Simple button example
       </div>
       <div className="example__control">
-        <DxSimpleGrid data={MY_GRID_DATA} columns={MY_COLUMNS}>
-          <DxSimpleGridPagerAdapter
-            pagerComponent={DxPager}
-            pageSizes={[10, 20, 30]}
-            selectedPage={1}
-            selectedPageSize={20}/>
-        </DxSimpleGrid>
+        {/*<DxSimpleGrid data={MY_GRID_DATA} columns={MY_COLUMNS}>*/}
+        {/*  <DxSimpleGridPagerAdapter*/}
+        {/*    pagerComponent={DxPager}*/}
+        {/*    pageSizes={[10, 20, 30]}*/}
+        {/*    selectedPage={1}*/}
+        {/*    selectedPageSize={20}/>*/}
+        {/*</DxSimpleGrid>*/}
       </div>
     </div>
   </React.Fragment>

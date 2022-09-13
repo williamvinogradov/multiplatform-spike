@@ -1,10 +1,11 @@
 import {TUpdateStateActionFunc} from '../../../common';
-import {ISlideToggleState} from '../../../types/slideToggle';
+import {ISlideToggleState} from '../state';
 
-function updateStateFromPropsAction(props: Partial<ISlideToggleState>): TUpdateStateActionFunc<ISlideToggleState> {
+
+function updateStateFromPropsAction(statePart: Partial<ISlideToggleState>): TUpdateStateActionFunc<ISlideToggleState> {
   return (state) => [{
     ...state,
-    ...props,
+    ...statePart,
   }, { emitOutputs: false }];
 }
 

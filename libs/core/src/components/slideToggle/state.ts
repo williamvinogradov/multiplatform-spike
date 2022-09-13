@@ -1,12 +1,45 @@
-import {State} from '../../common';
-import {ISlideToggleState, SLIDE_TOGGLE_DEFAULT_STATE} from '../../types/slideToggle';
+import {TTextPosition} from '../../types/slideToggle';
 
-class SlideToggleState extends State<ISlideToggleState> {
-  constructor() {
-    super(SLIDE_TOGGLE_DEFAULT_STATE);
+interface ISlideToggleModelState {
+  value: boolean;
+}
+
+interface ISlideToggleConfigState {
+  config: {
+    text: string;
+    textPosition: TTextPosition;
+  },
+}
+
+interface ISlideToggleTemplateState {
+  templates: {
+    indicatorView: unknown,
+    textView: unknown,
   }
 }
 
-export {
-  SlideToggleState,
+interface ISlideToggleState
+  extends ISlideToggleModelState,
+    ISlideToggleConfigState,
+    ISlideToggleTemplateState {
 }
+
+const SLIDE_TOGGLE_DEFAULT_STATE: ISlideToggleState = {
+  value: false,
+  config: {
+    text: '',
+    textPosition: 'right',
+  },
+  templates: {
+    indicatorView: undefined,
+    textView: undefined,
+  }
+}
+
+export type {
+  ISlideToggleModelState,
+  ISlideToggleConfigState,
+  ISlideToggleTemplateState,
+  ISlideToggleState
+};
+export {SLIDE_TOGGLE_DEFAULT_STATE};

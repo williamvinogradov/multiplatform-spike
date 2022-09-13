@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, HostBinding, Input, OnChanges} from '@angular/core';
-import {TTemplate} from '@dx/angular-common';
+import {TAngularTemplateObsolete} from '@dx/angular-common';
 
 @Component({
   selector: 'dx-simple-grid-data-getter-cell',
@@ -13,7 +13,7 @@ import {TTemplate} from '@dx/angular-common';
 export class DxSimpleGridDataGetterCellComponent<TData> implements OnChanges {
   @Input() data?: TData;
   @Input() valueGetter?: (data: TData) => unknown;
-  @Input() template?: TTemplate;
+  @Input() template?: TAngularTemplateObsolete;
 
   @HostBinding('class.dx-simple-grid-row__cell') hostClass = true;
 

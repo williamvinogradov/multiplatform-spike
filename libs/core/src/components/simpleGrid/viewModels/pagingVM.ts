@@ -1,4 +1,4 @@
-import {IPagerState, PAGER_DEFAULT_STATE} from '../../../types/pager';
+import {IPagerState} from '../../../types/pager';
 import {ISimpleGridPaging, ISimpleGridState} from '../../../types/simpleGrid';
 
 interface ISimpleGridPagingSlice {
@@ -19,7 +19,10 @@ function getSimpleGridPagingSlice<TData>(state: ISimpleGridState<TData>): ISimpl
 function getSimpleGridPagingVM({dataLength, paging}: ISimpleGridPagingSlice): ISimpleGridPagingVM {
   if (!paging) {
     return {
-      ...PAGER_DEFAULT_STATE,
+      selectedPageSize: 1,
+      selectedPage: 1,
+      pageSizes: [20, 40],
+      pageCount: 1,
     };
   }
 

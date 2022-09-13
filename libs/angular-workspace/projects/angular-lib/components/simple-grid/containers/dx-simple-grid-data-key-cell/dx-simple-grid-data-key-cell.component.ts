@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, HostBinding, Input} from '@angular/core';
-import {TTemplate} from '@dx/angular-common';
+import {TAngularTemplateObsolete} from '@dx/angular-common';
 
 @Component({
   selector: 'dx-simple-grid-data-key-cell',
@@ -14,7 +14,7 @@ import {TTemplate} from '@dx/angular-common';
 export class DxSimpleGridDataKeyCellComponent<TData> {
   @Input() data?: TData;
   @Input() keyName?: keyof TData;
-  @Input() template?: TTemplate;
+  @Input() template?: TAngularTemplateObsolete;
 
   @HostBinding('class.dx-simple-grid-row__cell') hostClass = true;
 }

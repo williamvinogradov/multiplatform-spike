@@ -1,78 +1,80 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnChanges, OnInit} from '@angular/core';
-import {forwardRef} from '@angular/core';
-import {DxPagerContracts} from '@dx/angular-common';
-import {DxPagerLogic, DxPagerOutputs, PagerState} from '@dx/core/components/pager';
-import {IPagerState} from '@dx/core/types/pager';
-import {map, Subject, takeUntil} from 'rxjs';
-
+import {ChangeDetectionStrategy, Component, OnChanges, OnInit} from '@angular/core';
+import {combineLatest, map, Observable, Subject, takeUntil} from 'rxjs';
+import {IAngularViewData} from '@dx/angular-common';
+import {DxPagerCore} from '@dx/core/components/pager'
+import {DxPagerContracts, IPagerPageNumberAngularVM, IPagerPageSizeAngularVM} from './types';
+import {IDxPagerViewActions, IDxPagerViewModel} from './views';
 
 @Component({
   selector: 'dx-pager',
-  templateUrl: './dx-pager.component.html',
-  styleUrls: ['./dx-pager.component.scss'],
+  template: `
+    <dx-dynamic-template *ngIf="templateViewModel$ | async as templateViewModel"
+                         [template]="pagerTemplate"
+                         [data]="templateViewModel">
+    </dx-dynamic-template>
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {provide: DxPagerContracts, useExisting: forwardRef(() => DxPagerComponent)},
-    {provide: PagerState, useClass: PagerState},
-    {
-      provide: DxPagerLogic,
-      useFactory: (state: PagerState) => new DxPagerLogic(state),
-      deps: [PagerState],
-    },
-    {
-      provide: DxPagerOutputs,
-      useFactory: (state: PagerState) => new DxPagerOutputs(state),
-      deps: [PagerState],
-    },
-  ]
+  providers: [DxPagerCore]
 })
-export class DxPagerComponent extends DxPagerContracts implements
-    OnInit,
-    OnChanges {
+export class DxPagerComponent extends DxPagerContracts
+  implements OnInit, OnChanges {
 
-  pageSizeVM$ = this.logic.pageSizeVM$.pipe(map(({items}) => items));
-  pageNumberVM$ = this.logic.pageNumberVM$.pipe(map(({items}) => items));
+  templateViewModel$ = this.getTemplateViewModel();
 
   private destroy$ = new Subject<void>();
 
-  constructor(private logic: DxPagerLogic,
-              private outputs: DxPagerOutputs,
-              private cdr: ChangeDetectorRef) {
+  constructor(private component: DxPagerCore) {
     super();
   }
 
   ngOnInit(): void {
-    this.outputs.outputs$.selectedPageChange
+    this.component.selectedPageChangeOutput$
       .pipe(takeUntil(this.destroy$))
       .subscribe((value: number) => this.selectedPageChange.emit(value));
 
-    this.outputs.outputs$.selectedPageSizeChange
+    this.component.selectedPageSizeChangeOutput$
       .pipe(takeUntil(this.destroy$))
       .subscribe((value: number) => this.selectedPageSizeChange.emit(value));
   }
 
   ngOnChanges(): void {
-    this.logic.updateStateFromPropsAction(this);
+    this.updateStateFromInputs();
   }
 
-  selectPage(selectedPage: number): void {
-    this.logic.selectPageAction(selectedPage);
+  private getTemplateViewModel(): Observable<IAngularViewData<IDxPagerViewModel, IDxPagerViewActions>> {
+    return combineLatest([
+      this.component.pageSizeLogic.viewModel$ as Observable<IPagerPageSizeAngularVM>,
+      this.component.pageNumberLogic.viewModel$ as Observable<IPagerPageNumberAngularVM>,
+    ]).pipe(
+      map(([pageSizeViewModel, pageNumberViewModel]) => ({
+        viewModel: {
+          pageSizeViewModel,
+          pageNumberViewModel,
+        },
+        actions: {
+          selectPage: (pageNumber: number) => this.component.pageNumberLogic.selectPageAction(pageNumber),
+          selectPageSize: (pageSize: number) => this.component.pageSizeLogic.selectPageSize(pageSize),
+        }
+      }))
+    );
   }
 
-  selectPageSize(selectedPageSize: number): void {
-    this.logic.selectPageSizeAction(selectedPageSize);
-  }
-
-  override updateInputs(props: Partial<IPagerState>): void {
-    this.logic.updateStateFromPropsAction({
-      selectedPage: props.selectedPage,
-      selectedPageSize: props.selectedPageSize,
-      pageCount: props.pageCount,
-      pageSizes: props.pageSizes,
+  private updateStateFromInputs(): void {
+    this.component.updateRootTemplate(this.pagerTemplate);
+    this.component.pageNumberLogic.updateFromProps({
+      count: this.pageCount,
+      templates: {
+        general: this.pageNumberTemplate,
+        item: this.pageNumberItemTemplate,
+        fakeItem: this.pageNumberFakeItemTemplate,
+      }
     });
-  }
-
-  trackByRecordId({recordId}: {recordId: string}): string {
-    return recordId;
+    this.component.pageSizeLogic.updateFromProps({
+      sizes: this.pageSizes,
+      templates: {
+        general: this.pageSizeTemplate,
+        item: this.pageSizeItemTemplate,
+      }
+    })
   }
 }

@@ -4,7 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build"
+    "build": "ng build",
+    "cache:clean": "ng cache clean"
   },
   "private": true,
   "dependencies": {
@@ -16,13 +17,13 @@
     "@angular/platform-browser": "^14.1.0",
     "@angular/platform-browser-dynamic": "^14.1.0",
     "@angular/router": "^14.1.0",
+    "@dx/angular": "file:../../dist/angular/dx-angular-1.0.0.tgz",
+    "@dx/angular-common": "file:../../dist/angular-common/dx-angular-common-1.0.0.tgz",
+    "@dx/core": "file:../../dist/core/dx-core-1.0.0.tgz",
     "concurrently": "^7.3.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
-    "zone.js": "~0.11.4",
-    "@dx/angular-common": "^1.0.0",
-    "@dx/angular": "^1.0.0",
-    "@dx/core": "^1.0.0"
+    "zone.js": "~0.11.4"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^14.1.0",

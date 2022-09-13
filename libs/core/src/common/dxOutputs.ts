@@ -2,6 +2,7 @@ import {filter, Observable} from 'rxjs';
 import {watch} from './operators';
 import {IState, State} from './state';
 
+/** @obsolete **/
 abstract class DxOutputs<TState, TOutputs> {
   protected state$ = this.state.state$;
 

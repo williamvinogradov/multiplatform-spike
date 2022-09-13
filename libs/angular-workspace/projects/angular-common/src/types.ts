@@ -1,20 +1,22 @@
+// This code will be deleted after simpleGrid rework.
+
 /* inputs & outputs */
 import {EventEmitter, TemplateRef} from '@angular/core';
 
+/** @obsolete **/
 type TAngularInputs<TInputs> = Partial<TInputs>;
+/** @obsolete **/
 type TAngularOutputs<TOutputs> = Record<keyof TOutputs, EventEmitter<TOutputs[keyof TOutputs]>>
 
-/* reactive forms */
-type TOnChangeCallback<TControlValue> = (value: TControlValue) => void;
-type TOnTouchCallback = () => void;
-
 /* templates */
-type TTemplate = TemplateRef<unknown>;
+// unfortunately, angular templates typings still bad, so we need any here.
+/** @obsolete **/
+type TAngularTemplateObsolete = TemplateRef<any>;
 
+/** @obsolete **/
 export type {
   TAngularInputs,
   TAngularOutputs,
-  TOnChangeCallback,
-  TOnTouchCallback,
-  TTemplate,
+  TAngularTemplateObsolete,
 }
+

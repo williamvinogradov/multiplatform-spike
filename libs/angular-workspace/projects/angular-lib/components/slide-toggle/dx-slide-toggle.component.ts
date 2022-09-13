@@ -1,84 +1,74 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
+  OnChanges,
   OnInit,
   Optional,
-  Output, TemplateRef,
+  Output,
 } from '@angular/core';
-import {ControlValueAccessor, NgControl} from "@angular/forms";
-import {TAngularInputs, TAngularOutputs, TOnChangeCallback, TOnTouchCallback} from '@dx/angular-common';
-import {DxSlideToggleLogic, DxSlideToggleOutputs, SlideToggleState} from '@dx/core/components/slideToggle';
-import {ISlideToggleOutputs, ISlideToggleState, SLIDE_TOGGLE_DEFAULT_STATE} from '@dx/core/types/slideToggle';
-import {Subject, takeUntil} from 'rxjs';
+import {NgControl} from '@angular/forms';
+import {Observable, Subject, takeUntil} from 'rxjs';
+import {
+  TAngularContracts,
+  FormControlComponent,
+  TAngularTemplate,
+} from '@dx/angular-common';
+import {DxSlideToggleCore, ISlideToggleState, SLIDE_TOGGLE_DEFAULT_STATE} from '@dx/core/components/slideToggle';
+import {TSlideInputContractsConfig} from '@dx/core/types/slideToggle';
+import {
+  DxSlideToggleTextViewComponent,
+  DxSlideToggleIndicatorViewComponent, DxSlideToggleIndicatorViewContracts, DxSlideToggleTextViewContracts,
+} from './views';
 
 
 @Component({
   selector: 'dx-slide-toggle',
-  templateUrl: './dx-slide-toggle.component.html',
-  styleUrls: ['./dx-slide-toggle.component.scss'],
+  template: `
+    <dx-slide-toggle-template *ngIf="viewModel$ | async as viewModel"
+                              [viewModel]="viewModel"
+                              (updateValue)="updateValue($event)">
+    </dx-slide-toggle-template>
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    { provide: SlideToggleState, useClass: SlideToggleState },
-    {
-      provide: DxSlideToggleLogic,
-      useFactory: (state: SlideToggleState) => new DxSlideToggleLogic(state),
-      deps: [SlideToggleState]
-    },
-    {
-      provide: DxSlideToggleOutputs,
-      useFactory: (state: SlideToggleState) => new DxSlideToggleOutputs(state),
-      deps: [SlideToggleState]
-    },
-  ],
+  providers: [DxSlideToggleCore],
 })
 export class DxSlideToggleComponent
-  implements
-    TAngularInputs<ISlideToggleState>,
-    TAngularOutputs<ISlideToggleOutputs>,
-    OnInit,
-    ControlValueAccessor {
+  extends FormControlComponent<boolean>
+  implements TAngularContracts<TSlideInputContractsConfig>, OnInit, OnChanges {
+  // inputs.
   @Input() value = SLIDE_TOGGLE_DEFAULT_STATE.value;
-  @Input() text = SLIDE_TOGGLE_DEFAULT_STATE.text;
-  @Input() textPosition = SLIDE_TOGGLE_DEFAULT_STATE.textPosition;
-  @Input() indicatorView?: TemplateRef<unknown>;
-  @Input() textView?: TemplateRef<unknown>;
-
+  @Input() text = SLIDE_TOGGLE_DEFAULT_STATE.config.text;
+  @Input() textPosition = SLIDE_TOGGLE_DEFAULT_STATE.config.textPosition;
+  // customization section.
+  @Input() indicatorViewTemplate: TAngularTemplate<DxSlideToggleIndicatorViewContracts> = DxSlideToggleIndicatorViewComponent;
+  @Input() textViewTemplate: TAngularTemplate<DxSlideToggleTextViewContracts> = DxSlideToggleTextViewComponent;
+  // outputs.
   @Output() valueChange = new EventEmitter<boolean>;
 
-  viewModel$ = this.logic.viewModel$;
-
-  /* angular reactive form fields */
-  private onChangeCallback?: TOnChangeCallback<boolean> = () => {};
-  private onTouchCallback?: TOnTouchCallback = () => {};
+  readonly viewModel$: Observable<ISlideToggleState> = this.component.viewModel$;
 
   private readonly destroy = new Subject<void>();
 
-  constructor(private logic: DxSlideToggleLogic,
-              private outputs: DxSlideToggleOutputs,
+  constructor(private component: DxSlideToggleCore,
+              private cdr: ChangeDetectorRef,
               @Optional() ngControl: NgControl) {
-    if (ngControl) {
-      ngControl.valueAccessor = this;
-    }
+    super(ngControl);
   }
 
   ngOnInit(): void {
-    this.outputs.outputs$.valueChange
+    this.component.valueChangeOutput$
       .pipe(takeUntil(this.destroy))
-      .subscribe((value) => {
+      .subscribe((value: boolean) => {
         this.valueChange.emit(value);
-        this.onChangeCallback && this.onChangeCallback(value);
-        this.onTouchCallback && this.onTouchCallback();
+        this.updateFormValue(value);
       });
   }
 
   ngOnChanges(): void {
-    this.logic.updateStateFromPropsAction({
-      value: this.value,
-      text: this.text,
-      textPosition: this.textPosition,
-    });
+    this.updateStateFromProps();
   }
 
   ngOnDestroy(): void {
@@ -87,19 +77,26 @@ export class DxSlideToggleComponent
   }
 
   updateValue(newValue: boolean): void {
-    this.logic.updateValueAction(newValue);
+    this.component.updateValue(newValue);
+  }
+
+  protected updateStateFromProps(): void {
+    this.component.updateStateFromProps({
+      value: this.value,
+      config: {
+        text: this.text,
+        textPosition: this.textPosition
+      },
+      templates: {
+        indicatorView: this.indicatorViewTemplate,
+        textView: this.textViewTemplate,
+      }
+    });
   }
 
   /* Support angular reactive forms methods */
   writeValue(value: boolean): void {
     this.value = value;
-  }
-
-  registerOnChange(onChangeCallback: TOnChangeCallback<boolean>): void {
-    this.onChangeCallback = onChangeCallback;
-  }
-
-  registerOnTouched(onTouchCallback: TOnTouchCallback): void {
-    this.onTouchCallback = onTouchCallback
+    this.updateStateFromProps();
   }
 }

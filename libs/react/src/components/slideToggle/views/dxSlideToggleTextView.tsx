@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 interface IDxSlideToggleTextViewProps {
   text: string;
@@ -12,10 +12,5 @@ function DxSlideToggleTextView({text}: IDxSlideToggleTextViewProps) {
   )
 }
 
-export type {
-  IDxSlideToggleTextViewProps,
-}
-
-export {
-  DxSlideToggleTextView,
-};
+export type {IDxSlideToggleTextViewProps};
+export {DxSlideToggleTextView};

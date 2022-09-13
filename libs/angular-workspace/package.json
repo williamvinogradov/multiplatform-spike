@@ -7,7 +7,8 @@
     "watch:lib": "ng build @dx/angular --watch",
     "build:common": "ng build @dx/angular-common",
     "watch:common": "ng build @dx/angular-common --watch",
-    "build:all": "npm run build:common && npm run build:lib"
+    "build:all": "npm run build:common && npm run build:lib",
+    "cache:clean": "ng cache clean"
   },
   "private": true,
   "dependencies": {

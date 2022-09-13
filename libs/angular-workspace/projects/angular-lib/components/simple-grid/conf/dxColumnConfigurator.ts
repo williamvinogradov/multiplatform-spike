@@ -5,7 +5,7 @@ import {
   ISimpleGridColumnGetter,
   ISimpleGridColumnKey
 } from '@dx/core/types/simpleGrid';
-import {TTemplate} from '@dx/angular-common';
+import {TAngularTemplateObsolete} from '@dx/angular-common';
 
 @Injectable()
 class DxColumnConfigurator<TData> {
@@ -13,8 +13,8 @@ class DxColumnConfigurator<TData> {
     options: {
       label: string,
       keyName: TProp,
-      headerTemplate: TTemplate,
-      dataTemplate: TTemplate,
+      headerTemplate: TAngularTemplateObsolete,
+      dataTemplate: TAngularTemplateObsolete,
     }
   ): ISimpleGridColumnKey<TData> {
     return {
@@ -30,8 +30,8 @@ class DxColumnConfigurator<TData> {
     options: {
       label: string,
       valueGetter: (data: TData) => TValue,
-      headerTemplate: TTemplate,
-      dataTemplate: TTemplate,
+      headerTemplate: TAngularTemplateObsolete,
+      dataTemplate: TAngularTemplateObsolete,
     }
   ): ISimpleGridColumnGetter<TData, TValue> {
     return {

@@ -1,7 +1,9 @@
 import {useEffect, useState} from 'react';
 import {Observable} from 'rxjs';
 
-function useViewModel<TViewModel>(viewModel$: Observable<TViewModel>): TViewModel | undefined {
+function useViewModel<TViewModel, TViewModelResult extends TViewModel>(
+  viewModel$: Observable<TViewModel>
+): TViewModelResult | undefined {
   const [viewModel, setViewModel] = useState<TViewModel>();
 
   useEffect(() => {
@@ -10,7 +12,7 @@ function useViewModel<TViewModel>(viewModel$: Observable<TViewModel>): TViewMode
     return () => subscription.unsubscribe();
   }, [viewModel$]);
 
-  return viewModel;
+  return viewModel as TViewModelResult;
 }
 
 export {

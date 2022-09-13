@@ -1,21 +1,22 @@
+// This code will be deleted after simpleGrid rework.
+
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {IPagerOutputs, IPagerState, PAGER_DEFAULT_STATE} from '@dx/core/types/pager';
+import {IPagerOutputs, IPagerState} from '@dx/core/types/pager';
 
 import {TAngularInputs, TAngularOutputs} from '../types';
 
 @Component({ template: '' })
-export class DxPagerContracts
+/** @obsolete **/
+export abstract class DxPagerContracts
   implements TAngularInputs<IPagerState>,
     TAngularOutputs<IPagerOutputs> {
-  @Input() selectedPage = PAGER_DEFAULT_STATE.selectedPage;
-  @Input() pageCount = PAGER_DEFAULT_STATE.pageCount;
-  @Input() selectedPageSize = PAGER_DEFAULT_STATE.selectedPageSize;
-  @Input() pageSizes = PAGER_DEFAULT_STATE.pageSizes;
+  @Input() selectedPage = 1;
+  @Input() pageCount = 1;
+  @Input() selectedPageSize = 20;
+  @Input() pageSizes = [20,40];
 
   @Output() selectedPageChange = new EventEmitter<number>();
   @Output() selectedPageSizeChange = new EventEmitter<number>();
-
-  constructor() {}
 
   updateInputs(props: Partial<IPagerState>): void {
   }

@@ -9,7 +9,8 @@ interface IState<TState> {
   meta: IStateUpdateMeta;
 }
 
-type TUpdateStateActionFunc<TState> = (state: TState) => [newStatePart: Partial<TState>, meta?: IStateUpdateMeta];
+type TUpdateStateActionResult<TState> = [newStatePart: Partial<TState>, meta?: IStateUpdateMeta];
+type TUpdateStateActionFunc<TState> = (state: TState) => TUpdateStateActionResult<TState>;
 
 const STATE_UPDATE_DEFAULT_META: IStateUpdateMeta = {
   emitOutputs: true,
@@ -42,12 +43,13 @@ class State<TState> {
           ...STATE_UPDATE_DEFAULT_META,
         },
       });
-    })
+    });
   }
 }
 
 export type {
   IState,
+  TUpdateStateActionResult,
   TUpdateStateActionFunc,
   IStateUpdateMeta,
 }

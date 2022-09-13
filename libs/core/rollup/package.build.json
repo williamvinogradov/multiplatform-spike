@@ -55,6 +55,11 @@
       "types": "./types/slideToggle/index.d.ts",
       "import": "./types/slideToggle/index.mjs",
       "require": "./cjs/types/slideToggle/index.cjs"
+    },
+    "./types/common": {
+      "types": "./types/common/index.d.ts",
+      "import": "./types/common/index.js",
+      "require": "./types/common/index.js"
     }
   }
 }

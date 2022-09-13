@@ -1,5 +1,5 @@
-import {TTextPosition} from '@dx/core/types/slideToggle';
 import React from 'react';
+import {TTextPosition} from '@dx/core/types/slideToggle';
 
 import './dxSlideToggleIndicatorView.scss';
 
@@ -19,10 +19,5 @@ function DxSlideToggleIndicatorView({value, textPosition}: IDxSLideToggleIndicat
   )
 }
 
-export type {
-  IDxSLideToggleIndicatorViewProps,
-}
-
-export {
-  DxSlideToggleIndicatorView,
-}
+export type {IDxSLideToggleIndicatorViewProps};
+export {DxSlideToggleIndicatorView};

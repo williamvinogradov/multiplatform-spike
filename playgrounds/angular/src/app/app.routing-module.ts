@@ -1,15 +1,13 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {PagerExampleComponent} from './examples/pager-example/pager-example.component';
-import {SimpleButtonExampleComponent} from './examples/simple-button-example/simple-button-example.component';
+import {PagerExampleComponent} from './examples/pager-example';
+import {SlideToggleExampleComponent} from './examples/slide-toggle-example';
 import {SimpleGridExampleComponent} from './examples/simple-grid-example/simple-grid-example.component';
-import {SlideToggleExampleComponent} from './examples/slide-toggle-example/slide-toggle-example.component';
-import {HomeComponent} from './home/home.component';
+import {HomeComponent} from './home.component';
 
 export enum ERoutes {
   home = 'home',
   slideToggle = 'slideToggle',
-  simpleButton = 'simpleButton',
   pager = 'pager',
   simpleGrid = 'simpleGrid',
 }
@@ -23,10 +21,6 @@ const routes: Routes = [
   {
     path: ERoutes.slideToggle,
     component: SlideToggleExampleComponent,
-  },
-  {
-    path: ERoutes.simpleButton,
-    component: SimpleButtonExampleComponent,
   },
   {
     path: ERoutes.pager,

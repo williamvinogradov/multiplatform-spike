@@ -2,7 +2,7 @@ import {DxSimpleGridLogic, ISimpleGridPagingVM} from '@dx/core/components/simple
 import React, {useEffect, useMemo} from 'react';
 import {useAdapterViewModel, useReactContext} from '../../../common/hooks';
 import {DxSimpleGridContext} from '../dxSimpleGridContext';
-import {IDxPagerProps} from '../../pager/dxPagerProps';
+import {IDxPagerProps} from '../../pager/types/props';
 
 
 interface IDxSimpleGridPagerProps extends IDxPagerProps {
@@ -22,13 +22,13 @@ function DxSimpleGridPagerAdapter<TData>(props: IDxSimpleGridPagerProps) {
       props.selectedPageSizeChange && props.selectedPageSizeChange(selectedPageSize);
     }
   }), [props]);
-  const viewModel = useAdapterViewModel<ISimpleGridPagingVM, IDxPagerProps>(logic.pagingVM$, adapterOutputs);
+  // const viewModel = useAdapterViewModel<ISimpleGridPagingVM, IDxPagerProps>(logic.pagingVM$, adapterOutputs);
 
   useEffect(() => logic.updateStateFromPagingPropsAction(props), [props]);
 
   return (
     <React.Fragment>
-      { props.pagerComponent && props.pagerComponent(viewModel || {})}
+      {/*{ props.pagerComponent && props.pagerComponent(viewModel || {})}*/}
     </React.Fragment>
   )
 }

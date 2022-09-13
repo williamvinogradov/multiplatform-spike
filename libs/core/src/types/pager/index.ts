@@ -1,36 +1,50 @@
+import {TConfigInput, TModelInput, TTemplateInput} from '../common';
+
+// These obsolete types will be deleted after simple grid rework.
+/** @obsolete **/
 interface IPagerPageSizeState {
   selectedPageSize: number;
   pageSizes: number[];
 }
 
+/** @obsolete **/
 interface IPagerPageNumberState {
   selectedPage: number;
   pageCount: number;
 }
 
+/** @obsolete **/
 interface IPagerState extends IPagerPageSizeState, IPagerPageNumberState {}
 
+/** @obsolete **/
 interface IPagerOutputs {
   selectedPageChange: number;
   selectedPageSizeChange: number;
 }
 
-const PAGER_DEFAULT_PAGE_SIZED = [20, 40];
-
-const PAGER_DEFAULT_STATE: IPagerState = {
-  selectedPage: 1,
-  selectedPageSize: PAGER_DEFAULT_PAGE_SIZED[0],
-  pageCount: 1,
-  pageSizes: PAGER_DEFAULT_PAGE_SIZED,
-}
-
+/** @obsolete **/
 export type {
   IPagerPageSizeState,
   IPagerPageNumberState,
   IPagerState,
   IPagerOutputs,
+};
+
+// Actual code.
+
+type TPagerContractsConfig = {
+  selectedPage: TModelInput<number>;
+  selectedPageSize: TModelInput<number>;
+  pageCount: TConfigInput<number>;
+  pageSizes: TConfigInput<number[]>;
+  pager: TTemplateInput;
+  pageNumber: TTemplateInput;
+  pageNumberItem: TTemplateInput;
+  pageNumberFakeItem: TTemplateInput;
+  pageSize: TTemplateInput;
+  pageSizeItem: TTemplateInput;
 }
 
-export {
-  PAGER_DEFAULT_STATE
-}
+export type {
+  TPagerContractsConfig
+};

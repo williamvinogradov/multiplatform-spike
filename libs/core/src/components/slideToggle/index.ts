@@ -1,3 +1,2 @@
-export * from './dxSlideToggleLogic';
-export * from './dxSlideToggleOutputs';
+export * from './dxSlideToggleCore';
 export * from './state';
