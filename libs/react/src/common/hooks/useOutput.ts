@@ -40,7 +40,7 @@ function useOutput<TOutputValue>(
 
   // update callback when it changes.
   useEffect(() => {
-    const [, updateCallback] = memoClosure.closure;
+    const [_, updateCallback] = memoClosure.closure;
     updateCallback && updateCallback(callback);
   }, [callback]);
 }
