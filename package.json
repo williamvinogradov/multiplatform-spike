@@ -21,6 +21,9 @@
     "lib:angular:watch:lib": "npm run watch:lib --prefix libs/angular-workspace",
     "lib:angular:link": "cd dist/angular-common && npm link && cd ../angular && npm link",
 
+    "jquery:install:local": "cd libs/jquery && npm link @dx/core",
+    "jquery:build" : ",",
+    
     "prereact:install:local": "npm run lib:react:install:local && npm run lib:react:build && npm run lib:react:link",
     "react:install:local": "cd playgrounds/react && npm link @dx/core @dx/react",
     "react:install": "npm install --prefix playgrounds/react",

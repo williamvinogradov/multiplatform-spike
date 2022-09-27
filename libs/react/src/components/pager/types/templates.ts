@@ -12,7 +12,7 @@ type TPageNumberItemTemplate = (props: IDxPagerPageNumberItemViewProps) => JSX.E
 type TPageSizeTemplate = (props: IDxPagerPageSizeViewProps) => JSX.Element;
 type TPageSizeItemTemplate = (props: IDxPagerPageSizeItemViewProps) => JSX.Element;
 
-export {
+export type {
   TPagerTemplate,
   TPageNumberTemplate,
   TPageSizeTemplate,

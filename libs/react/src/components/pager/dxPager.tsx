@@ -16,7 +16,8 @@ import {
 
 import './dxPager.scss';
 
-function DxPager(props: IDxPagerProps) {
+//* Component={"name":"DxPager", "jQueryRegistered":true, "hasApiMethod":false}
+export function DxPager(props: IDxPagerProps) {
   const isPageNumberControlled = props.selectedPage !== undefined;
   const isPageSizeControlled = props.selectedPageSize !== undefined;
 
@@ -38,19 +39,20 @@ function DxPager(props: IDxPagerProps) {
 
 
   const readyToRender = !!rootTemplate?.template && !!pageNumberViewModel && !!pageSizeViewModel;
+  const viewModel = {
+    pageNumberViewModel,
+    pageSizeViewModel,
+    selectPage,
+    selectPageSize,
+  };
   return readyToRender
-    ? rootTemplate.template({
-      pageNumberViewModel,
-      pageSizeViewModel,
-      selectPage,
-      selectPageSize,
-    })
-    : null;
+    ? rootTemplate.template({...viewModel, data: viewModel } as any)
+    : <div></div>;
 }
 
 DxPager.defaultProps = PAGER_DEFAULT_PROPS;
 
 export {
   IDxPagerProps,
-  DxPager,
+  
 }

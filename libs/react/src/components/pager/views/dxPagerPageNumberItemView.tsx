@@ -3,6 +3,8 @@ import {IPagerPageNumberItemReact} from '../types';
 
 interface IDxPagerPageNumberItemViewProps {
   item: IPagerPageNumberItemReact;
+  data: { item: IPagerPageNumberItemReact, selectPage: (pageNumber: number) => () => void };
+
   selectPage: (pageNumber: number) => () => void;
 }
 
