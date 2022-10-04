@@ -1,5 +1,5 @@
 import {useEffect, useMemo, useRef, useState} from 'react';
-import {asapScheduler, asyncScheduler, Observable, scheduled, skip, Subscription} from 'rxjs';
+import {asyncScheduler, Observable, scheduled, skip, Subscription} from 'rxjs';
 
 type TCallback<T> = ((value: T) => void) | undefined;
 type TClosure<T> = [Subscription, (newValue: TCallback<T>) => void];

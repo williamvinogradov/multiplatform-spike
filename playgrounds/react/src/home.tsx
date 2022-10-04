@@ -8,8 +8,6 @@ function Home() {
     <div className="link-list">
       <Link to="/slideToggle">slideToggle example</Link>
       <Link to="/pager">pager example</Link>
-      {/* 🚧 Rework in progress */}
-      <Link to="/"> 🚧 simpleGrid example (broken)</Link>
     </div>
   )
 }

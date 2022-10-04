@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {IAngularViewActionsData, IAngularViewData, IAngularViewModelData} from '../../types2';
+import {IAngularViewActionsData, IAngularViewData, IAngularViewModelData} from '../../types';
 import {DxViewComponent} from './dx-view.component';
 
 

@@ -26,16 +26,6 @@
       "import": "./types/pager/index.mjs",
       "require": "./cjs/types/pager/index.cjs"
     },
-    "./components/simpleGrid": {
-      "types": "./components/simpleGrid/index.d.ts",
-      "import": "./components/simpleGrid/index.mjs",
-      "require": "./cjs/components/simpleGrid/index.cjs"
-    },
-    "./types/simpleGrid": {
-      "types": "./types/simpleGrid/index.d.ts",
-      "import": "./types/simpleGrid/index.mjs",
-      "require": "./cjs/types/simpleGrid/index.cjs"
-    },
     "./components/simpleButton": {
       "types": "./components/simpleButton/index.d.ts",
       "import": "./components/simpleButton/index.mjs",

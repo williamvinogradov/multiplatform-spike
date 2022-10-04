@@ -5,8 +5,6 @@ import {ChangeDetectionStrategy, Component} from '@angular/core';
   template:`
     <a routerLink="/slideToggle">slideToggle examples</a>
     <a routerLink="/pager">pager examples</a>
-    <!--  🚧 Rework in progress-->
-    <a routerLink="/">🚧 simpleGrid examples (broken)</a>
   `,
   styles: [`
     :host {

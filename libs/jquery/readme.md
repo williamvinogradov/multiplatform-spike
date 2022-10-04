@@ -1,8 +1,10 @@
-для сборки
-npm install
-npm link @dx/core
-затем генерим сырцы из react:
-npm run build
-далее собираем бандл
-npx gulp js-bundles-debug
-открываем в Chrome index.html
+## Build steps
+- ```npm install```
+- Link the core lib: ```npm link @dx/core```
+- Generate src from react lib: ```npm run build```
+- Generate bundle via gulp: ```gulp js-bundles-debug```
+- Open index.html in browser
+
+## Troubleshooting
+### Node Sass does not yet support your current environment
+Run the next command in cli: ```npm rebuild node-sass```

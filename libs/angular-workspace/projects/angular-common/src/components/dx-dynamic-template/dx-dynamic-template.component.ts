@@ -7,7 +7,7 @@ import {
   TemplateRef,
   ViewContainerRef
 } from '@angular/core';
-import {TAngularTemplate, TNullable} from '../../types2';
+import {TAngularTemplate, TNullable} from '../../types';
 import {DxViewComponent} from './dx-view.component';
 
 interface ITemplateContext<TComponent> {

@@ -11,7 +11,7 @@ function DxPagerPageNumberView({viewModel, selectPage}: IDxPagerPageNumberViewPr
     <div className="dx-pager-pages">
       {
         viewModel.items.map((item) =>
-          item.template({item, data: { item, selectPage }, selectPage})
+          item.template({item, selectPage})
         )
       }
     </div>
