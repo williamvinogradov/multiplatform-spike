@@ -3,9 +3,9 @@ import typescript from "@rollup/plugin-typescript";
 import copy from "rollup-plugin-copy";
 
 
-function getEs6Config(componentName, section, outputDir) {
+function getEs6Config(path, outputDir) {
     return {
-        input: `src/${section}/${componentName}/index.ts`,
+        input: `src/${path}/index.ts`,
         output: [
             {
                 dir: `${outputDir}`,
@@ -30,9 +30,9 @@ function getEs6Config(componentName, section, outputDir) {
     }
 }
 
-function getCjsConfig(componentName, section, outputDir) {
+function getCjsConfig(path, outputDir) {
     return {
-        input: `src/${section}/${componentName}/index.ts`,
+        input: `src/${path}/index.ts`,
         output: [
             {
                 dir: `${outputDir}/cjs`,
@@ -82,10 +82,10 @@ function getRootConfig(outputDir) {
 
 function getRollupConfig(components, outputDir) {
     return [
-        ...components.map((componentName) => getEs6Config(componentName, 'components', outputDir)),
-        ...components.map((componentName) => getCjsConfig(componentName, 'components', outputDir)),
-        ...components.map((componentName) => getEs6Config(componentName, 'types', outputDir)),
-        ...components.map((componentName) => getCjsConfig(componentName, 'types', outputDir)),
+        ...components.map((componentName) => getEs6Config(`components/${componentName}`, outputDir)),
+        ...components.map((componentName) => getCjsConfig(`components/${componentName}`, outputDir)),
+        getEs6Config('internal', outputDir),
+        getCjsConfig('internal', outputDir),
         getRootConfig(outputDir),
     ];
 }

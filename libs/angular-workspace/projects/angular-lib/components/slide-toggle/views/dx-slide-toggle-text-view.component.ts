@@ -1,12 +1,12 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {SlideToggleState} from '@dx/core/components/slideToggle';
 import {DxViewModelContracts} from '@dx/angular-common';
-import {ISlideToggleState} from '@dx/core/components/slideToggle';
 
 @Component({
   template: '',
 })
 export abstract class DxSlideToggleTextViewContracts
-  extends DxViewModelContracts<ISlideToggleState> {
+  extends DxViewModelContracts<SlideToggleState> {
 }
 
 @Component({

@@ -1,8 +1,8 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {DxViewContracts} from '@dx/angular-common';
-import {IPagerPageNumberAngularVM} from '../types';
+import {PageNumberAngularVM} from '../types';
 
-interface IDxPagerPageNumberActions {
+interface DxPagerPageNumberActions {
   selectPage: (pageNumber: number) => void;
 }
 
@@ -10,7 +10,7 @@ interface IDxPagerPageNumberActions {
   template: '',
 })
 export abstract class DxPagerPageNumberViewContracts
-  extends DxViewContracts<IPagerPageNumberAngularVM, IDxPagerPageNumberActions> {
+  extends DxViewContracts<PageNumberAngularVM, DxPagerPageNumberActions> {
 }
 
 @Component({

@@ -7,10 +7,12 @@ import {
   TemplateRef,
   ViewContainerRef
 } from '@angular/core';
-import {TAngularTemplate, TNullable} from '../../types';
+import {AngularTemplate} from '../../types';
 import {DxViewComponent} from './dx-view.component';
 
-interface ITemplateContext<TComponent> {
+type Nullable<T> = T | null
+
+interface AngularTemplateContext<TComponent> {
   $implicit: TComponent;
 }
 
@@ -21,24 +23,24 @@ interface ITemplateContext<TComponent> {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DxDynamicTemplateComponent<TComponent extends DxViewComponent> {
-  @Input() set template(template: TNullable<TAngularTemplate<TComponent>>) {
+  @Input() set template(template: Nullable<AngularTemplate<TComponent>>) {
     template && this.setTemplate(template);
   }
 
-  @Input() set data(templateData: TNullable<unknown>) {
-    const typedTemplateData = templateData as TNullable<TComponent>;
+  @Input() set data(templateData: Nullable<unknown>) {
+    const typedTemplateData = templateData as Nullable<TComponent>;
     this.templateData = typedTemplateData;
     typedTemplateData && this.setTemplateData();
   }
 
-  private templateData: TNullable<TComponent> = null;
-  private componentRef: TNullable<ComponentRef<TComponent>> = null;
-  private templateRef: TNullable<EmbeddedViewRef<ITemplateContext<TComponent>>> = null;
+  private templateData: Nullable<TComponent> = null;
+  private componentRef: Nullable<ComponentRef<TComponent>> = null;
+  private templateRef: Nullable<EmbeddedViewRef<AngularTemplateContext<TComponent>>> = null;
 
   constructor(private viewContainerRef: ViewContainerRef) {
   }
 
-  private setTemplate(template: TAngularTemplate<TComponent>): void {
+  private setTemplate(template: AngularTemplate<TComponent>): void {
     if (template instanceof TemplateRef) {
       this.templateRef = this.viewContainerRef.createEmbeddedView(template);
     } else {
@@ -62,7 +64,7 @@ export class DxDynamicTemplateComponent<TComponent extends DxViewComponent> {
     }
 
     if (this.templateRef) {
-      this.templateRef.context = { $implicit: this.templateData };
+      this.templateRef.context = {$implicit: this.templateData};
     }
   }
 }

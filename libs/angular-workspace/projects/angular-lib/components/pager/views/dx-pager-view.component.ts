@@ -1,19 +1,21 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {DxViewContracts} from '@dx/angular-common';
-import {IPagerPageNumberAngularVM, IPagerPageSizeAngularVM} from '../types';
+import {AngularViewData, DxViewContracts} from '@dx/angular-common';
+import {PageNumberAngularVM, PageSizeAngularVM} from '../types';
 
-export interface IDxPagerViewModel {
-  pageSizeViewModel: IPagerPageSizeAngularVM;
-  pageNumberViewModel: IPagerPageNumberAngularVM;
+export interface DxPagerViewModel {
+  pageSizeViewModel: PageSizeAngularVM;
+  pageNumberViewModel: PageNumberAngularVM;
 }
 
-export interface IDxPagerViewActions {
+export interface DxPagerViewActions {
   selectPage: (pageNumber: number) => void;
   selectPageSize: (pageSize: number) => void;
 }
 
+export interface DxPagerViewContractsType extends AngularViewData<DxPagerViewModel, DxPagerViewActions> {}
+
 @Component({ template: '' })
-export abstract class DxPagerViewContracts extends DxViewContracts<IDxPagerViewModel, IDxPagerViewActions>{
+export abstract class DxPagerViewContracts extends DxViewContracts<DxPagerViewModel, DxPagerViewActions>{
 }
 
 @Component({

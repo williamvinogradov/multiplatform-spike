@@ -1,10 +1,14 @@
+import {Component} from '@angular/core';
 import {ControlValueAccessor, NgControl} from '@angular/forms';
-import {TOnChangeCallback, TOnTouchCallback} from './types';
+import {OnChangeCallback, OnTouchCallback} from './types';
 
+@Component({template: ''})
 abstract class FormControlComponent<TValue> implements ControlValueAccessor {
   /* angular reactive form fields */
-  protected onChangeCallback?: TOnChangeCallback<TValue> = () => {};
-  protected onTouchCallback?: TOnTouchCallback = () => {};
+  protected onChangeCallback?: OnChangeCallback<TValue> = () => {
+  };
+  protected onTouchCallback?: OnTouchCallback = () => {
+  };
 
   protected constructor(protected ngControl?: NgControl) {
     if (ngControl) {
@@ -15,11 +19,11 @@ abstract class FormControlComponent<TValue> implements ControlValueAccessor {
   abstract writeValue(value: TValue): void;
 
   /* Support angular reactive forms methods */
-  registerOnChange(onChangeCallback: TOnChangeCallback<TValue>): void {
+  registerOnChange(onChangeCallback: OnChangeCallback<TValue>): void {
     this.onChangeCallback = onChangeCallback;
   }
 
-  registerOnTouched(onTouchCallback: TOnTouchCallback): void {
+  registerOnTouched(onTouchCallback: OnTouchCallback): void {
     this.onTouchCallback = onTouchCallback
   }
 

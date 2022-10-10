@@ -1,7 +1,10 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {PAGER_DEFAULT_STATE} from '@dx/core/components/pager'
-import {TPagerContractsConfig} from '@dx/core/types/pager';
-import {TAngularContracts, TAngularTemplate} from '@dx/angular-common';
+import {
+  PagerContractConfigs,
+  PagerContractModels,
+  PagerContractTemplates
+} from '@dx/core/components/pager'
+import {AngularContracts, AngularTemplate} from '@dx/angular-common';
 import {
   DxPagerPageNumberItemViewComponent,
   DxPagerPageNumberViewComponent, DxPagerPageSizeItemViewComponent,
@@ -10,19 +13,19 @@ import {
 } from '../views';
 
 @Component({ template: '' })
-export abstract class DxPagerContracts implements TAngularContracts<TPagerContractsConfig>{
+export abstract class DxPagerContracts implements AngularContracts<PagerContractModels, PagerContractConfigs, PagerContractTemplates>{
   // inputs.
-  @Input() selectedPage = PAGER_DEFAULT_STATE.pageNumber.selected;
-  @Input() selectedPageSize = PAGER_DEFAULT_STATE.pageSize.selected;
-  @Input() pageCount = PAGER_DEFAULT_STATE.pageNumber.count;
-  @Input() pageSizes = PAGER_DEFAULT_STATE.pageSize.sizes;
+  @Input() selectedPage?: number;
+  @Input() selectedPageSize?: number;
+  @Input() pageCount?: number;
+  @Input() pageSizes?: number[];
   // customization.
-  @Input() pagerTemplate: TAngularTemplate<DxPagerViewContracts> = DxPagerViewComponent;
-  @Input() pageNumberTemplate: TAngularTemplate<DxPagerPageNumberViewComponent> = DxPagerPageNumberViewComponent;
-  @Input() pageNumberItemTemplate: TAngularTemplate<DxPagerPageNumberItemViewComponent> = DxPagerPageNumberItemViewComponent;
-  @Input() pageNumberFakeItemTemplate: TAngularTemplate<DxPagerPageNumberItemViewComponent> = DxPagerPageNumberItemViewComponent;
-  @Input() pageSizeTemplate: TAngularTemplate<DxPagerPageSizeViewComponent> = DxPagerPageSizeViewComponent;
-  @Input() pageSizeItemTemplate: TAngularTemplate<DxPagerPageSizeItemViewComponent> = DxPagerPageSizeItemViewComponent;
+  @Input() pagerView: AngularTemplate<DxPagerViewContracts>;
+  @Input() pageNumberView: AngularTemplate<DxPagerPageNumberViewComponent>;
+  @Input() pageNumberItemView: AngularTemplate<DxPagerPageNumberItemViewComponent>;
+  @Input() pageNumberFakeItemView: AngularTemplate<DxPagerPageNumberItemViewComponent>;
+  @Input() pageSizeView: AngularTemplate<DxPagerPageSizeViewComponent>;
+  @Input() pageSizeItemView: AngularTemplate<DxPagerPageSizeItemViewComponent>;
   // outputs.
   @Output() selectedPageChange = new EventEmitter<number>();
   @Output() selectedPageSizeChange = new EventEmitter<number>();

@@ -1,22 +1,27 @@
 import React from 'react';
-import {IPagerPageNumberItemReact} from '../types';
+import {PageNumberItemTemplate, ItemReactVM} from '../types/public';
 
-interface IDxPagerPageNumberItemViewProps {
-  item: IPagerPageNumberItemReact;
-  selectPage: (pageNumber: number) => () => void;
+
+interface DxPagerPageNumberItemViewProps {
+  // TODO jQuery: Temporary wrapping for the inferno generator.
+  data: {
+    item: ItemReactVM<PageNumberItemTemplate>;
+    selectPage: (pageNumber: number) => void;
+  }
 }
 
-function DxPagerPageNumberItemView({item, selectPage}: IDxPagerPageNumberItemViewProps) {
+const DxPagerPageNumberItemView = ({data: {item, selectPage}}: DxPagerPageNumberItemViewProps) => {
+  const clickHandler = () => selectPage(item.value);
   return (
     <div key={item.value}
          className={`dx-pager-pages__item 
                         ${item.selectable ? '-selectable' : ''}
                         ${item.selected ? '-selected' : ''}`}
-         onClick={selectPage(item.value)}>
+         onClick={clickHandler}>
       {item.label}
     </div>
   )
-}
+};
 
-export type {IDxPagerPageNumberItemViewProps};
+export type {DxPagerPageNumberItemViewProps};
 export {DxPagerPageNumberItemView};

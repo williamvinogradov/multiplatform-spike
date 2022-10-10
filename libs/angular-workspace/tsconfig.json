@@ -27,7 +27,8 @@
       "@dx/core/*": [ "./node_modules/@dx/core/*"]
     },
     "types": [
-      "@dx/core"
+      "@dx/core",
+      "@dx/angular-common",
     ],
     "skipLibCheck": true
   },

@@ -1,26 +1,27 @@
 import {Component, Input} from '@angular/core';
-import {IAngularViewActionsData, IAngularViewData, IAngularViewModelData} from '../../types';
+import {DeepReadonly} from 'ts-essentials';
+import {AngularViewActionsData, AngularViewData, AngularViewModelData} from '../../types';
 import {DxViewComponent} from './dx-view.component';
 
 
 @Component({ template: '' })
 export abstract class DxViewModelContracts<TViewModel>
   extends DxViewComponent
-  implements IAngularViewModelData<TViewModel> {
-  @Input() viewModel!: TViewModel;
+  implements AngularViewModelData<TViewModel> {
+  @Input() viewModel!: DeepReadonly<TViewModel>;
 }
 
 @Component({ template: ''})
 export abstract class DxViewActionsContracts<TViewActions>
   extends DxViewComponent
-  implements IAngularViewActionsData<TViewActions> {
-  @Input() actions!: TViewActions;
+  implements AngularViewActionsData<TViewActions> {
+  @Input() actions!: DeepReadonly<TViewActions>;
 }
 
 @Component({ template: ''})
 export abstract class DxViewContracts<TViewModel, TViewActions>
   extends DxViewComponent
-  implements IAngularViewData<TViewModel, TViewActions> {
-  @Input() viewModel!: TViewModel;
-  @Input() actions!: TViewActions;
+  implements AngularViewData<TViewModel, TViewActions> {
+  @Input() viewModel!: DeepReadonly<TViewModel>;
+  @Input() actions!: DeepReadonly<TViewActions>;
 }

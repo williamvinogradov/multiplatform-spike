@@ -1,8 +1,8 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {DxViewContracts} from '@dx/angular-common';
-import {IPagerPageSizeAngularVM} from '../types';
+import {PageSizeAngularVM} from '../types';
 
-interface IDxPagerPageSizeActions {
+interface DxPagerPageSizeActions {
   selectPageSize: (pageSize: number) => void;
 }
 
@@ -10,7 +10,7 @@ interface IDxPagerPageSizeActions {
   template: '',
 })
 export abstract class DxPagerPageSizeViewContracts
-  extends DxViewContracts<IPagerPageSizeAngularVM, IDxPagerPageSizeActions> {
+  extends DxViewContracts<PageSizeAngularVM, DxPagerPageSizeActions> {
 }
 
 @Component({

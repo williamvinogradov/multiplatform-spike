@@ -1,8 +1,8 @@
-import { DxSlideToggle } from '@dx/react/components/slideToggle';
+import {DxSlideToggle} from '@dx/react/components/slideToggle';
 import React, {useCallback} from 'react';
 
 function UncontrolledSlideToggleExample() {
-  const handleValueChange = useCallback((value: boolean) => alert(`value change fired with ${value}`), []);
+  const handleValueChange = useCallback((value: boolean) => console.log(`value change fired with: %c${value}`, 'color: green'), []);
 
   return (
     <div className="example">
@@ -14,6 +14,9 @@ function UncontrolledSlideToggleExample() {
                        text={'React passed text'}
                        textPosition={'left'}
                        valueChange={handleValueChange}/>
+      </div>
+      <div className="example__info">
+        See console for notifications.
       </div>
     </div>
   )

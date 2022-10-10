@@ -1,3 +1,3 @@
 export * from './dxPager';
-export * from './types';
+export * from './types/public';
 export * from './views';

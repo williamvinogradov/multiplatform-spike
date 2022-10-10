@@ -1,102 +1,76 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
-  EventEmitter,
-  Input,
+  Inject,
   OnChanges,
   OnInit,
   Optional,
-  Output,
 } from '@angular/core';
 import {NgControl} from '@angular/forms';
-import {Observable, Subject, takeUntil} from 'rxjs';
 import {
-  TAngularContracts,
-  FormControlComponent,
-  TAngularTemplate,
-} from '@dx/angular-common';
-import {DxSlideToggleCore, ISlideToggleState, SLIDE_TOGGLE_DEFAULT_STATE} from '@dx/core/components/slideToggle';
-import {TSlideInputContractsConfig} from '@dx/core/types/slideToggle';
+  createSlideToggleStore,
+  UpdateValueAction,
+  UpdateFromContractsAction, SlideToggleStore
+} from '@dx/core/components/slideToggle';
 import {
-  DxSlideToggleTextViewComponent,
-  DxSlideToggleIndicatorViewComponent, DxSlideToggleIndicatorViewContracts, DxSlideToggleTextViewContracts,
-} from './views';
+  SLIDE_TOGGLE_CONTEXT_TOKEN,
+  SlideToggleContext,
+  slideToggleContextFactory
+} from './context';
+import {DxSlideToggleContracts} from './types';
+import {propsToContracts} from './utils';
 
 
 @Component({
   selector: 'dx-slide-toggle',
   template: `
-    <dx-slide-toggle-template *ngIf="viewModel$ | async as viewModel"
-                              [viewModel]="viewModel"
-                              (updateValue)="updateValue($event)">
-    </dx-slide-toggle-template>
+    <dx-slide-toggle-container>
+    </dx-slide-toggle-container>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [DxSlideToggleCore],
+  providers: [{
+    provide: SLIDE_TOGGLE_CONTEXT_TOKEN,
+    useFactory: slideToggleContextFactory,
+  }],
 })
-export class DxSlideToggleComponent
-  extends FormControlComponent<boolean>
-  implements TAngularContracts<TSlideInputContractsConfig>, OnInit, OnChanges {
-  // inputs.
-  @Input() value = SLIDE_TOGGLE_DEFAULT_STATE.value;
-  @Input() text = SLIDE_TOGGLE_DEFAULT_STATE.config.text;
-  @Input() textPosition = SLIDE_TOGGLE_DEFAULT_STATE.config.textPosition;
-  // customization section.
-  @Input() indicatorViewTemplate: TAngularTemplate<DxSlideToggleIndicatorViewContracts> = DxSlideToggleIndicatorViewComponent;
-  @Input() textViewTemplate: TAngularTemplate<DxSlideToggleTextViewContracts> = DxSlideToggleTextViewComponent;
-  // outputs.
-  @Output() valueChange = new EventEmitter<boolean>;
+export class DxSlideToggleComponent extends DxSlideToggleContracts
+  implements OnInit, OnChanges {
 
-  readonly viewModel$: Observable<ISlideToggleState> = this.component.viewModel$;
+  private store?: SlideToggleStore;
 
-  private readonly destroy = new Subject<void>();
-
-  constructor(private component: DxSlideToggleCore,
-              private cdr: ChangeDetectorRef,
+  constructor(@Inject(SLIDE_TOGGLE_CONTEXT_TOKEN) private contextContainer: SlideToggleContext,
               @Optional() ngControl: NgControl) {
     super(ngControl);
   }
 
   ngOnInit(): void {
-    this.component.valueChangeOutput$
-      .pipe(takeUntil(this.destroy))
-      .subscribe((value: boolean) => {
-        this.valueChange.emit(value);
-        this.updateFormValue(value);
-      });
+    const contracts = propsToContracts(this);
+    this.store = createSlideToggleStore(contracts);
+    // init context.
+    this.contextContainer.context = [
+      this.store,
+      {
+        valueChange: (value: boolean) => {
+          this.store?.dispatch(new UpdateValueAction(value));
+          this.valueChange.emit(value);
+          this.updateFormValue(value);
+        }
+      }
+    ];
   }
 
   ngOnChanges(): void {
-    this.updateStateFromProps();
+    this.updateStateFromInputs();
   }
 
-  ngOnDestroy(): void {
-    this.destroy.next();
-    this.destroy.complete();
-  }
-
-  updateValue(newValue: boolean): void {
-    this.component.updateValue(newValue);
-  }
-
-  protected updateStateFromProps(): void {
-    this.component.updateStateFromProps({
-      value: this.value,
-      config: {
-        text: this.text,
-        textPosition: this.textPosition
-      },
-      templates: {
-        indicatorView: this.indicatorViewTemplate,
-        textView: this.textViewTemplate,
-      }
-    });
+  protected updateStateFromInputs(): void {
+    const contracts = propsToContracts(this);
+    this.store?.dispatch(new UpdateFromContractsAction(contracts));
   }
 
   /* Support angular reactive forms methods */
   writeValue(value: boolean): void {
     this.value = value;
-    this.updateStateFromProps();
+    this.updateStateFromInputs();
   }
 }

@@ -1,16 +1,19 @@
 import React from 'react';
 
-interface IDxSlideToggleTextViewProps {
-  text: string;
+interface DxSlideToggleTextViewProps {
+  // TODO jQuery: Temporary wrapping for the inferno generator.
+  data: {
+    text: string;
+  }
 }
 
-function DxSlideToggleTextView({text}: IDxSlideToggleTextViewProps) {
+const DxSlideToggleTextView = ({data: {text}}: DxSlideToggleTextViewProps) => {
   return (
     <div>
       {text}
     </div>
   )
-}
+};
 
-export type {IDxSlideToggleTextViewProps};
+export type {DxSlideToggleTextViewProps};
 export {DxSlideToggleTextView};

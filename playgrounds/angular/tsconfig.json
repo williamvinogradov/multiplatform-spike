@@ -22,11 +22,12 @@
       "es2020",
       "dom"
     ],
+    "paths": {
+      "@dx/angular/*": ["./node_modules/@dx/angular/*"],
+      "@dx/angular-common/*": ["./node_modules/@dx/angular-common/*"],
+      "@dx/core/*": [ "./node_modules/@dx/core/*"]
+    },
     "skipLibCheck": true,
-    "types": [
-      "@dx/angular-common",
-      "@dx/angular"
-    ]
   },
   "include": ["./src/**/*.ts"],
   "exclude": ["node_modules"],

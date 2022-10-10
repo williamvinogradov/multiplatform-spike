@@ -16,6 +16,11 @@
       "types": "./types/index.d.ts",
       "default": "./types/index.js"
     },
+    "./internal": {
+      "types": "./internal/index.d.ts",
+      "import": "./internal/index.mjs",
+      "require": "./cjs/internal/index.cjs"
+    },
     "./components/pager": {
       "types": "./components/pager/index.d.ts",
       "import": "./components/pager/index.mjs",

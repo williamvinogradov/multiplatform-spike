@@ -6,4 +6,4 @@ const COMPONENTS = [
     'pager'
 ];
 
-export default  getRollupConfig(COMPONENTS, OUTPUT_DIR);
+export default getRollupConfig(COMPONENTS, OUTPUT_DIR);

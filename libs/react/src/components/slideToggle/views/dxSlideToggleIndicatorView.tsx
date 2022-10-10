@@ -1,14 +1,17 @@
 import React from 'react';
-import {TTextPosition} from '@dx/core/types/slideToggle';
+import {TTextPosition} from '@dx/core/components/slideToggle';
 
 import './dxSlideToggleIndicatorView.scss';
 
-interface IDxSLideToggleIndicatorViewProps {
-  value: boolean;
-  textPosition: TTextPosition;
+interface DxSlideToggleIndicatorViewProps {
+  // TODO jQuery: Temporary wrapping for the inferno generator.
+  data: {
+    value: boolean;
+    textPosition: TTextPosition;
+  }
 }
 
-function DxSlideToggleIndicatorView({value, textPosition}: IDxSLideToggleIndicatorViewProps) {
+const DxSlideToggleIndicatorView = ({data: {value, textPosition}}: DxSlideToggleIndicatorViewProps) => {
   return (
     <div className={`dx-slide-toggle-indicator ${textPosition === 'right' ? '-left' : '-right'}`}>
       <div className={`dx-slide-toggle-line ${!value ? '-off' : '-on'}`}>
@@ -17,7 +20,7 @@ function DxSlideToggleIndicatorView({value, textPosition}: IDxSLideToggleIndicat
       </div>
     </div>
   )
-}
+};
 
-export type {IDxSLideToggleIndicatorViewProps};
+export type {DxSlideToggleIndicatorViewProps};
 export {DxSlideToggleIndicatorView};

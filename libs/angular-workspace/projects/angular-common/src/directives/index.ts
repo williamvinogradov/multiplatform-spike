@@ -1,1 +1,1 @@
-export * from './dxLet';
+export * from './dx-let';

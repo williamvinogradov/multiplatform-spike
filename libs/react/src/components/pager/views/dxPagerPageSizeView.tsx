@@ -1,22 +1,24 @@
 import React from 'react';
-import {IPagerPageSizeReactVM} from '../types';
+import {PageSizeReactVM} from '../types/public';
 
-interface IDxPagerPageSizeViewProps {
-  viewModel: IPagerPageSizeReactVM;
-  selectPageSize: (pageSize: number) => () => void;
+interface DxPagerPageSizeViewProps {
+  // TODO jQuery: Temporary wrapping for the inferno generator.
+  data: {
+    viewModel: PageSizeReactVM;
+    selectPageSize: (pageSize: number) => void;
+  }
 }
 
-
-function DxPagerPageSizeView({viewModel, selectPageSize}: IDxPagerPageSizeViewProps) {
+const DxPagerPageSizeView = ({data: {viewModel, selectPageSize}}: DxPagerPageSizeViewProps) => {
   return (
     <div className="dx-pager-page-size">
       {
         viewModel.items.map((item) =>
-          item.template({item, selectPageSize}))
+          item.template({data: {item, selectPageSize}}))
       }
     </div>
   );
-}
+};
 
-export type {IDxPagerPageSizeViewProps};
+export type {DxPagerPageSizeViewProps};
 export {DxPagerPageSizeView};

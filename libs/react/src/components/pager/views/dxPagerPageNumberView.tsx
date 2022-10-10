@@ -1,22 +1,25 @@
 import React from 'react';
-import {IPagerPageNumberReactVM} from '../types';
+import {PageNumberReactVM} from '../types/public';
 
-interface IDxPagerPageNumberViewProps {
-  viewModel: IPagerPageNumberReactVM;
-  selectPage: (pageNumber: number) => () => void;
+interface DxPagerPageNumberViewProps {
+  // TODO jQuery: Temporary wrapping for the inferno generator.
+  data: {
+    viewModel: PageNumberReactVM;
+    selectPage: (pageNumber: number) => void;
+  }
 }
 
-function DxPagerPageNumberView({viewModel, selectPage}: IDxPagerPageNumberViewProps) {
+const DxPagerPageNumberView = ({data: {viewModel, selectPage}}: DxPagerPageNumberViewProps) => {
   return (
     <div className="dx-pager-pages">
       {
         viewModel.items.map((item) =>
-          item.template({item, selectPage})
+          item.template({data: {item, selectPage}})
         )
       }
     </div>
   )
-}
+};
 
-export type {IDxPagerPageNumberViewProps};
+export type {DxPagerPageNumberViewProps};
 export {DxPagerPageNumberView};

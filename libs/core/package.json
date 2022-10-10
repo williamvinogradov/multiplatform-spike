@@ -13,28 +13,10 @@
     "rollup": "^2.77.1",
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",
+    "ts-essentials": "^9.3.0",
     "typescript": "^4.7.4"
   },
   "dependencies": {
     "tslib": "^2.3.0"
-  },
-  "peerDependencies": {
-    "rxjs": ">=7.x.x"
-  },
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
-    },
-    "./components/pager": {
-      "types": "./dist/components/pager/index.d.ts",
-      "import": "./dist/components/pager/index.mjs",
-      "require": "./dist/cjs/components/pager/index.cjs"
-    },
-    "./types/pager": {
-      "types": "./dist/types/pager/index.d.ts",
-      "import": "./dist/types/pager/index.mjs",
-      "require": "./dist/cjs/types/pager/index.cjs"
-    }
   }
 }

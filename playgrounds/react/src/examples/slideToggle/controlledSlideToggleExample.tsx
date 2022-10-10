@@ -8,20 +8,22 @@ function ControlledSlideToggleExample() {
     textPosition: 'right' as TTextPosition,
   });
 
-  const handleValueChange = useCallback((value: boolean) => setState(value), []);
+  const handleValueChange = useCallback((value: boolean) => {
+    setState(value);
+  }, []);
   const appClick = useCallback(() => setState(!state), [state]);
 
   const changeTextPosition = useCallback((event: React.ChangeEvent<HTMLSelectElement>) =>
-  setConfig({
-    ...config,
-    textPosition: event.target.value as TTextPosition,
-  }), [config]);
+    setConfig({
+      ...config,
+      textPosition: event.target.value as TTextPosition,
+    }), [config]);
 
   const changeText = useCallback((event: React.ChangeEvent<HTMLInputElement>) =>
-  setConfig({
-    ...config,
-    text: event.target.value,
-  }), [config]);
+    setConfig({
+      ...config,
+      text: event.target.value,
+    }), [config]);
 
   return (
     <div className="example">
@@ -52,7 +54,7 @@ function ControlledSlideToggleExample() {
         </div>
         <div className="example__play-part">
           <span>Set text:</span>
-          <input className="example-input" type="text" value={config.text} onChange={changeText} />
+          <input className="example-input" type="text" value={config.text} onChange={changeText}/>
         </div>
       </div>
     </div>

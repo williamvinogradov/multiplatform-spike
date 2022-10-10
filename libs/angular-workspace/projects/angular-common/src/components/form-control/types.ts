@@ -1,8 +1,8 @@
 // reactive form types.
-type TOnChangeCallback<TControlValue> = (value: TControlValue) => void;
-type TOnTouchCallback = () => void;
+type OnChangeCallback<TControlValue> = (value: TControlValue) => void;
+type OnTouchCallback = () => void;
 
 export type {
-  TOnChangeCallback,
-  TOnTouchCallback,
+  OnChangeCallback,
+  OnTouchCallback,
 }

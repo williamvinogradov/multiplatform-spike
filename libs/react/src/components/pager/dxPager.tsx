@@ -1,58 +1,36 @@
-import React, {useMemo} from 'react';
-import {DxPagerCore, IPagerPageNumberVM, IPagerPageSizeVM} from '@dx/core/components/pager';
-import {useViewModel} from '../../common/hooks';
-import {useControlledPageNumber} from './hooks/useControlledPageNumber';
-import {useControlledPageSize} from './hooks/useControlledPageSize';
-import {useUncontrolledPageNumber} from './hooks/useUncontrolledPageNumber';
-import {useUncontrolledPageSize} from './hooks/useUncontrolledPageSize';
-import {useUpdateFromProps} from './hooks/useUpdateFromProps';
+import React from 'react';
 import {
-  IDxPagerProps,
-  IPagerPageNumberReactVM,
-  IPagerPageSizeReactVM,
-  PAGER_DEFAULT_PROPS,
-  TPagerTemplate
-} from './types';
+  UpdateFromContractsAction
+} from '@dx/core/components/pager';
+import {useSecondEffect} from '../../internal';
+import {useIsControlled, useCoreControlledContext, useCoreUncontrolledContext} from './hooks';
+import {DxPagerProps} from './types/public';
+import {
+  propsToContracts,
+} from './utils';
+import {PagerContext} from './dxPagerContext';
+import {DxPagerContainer} from './containers/dxPagerContainer';
 
 import './dxPager.scss';
 
+
+// TODO jQuery: export here for the inferno generator.
 //* Component={"name":"DxPager", "jQueryRegistered":true, "hasApiMethod":false}
-export function DxPager(props: IDxPagerProps) {
-  const isPageNumberControlled = props.selectedPage !== undefined;
-  const isPageSizeControlled = props.selectedPageSize !== undefined;
+export const DxPager = React.memo((props: DxPagerProps) => {
+  const isControlled = useIsControlled(props);
+  const [store, context] = isControlled
+    ? useCoreControlledContext(props)
+    : useCoreUncontrolledContext(props);
 
-  const component = useMemo(() => new DxPagerCore(), []);
+  /* update from contracts */
+  const contracts = propsToContracts(props, false, isControlled);
+  useSecondEffect(() => {
+    store.dispatch(new UpdateFromContractsAction(contracts));
+  }, [props]);
 
-  const rootTemplate = useViewModel<unknown, {template: TPagerTemplate}>(component.template$);
-  const pageNumberViewModel = useViewModel<IPagerPageNumberVM, IPagerPageNumberReactVM>(component.pageNumberLogic.viewModel$);
-  const pageSizeViewModel = useViewModel<IPagerPageSizeVM, IPagerPageSizeReactVM>(component.pageSizeLogic.viewModel$);
-
-  useUpdateFromProps(component, props, isPageNumberControlled, isPageSizeControlled);
-
-  const [selectPage] = isPageNumberControlled
-    ? useControlledPageNumber(component, props)
-    : useUncontrolledPageNumber(component, props);
-
-  const [selectPageSize] = isPageSizeControlled
-    ? useControlledPageSize(component, props)
-    : useUncontrolledPageSize(component, props);
-
-
-  const readyToRender = !!rootTemplate?.template && !!pageNumberViewModel && !!pageSizeViewModel;
-  const viewModel = {
-    pageNumberViewModel,
-    pageSizeViewModel,
-    selectPage,
-    selectPageSize,
-  };
-  return readyToRender
-    ? rootTemplate.template({...viewModel, data: viewModel } as any)
-    : <div></div>;
-}
-
-DxPager.defaultProps = PAGER_DEFAULT_PROPS;
-
-export {
-  IDxPagerProps,
-  
-}
+  return (
+    <PagerContext.Provider value={context}>
+      <DxPagerContainer/>
+    </PagerContext.Provider>
+  )
+});

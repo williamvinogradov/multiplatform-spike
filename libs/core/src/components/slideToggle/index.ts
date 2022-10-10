@@ -1,2 +1,3 @@
-export * from './dxSlideToggleCore';
-export * from './state';
+export * from './store';
+export * from './types';
+

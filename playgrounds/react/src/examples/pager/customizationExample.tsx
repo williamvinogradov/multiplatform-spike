@@ -1,13 +1,13 @@
 import React from 'react';
 import {
   DxPager,
-  IDxPagerPageSizeItemViewProps,
-  IDxPagerPageNumberItemViewProps,
-  IDxPagerPageSizeViewProps,
-  IDxPagerPageNumberViewProps,
+  DxPagerPageSizeItemViewProps,
+  DxPagerPageNumberItemViewProps,
+  DxPagerPageSizeViewProps,
+  DxPagerPageNumberViewProps,
   DxPagerPageNumberItemView,
   DxPagerPageSizeItemView,
-  IDxPagerViewProps,
+  DxPagerViewProps,
   DxPagerPageSizeView,
   DxPagerPageNumberView
 } from '@dx/react/components/pager';
@@ -16,27 +16,29 @@ import './customizationExample.css';
 
 // --- custom template section ---
 
-function CustomPageSizeItem({item, selectPageSize}: IDxPagerPageSizeItemViewProps) {
+const CustomPageSizeItem = ({data: {item, selectPageSize}}: DxPagerPageSizeItemViewProps) => {
+  const clickHandler = () => selectPageSize(item.value);
   return (
     <div className={`custom-pager-item ${item.selected ? '--selected' : ''}`}
          key={item.value}
-         onClick={selectPageSize(item.value)}>
+         onClick={clickHandler}>
       {item.label}
     </div>
   );
 }
 
-function CustomPageNumberItem({item, selectPage}: IDxPagerPageNumberItemViewProps) {
+const CustomPageNumberItem = ({data: {item, selectPage}}: DxPagerPageNumberItemViewProps) => {
+  const clickHandler = () => selectPage(item.value);
   return (
     <div className={`custom-pager-item ${item.selected ? '--selected' : ''}`}
          key={item.value}
-         onClick={selectPage(item.value)}>
+         onClick={clickHandler}>
       {item.label}
     </div>
   );
 }
 
-function CustomPageNumberDivider({item}: IDxPagerPageNumberItemViewProps) {
+const CustomPageNumberDivider = ({data: {item}}: DxPagerPageNumberItemViewProps) => {
   return (
     <div className="custom-pager-item divider"
          key={item.value}>
@@ -46,25 +48,31 @@ function CustomPageNumberDivider({item}: IDxPagerPageNumberItemViewProps) {
   )
 }
 
-function CustomPageSize({viewModel, selectPageSize}: IDxPagerPageSizeViewProps) {
+const CustomPageSize = ({data: {viewModel, selectPageSize}}: DxPagerPageSizeViewProps) => {
   return (
     <div className="custom-pager-sizes">
       {
         viewModel.items.map((item) =>
-          <DxPagerPageSizeItemView key={item.value} item={item} selectPageSize={selectPageSize} />
+          <DxPagerPageSizeItemView key={item.value} data={{
+            item,
+            selectPageSize,
+          }}/>
         )
       }
     </div>
   )
 }
 
-function CustomPageNumber({viewModel, selectPage}: IDxPagerPageNumberViewProps) {
+const CustomPageNumber = ({data: {viewModel, selectPage}}: DxPagerPageNumberViewProps) => {
   return (
     <div className="custom-pager-numbers">
       <div className="custom-pager-numbers__content">
         {
           viewModel.items.map((item) =>
-            <DxPagerPageNumberItemView key={item.value} item={item} selectPage={selectPage} />
+            <DxPagerPageNumberItemView key={item.value} data={{
+              item,
+              selectPage,
+            }}/>
           )
         }
       </div>
@@ -72,14 +80,21 @@ function CustomPageNumber({viewModel, selectPage}: IDxPagerPageNumberViewProps) 
   )
 }
 
-function CustomPager({pageSizeViewModel, pageNumberViewModel, selectPage, selectPageSize}: IDxPagerViewProps) {
+const CustomPager = ({
+                       data: {
+                         pageSizeViewModel,
+                         pageNumberViewModel,
+                         selectedPageChange,
+                         selectedPageSizeChange
+                       }
+                     }: DxPagerViewProps) => {
   return (
     <div className="custom-pager">
       <div className="custom-pager__item">
-        <DxPagerPageNumberView viewModel={pageNumberViewModel} selectPage={selectPage} />
+        <DxPagerPageNumberView data={{viewModel: pageNumberViewModel, selectPage: selectedPageChange}}/>
       </div>
       <div className="custom-pager__item">
-        <DxPagerPageSizeView viewModel={pageSizeViewModel} selectPageSize={selectPageSize} />
+        <DxPagerPageSizeView data={{viewModel: pageSizeViewModel, selectPageSize: selectedPageSizeChange}}/>
       </div>
     </div>
   )
@@ -99,9 +114,9 @@ function CustomizationExample() {
                    defaultSelectedPageSize={20}
                    pageCount={20}
                    pageSizes={[10, 20, 30]}
-                   pageNumberItemTemplate={CustomPageNumberItem}
-                   pageNumberFakeItemTemplate={CustomPageNumberDivider}
-                   pageSizeItemTemplate={CustomPageSizeItem}
+                   pageNumberItemView={CustomPageNumberItem}
+                   pageNumberFakeItemView={CustomPageNumberDivider}
+                   pageSizeItemView={CustomPageSizeItem}
           />
         </div>
       </div>
@@ -115,8 +130,8 @@ function CustomizationExample() {
                    defaultSelectedPageSize={20}
                    pageCount={20}
                    pageSizes={[10, 20, 30]}
-                   pageNumberTemplate={CustomPageNumber}
-                   pageSizeTemplate={CustomPageSize}
+                   pageNumberView={CustomPageNumber}
+                   pageSizeView={CustomPageSize}
           />
         </div>
       </div>
@@ -130,9 +145,9 @@ function CustomizationExample() {
                    defaultSelectedPageSize={20}
                    pageCount={20}
                    pageSizes={[10, 20, 30]}
-                   pagerTemplate={CustomPager}
-                   pageNumberItemTemplate={CustomPageNumberItem}
-                   pageNumberFakeItemTemplate={CustomPageNumberDivider}
+                   pagerView={CustomPager}
+                   pageNumberItemView={CustomPageNumberItem}
+                   pageNumberFakeItemView={CustomPageNumberDivider}
           />
         </div>
       </div>

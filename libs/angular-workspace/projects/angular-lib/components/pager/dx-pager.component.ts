@@ -1,80 +1,62 @@
-import {ChangeDetectionStrategy, Component, OnChanges, OnInit} from '@angular/core';
-import {combineLatest, map, Observable, Subject, takeUntil} from 'rxjs';
-import {IAngularViewData} from '@dx/angular-common';
-import {DxPagerCore} from '@dx/core/components/pager'
-import {DxPagerContracts, IPagerPageNumberAngularVM, IPagerPageSizeAngularVM} from './types';
-import {IDxPagerViewActions, IDxPagerViewModel} from './views';
+import {ChangeDetectionStrategy, Component, Inject, OnChanges, OnInit} from '@angular/core';
+import {
+  createPagerStore,
+  PagerStore,
+  SelectPageAction,
+  SelectPageSizeAction,
+  UpdateFromContractsAction, validatePageNumber, validatePageSize
+} from '@dx/core/components/pager'
+import {createValidator} from '@dx/core/internal';
+import {PAGER_CONTEXT_TOKEN, PagerContext, pagerContextFactory} from './context';
+import {DxPagerContracts} from './types';
+import {propsToContracts} from './utils';
 
 @Component({
   selector: 'dx-pager',
-  template: `
-    <dx-dynamic-template *ngIf="templateViewModel$ | async as templateViewModel"
-                         [template]="pagerTemplate"
-                         [data]="templateViewModel">
-    </dx-dynamic-template>
-  `,
+  template: '<dx-pager-container></dx-pager-container>',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [DxPagerCore]
+  providers: [{
+    provide: PAGER_CONTEXT_TOKEN,
+    useFactory: pagerContextFactory,
+  }]
 })
 export class DxPagerComponent extends DxPagerContracts
   implements OnInit, OnChanges {
 
-  templateViewModel$ = this.getTemplateViewModel();
+  private store?: PagerStore;
 
-  private destroy$ = new Subject<void>();
-
-  constructor(private component: DxPagerCore) {
+  constructor(@Inject(PAGER_CONTEXT_TOKEN) private contextContainer: PagerContext) {
     super();
   }
 
   ngOnInit(): void {
-    this.component.selectedPageChangeOutput$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((value: number) => this.selectedPageChange.emit(value));
+    const contracts = propsToContracts(this);
+    this.store = createPagerStore(contracts);
 
-    this.component.selectedPageSizeChangeOutput$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((value: number) => this.selectedPageSizeChange.emit(value));
+    const pageNumberValidator = createValidator(validatePageNumber);
+    const pageSizeValidator = createValidator(validatePageSize);
+
+    this.store.addValidators([pageNumberValidator, pageSizeValidator]);
+    this.store.validate();
+
+    // init context
+    this.contextContainer.context = [
+      this.store,
+      {
+        selectedPageChange: (value: number) => {
+          this.store?.dispatch(new SelectPageAction(value));
+          this.selectedPageChange.emit(value);
+        },
+        selectedPageSizeChange: (value: number) => {
+          this.store?.dispatch(new SelectPageSizeAction(value));
+          this.selectedPageSizeChange.emit(value);
+        }
+      }
+    ];
   }
 
   ngOnChanges(): void {
-    this.updateStateFromInputs();
-  }
-
-  private getTemplateViewModel(): Observable<IAngularViewData<IDxPagerViewModel, IDxPagerViewActions>> {
-    return combineLatest([
-      this.component.pageSizeLogic.viewModel$ as Observable<IPagerPageSizeAngularVM>,
-      this.component.pageNumberLogic.viewModel$ as Observable<IPagerPageNumberAngularVM>,
-    ]).pipe(
-      map(([pageSizeViewModel, pageNumberViewModel]) => ({
-        viewModel: {
-          pageSizeViewModel,
-          pageNumberViewModel,
-        },
-        actions: {
-          selectPage: (pageNumber: number) => this.component.pageNumberLogic.selectPageAction(pageNumber),
-          selectPageSize: (pageSize: number) => this.component.pageSizeLogic.selectPageSize(pageSize),
-        }
-      }))
-    );
-  }
-
-  private updateStateFromInputs(): void {
-    this.component.updateRootTemplate(this.pagerTemplate);
-    this.component.pageNumberLogic.updateFromProps({
-      count: this.pageCount,
-      templates: {
-        general: this.pageNumberTemplate,
-        item: this.pageNumberItemTemplate,
-        fakeItem: this.pageNumberFakeItemTemplate,
-      }
-    });
-    this.component.pageSizeLogic.updateFromProps({
-      sizes: this.pageSizes,
-      templates: {
-        general: this.pageSizeTemplate,
-        item: this.pageSizeItemTemplate,
-      }
-    })
+    const contracts = propsToContracts(this);
+    this.store?.dispatch(new UpdateFromContractsAction(contracts));
   }
 }

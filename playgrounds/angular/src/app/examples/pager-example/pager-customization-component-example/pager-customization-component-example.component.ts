@@ -1,10 +1,12 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {
   CustomPageNumberComponent,
-  CustomPageNumberItemComponent, CustomPagerComponent, CustomPageSizeComponent,
-  CustomPageSizeItemComponent
+  CustomPageNumberItemComponent,
+  CustomPagerComponent,
+  CustomPageSizeComponent,
+  CustomPageSizeItemComponent,
+  CustomPageNumberDividerComponent
 } from '../custom-components';
-import {CustomPageNumberDividerComponent} from '../custom-components/custom-page-number-divider.component';
 
 @Component({
   selector: 'app-pager-customization-component-example',

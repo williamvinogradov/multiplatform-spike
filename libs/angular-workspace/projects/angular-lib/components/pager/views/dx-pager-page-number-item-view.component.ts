@@ -1,14 +1,14 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {DxViewContracts} from '@dx/angular-common';
-import {IPagerPageNumberItemAngular} from '../types';
+import {ItemAngularVM} from '../types';
 
-interface IDxPagerPageNumberItemActions {
+interface DxPagerPageNumberItemActions {
   selectPage: (pageNumber: number) => void;
 }
 
 @Component({template: ''})
 export abstract class DxPagerPageNumberItemViewContracts
-  extends DxViewContracts<IPagerPageNumberItemAngular, IDxPagerPageNumberItemActions> {
+  extends DxViewContracts<ItemAngularVM<DxPagerPageNumberItemViewComponent>, DxPagerPageNumberItemActions> {
 }
 
 @Component({

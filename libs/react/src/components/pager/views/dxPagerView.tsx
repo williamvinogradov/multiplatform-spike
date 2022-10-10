@@ -1,34 +1,41 @@
 import React from 'react';
-import {IPagerPageNumberReactVM, IPagerPageSizeReactVM} from '../types';
+import {PageNumberReactVM, PageSizeReactVM} from '../types/public';
 
-interface IDxPagerViewProps {
-  pageSizeViewModel: IPagerPageSizeReactVM;
-  pageNumberViewModel: IPagerPageNumberReactVM;
-  selectPage: (pageNumber: number) => () => void;
-  selectPageSize: (pageSize: number) => () => void;
+interface DxPagerViewProps {
+  // TODO jQuery: Temporary wrapping for the inferno generator.
+  data: {
+    pageSizeViewModel: PageSizeReactVM;
+    pageNumberViewModel: PageNumberReactVM;
+    selectedPageChange: (pageNumber: number)  => void;
+    selectedPageSizeChange: (pageSize: number)  => void;
+  }
 }
 
-function DxPagerView(props: IDxPagerViewProps) {
-  const pageSizeView = props.pageSizeViewModel.template;
-  const pageNumberView = props.pageNumberViewModel.template;
+const DxPagerView = (props: DxPagerViewProps) => {
+  const pageSizeView = props.data.pageSizeViewModel.template;
+  const pageNumberView = props.data.pageNumberViewModel.template;
 
   return (
     <div className="dx-pager">
       {
         pageSizeView({
-          viewModel: props.pageSizeViewModel,
-          selectPageSize: props.selectPageSize,
+          data: {
+            viewModel: props.data.pageSizeViewModel,
+            selectPageSize: props.data.selectedPageSizeChange,
+          }
         })
       }
       {
         pageNumberView({
-          viewModel: props.pageNumberViewModel,
-          selectPage: props.selectPage,
+          data: {
+            viewModel: props.data.pageNumberViewModel,
+            selectPage: props.data.selectedPageChange,
+          }
         })
       }
     </div>
   )
-}
+};
 
-export {IDxPagerViewProps};
+export {DxPagerViewProps};
 export {DxPagerView};

@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {DxLetModule, DxDynamicTemplateModule} from '@dx/angular-common';
-import {DxSlideToggleTemplateComponent} from './containers/dx-slide-toggle-template.component';
+import {DxSlideToggleContainerComponent} from './containers/dx-slide-toggle-container.component';
 import {DxSlideToggleComponent} from './dx-slide-toggle.component';
 import {
   DxSlideToggleIndicatorViewComponent,
@@ -13,7 +13,7 @@ import {
 @NgModule({
   declarations: [
     DxSlideToggleComponent,
-    DxSlideToggleTemplateComponent,
+    DxSlideToggleContainerComponent,
     // views.
     DxSlideToggleIndicatorViewComponent,
     DxSlideToggleTextViewComponent,

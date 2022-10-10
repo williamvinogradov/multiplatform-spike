@@ -1,31 +1,26 @@
-import {IPagerItem, IPagerPageNumberVM, IPagerPageSizeVM} from '@dx/core/components/pager';
+import {ItemVM, PageNumberVM, PageSizeVM} from '@dx/core/components/pager';
 import {
   DxPagerPageNumberItemViewComponent, DxPagerPageNumberViewComponent,
   DxPagerPageSizeItemViewComponent,
   DxPagerPageSizeViewComponent
 } from '../views';
 
-interface IPagerPageSizeItemAngular extends IPagerItem {
-  template: DxPagerPageSizeItemViewComponent;
+interface ItemAngularVM<Template> extends ItemVM {
+  template: Template;
 }
 
-interface IPagerPageNumberItemAngular extends IPagerItem {
-  template: DxPagerPageNumberItemViewComponent;
-}
-
-interface IPagerPageSizeAngularVM extends IPagerPageSizeVM {
-  items: IPagerPageSizeItemAngular[];
+interface PageSizeAngularVM extends PageSizeVM {
+  items: ItemAngularVM<DxPagerPageSizeItemViewComponent>[];
   template: DxPagerPageSizeViewComponent;
 }
 
-interface IPagerPageNumberAngularVM extends IPagerPageNumberVM {
-  items: IPagerPageNumberItemAngular[];
+interface PageNumberAngularVM extends PageNumberVM {
+  items: ItemAngularVM<DxPagerPageNumberItemViewComponent>[];
   template: DxPagerPageNumberViewComponent;
 }
 
 export type {
-  IPagerPageSizeItemAngular,
-  IPagerPageNumberItemAngular,
-  IPagerPageSizeAngularVM,
-  IPagerPageNumberAngularVM,
+  ItemAngularVM,
+  PageSizeAngularVM,
+  PageNumberAngularVM,
 }

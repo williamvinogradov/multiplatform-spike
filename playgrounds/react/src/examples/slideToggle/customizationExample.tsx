@@ -1,8 +1,8 @@
-import {TTextPosition} from '@dx/core/types/slideToggle';
+import {TTextPosition} from '@dx/react/components/slideToggle';
 import {
   DxSlideToggle,
-  IDxSLideToggleIndicatorViewProps,
-  IDxSlideToggleTextViewProps
+  DxSlideToggleIndicatorViewProps,
+  DxSlideToggleTextViewProps
 } from '@dx/react/components/slideToggle';
 import React, {useCallback, useState} from 'react';
 
@@ -11,19 +11,19 @@ import catImage from '../../assets/cat.jpeg';
 import dogImage from '../../assets/dog.webp';
 
 
-function CustomIndicator({value}: IDxSLideToggleIndicatorViewProps) {
+const CustomIndicator = ({data: {value}}: DxSlideToggleIndicatorViewProps) => {
   return (
     <div className={'custom-indicator'}>
       {
         value
-          ? <img className={'custom-indicator__image'} src={catImage} alt={'cat'} />
-          : <img className={'custom-indicator__image'} src={dogImage} alt={'dog'} />
+          ? <img className={'custom-indicator__image'} src={catImage} alt={'cat'}/>
+          : <img className={'custom-indicator__image'} src={dogImage} alt={'dog'}/>
       }
     </div>
   )
 }
 
-function CustomText({text}: IDxSlideToggleTextViewProps) {
+const CustomText = ({data: {text}}: DxSlideToggleTextViewProps) => {
   return (
     <div className={'custom-text'}>
       {text}
@@ -58,8 +58,8 @@ function CustomizationExample() {
         <DxSlideToggle defaultValue={false}
                        text={config.text}
                        textPosition={config.textPosition}
-                       indicatorViewTemplate={CustomIndicator}
-                       textViewTemplate={CustomText}/>
+                       indicatorView={CustomIndicator}
+                       textView={CustomText}/>
       </div>
       <div className="example__info">
         <div className="example__play-part">
@@ -71,7 +71,7 @@ function CustomizationExample() {
         </div>
         <div className="example__play-part">
           <span>Set text:</span>
-          <input className="example-input" type="text" value={config.text} onChange={changeText} />
+          <input className="example-input" type="text" value={config.text} onChange={changeText}/>
         </div>
       </div>
     </div>

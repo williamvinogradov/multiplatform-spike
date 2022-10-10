@@ -1,32 +1,29 @@
-import React, {useMemo} from 'react';
-import {DxSlideToggleCore, ISlideToggleState} from '@dx/core/components/slideToggle';
-import {useViewModel} from '../../common/hooks';
-import {DxSlideToggleTemplate} from './containers/dxSlideToggleTemplate';
-import {useControlled} from './hooks/useControlled';
-import {useUncontrolled} from './hooks/useUncontrolled';
-import {useUpdateFromProps} from './hooks/useUpdateFromProps';
-import {DX_SLIDE_TOGGLE_DEFAULT_PROPS, IDxSlideToggleProps, ISlideToggleReactVM} from './types';
+import React from 'react';
+import {
+  UpdateFromContractsAction,
+} from '@dx/core/components/slideToggle';
+import {useSecondEffect} from '../../internal';
+import {DxSlideToggleContainer} from './containers/dxSlideToggleContainer';
+import {SlideToggleContext} from './dxSlideToggleContext';
+import {useCoreContext, useIsControlled} from './hooks';
+import {propsToContracts} from './utils';
+import {DxSlideToggleProps} from './types/public';
 
-function DxSlideToggle(props: IDxSlideToggleProps) {
-  const isControlled = props.value !== undefined;
 
-  const component = useMemo(() => new DxSlideToggleCore(), []);
-  const viewModel = useViewModel<ISlideToggleState, ISlideToggleReactVM>(component.viewModel$);
+// TODO jQuery: export here for the inferno generator.
+export const DxSlideToggle = React.memo((props: DxSlideToggleProps) => {
+  const isControlled = useIsControlled(props);
+  const [store, context] = useCoreContext(props, isControlled);
 
-  useUpdateFromProps(component, props);
+  /* update state from contracts */
+  const contracts = propsToContracts(props, false, isControlled);
+  useSecondEffect(() => {
+    store.dispatch(new UpdateFromContractsAction(contracts));
+  }, [contracts]);
 
-  const [updateValue] = isControlled
-    ? useControlled(component, props, viewModel)
-    : useUncontrolled(component, props, viewModel);
-
-  return viewModel
-    ? <DxSlideToggleTemplate viewModel={viewModel} updateValue={updateValue} />
-    : null;
-}
-
-DxSlideToggle.defaultProps = DX_SLIDE_TOGGLE_DEFAULT_PROPS;
-
-export {
-  IDxSlideToggleProps,
-  DxSlideToggle,
-}
+  return (
+    <SlideToggleContext.Provider value={context}>
+      <DxSlideToggleContainer/>
+    </SlideToggleContext.Provider>
+  )
+});

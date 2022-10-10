@@ -7,9 +7,9 @@ import {UncontrolledSlideToggleExample} from './uncontrolledSlideToggleExample';
 
 function SlideToggleExample() {
   return <React.Fragment>
-    <ControlledSlideToggleExample />
-    <UncontrolledSlideToggleExample />
-    <CustomizationExample />
+    <ControlledSlideToggleExample/>
+    <UncontrolledSlideToggleExample/>
+    <CustomizationExample/>
   </React.Fragment>
 }
 
