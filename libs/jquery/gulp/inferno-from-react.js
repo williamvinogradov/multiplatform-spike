@@ -7,12 +7,36 @@ import rename from "gulp-rename";
 import * as ts from 'gulp-typescript';
 import transpileConfig from './transpile-config.js';
 
+import * as core from '@devextreme-generator/core';
+
 import { generateComponents } from '@devextreme-generator/build-helpers';
 import InfernoFromReactGeneratorModule from '@devextreme-generator/inferno-from-react';
 // TODO Vitik: remove this mapping after next release of generators
 const InfernoFromReactGenerator = InfernoFromReactGeneratorModule.InfernoFromReactGenerator ||
     InfernoFromReactGeneratorModule.ReactInfernoGenerator;
 
+class ImportWrap {
+    constructor(importDeclaration) {
+        this.importDeclaration = importDeclaration;
+    }
+    toString() {
+        return `import { HookContainer, InfernoWrapperComponent } from '@devextreme/runtime/inferno-hooks'
+        ${this.importDeclaration.toString()}`;
+    }
+}
+class PatchedGenerator extends InfernoFromReactGenerator {
+    createImportDeclaration(decorators, modifiers, importClause, moduleSpecifier) {
+        if(Object.keys(this.components).length > 0 && !this.coreHooksImportAdded) {
+            this.coreHooksImportAdded = true;
+            return new ImportWrap(super.createImportDeclaration(decorators, modifiers, importClause, moduleSpecifier));
+        }
+        return super.createImportDeclaration(decorators, modifiers, importClause, moduleSpecifier);
+    }
+    postProcessResult() {
+        this.coreHooksImportAdded = false;
+        super.postProcessResult();
+    }
+}
 // const env = require('../env-variables');
 // const context = require('../context.js');
 
@@ -54,7 +78,7 @@ export function generateInfernoFromReactComponents(distPath) {
     //return function generateInfernoFromReactComponents() {
     const tsReactProject = ts.default.createProject('gulp/inferno-from-react.tsconfig.json');
     const tsProject = ts.default.createProject('gulp/inferno-from-react.tsconfig.json');
-    const generator = new InfernoFromReactGenerator();
+    const generator = new PatchedGenerator(); //new InfernoFromReactGenerator();
     generator.options = BASE_GENERATOR_OPTIONS_WITH_JQUERY;
 
     const isNotDTS = (file) => !file.path.endsWith('.d.ts');
@@ -65,10 +89,10 @@ export function generateInfernoFromReactComponents(distPath) {
 
     return gulp.src(SRC/*, { base: 'react/components/pager/' }*/)
         // .pipe(gulpIf(dev, cached('generate-inferno-from-react-component')))
-        .pipe(tsReactProject({ }))
+        .pipe(tsReactProject({}))
         .pipe(rename(function(path) {
-             path.extname = path.extname === '.js' ? '.ts' : '.tsx'
-         }))
+            path.extname = path.extname === '.js' ? '.ts' : '.tsx'
+        }))
         .pipe(generateComponents(generator))
         .pipe(tsProject())
         // .pipe(gulpIf(isNotDTS, babel(transpileConfig.cjs)))
