@@ -79,19 +79,29 @@ const CustomPageNumber = ({data: {viewModel, selectPage}}: DxPagerPageNumberView
     </div>
   )
 }
+const RootViewCustomPageNumber = ({data: {viewModel, selectPage}}: DxPagerPageNumberViewProps) => {
+  return (
+    <div className="custom-pager-numbers">
+      <div className="custom-pager-numbers__content">
+        <DxPagerPageNumberView data={{ viewModel, selectPage }}></DxPagerPageNumberView>
+      </div>
+    </div>
+  )
+}
 
 const CustomPager = ({
                        data: {
                          pageSizeViewModel,
                          pageNumberViewModel,
                          selectedPageChange,
-                         selectedPageSizeChange
+                         selectedPageSizeChange,
                        }
                      }: DxPagerViewProps) => {
+  const PageNumberComponent = pageNumberViewModel.template;
   return (
     <div className="custom-pager">
       <div className="custom-pager__item">
-        <DxPagerPageNumberView data={{viewModel: pageNumberViewModel, selectPage: selectedPageChange}}/>
+        <PageNumberComponent data={{viewModel: pageNumberViewModel, selectPage: selectedPageChange}}/>
       </div>
       <div className="custom-pager__item">
         <DxPagerPageSizeView data={{viewModel: pageSizeViewModel, selectPageSize: selectedPageSizeChange}}/>
@@ -146,6 +156,7 @@ function CustomizationExample() {
                    pageCount={20}
                    pageSizes={[10, 20, 30]}
                    pagerView={CustomPager}
+                   pageNumberView={RootViewCustomPageNumber}
                    pageNumberItemView={CustomPageNumberItem}
                    pageNumberFakeItemView={CustomPageNumberDivider}
           />
