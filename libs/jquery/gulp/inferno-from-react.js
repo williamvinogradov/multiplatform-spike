@@ -30,6 +30,10 @@ class PatchedGenerator extends InfernoFromReactGenerator {
             this.coreHooksImportAdded = true;
             return new ImportWrap(super.createImportDeclaration(decorators, modifiers, importClause, moduleSpecifier));
         }
+        if(moduleSpecifier.expression.indexOf('devextreme-react') !== -1) {
+            moduleSpecifier.expression = moduleSpecifier.expression.replace('devextreme-react', '../../../wrappers');
+        }
+        moduleSpecifier.expression = moduleSpecifier.expression.replace('devextreme-react', '../../../wrappers');
         return super.createImportDeclaration(decorators, modifiers, importClause, moduleSpecifier);
     }
     postProcessResult() {

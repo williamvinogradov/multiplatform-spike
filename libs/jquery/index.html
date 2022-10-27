@@ -70,6 +70,8 @@
         }
     </style>
     <script type="text/javascript" src="./dest/bundle.debug.js" charset="utf-8"></script>
+    <div id="button">Change readOnly</div>
+    <div id="selectbox"></div>
     <div id="pager"></div>
     <div className="example">
         <div className="example__title">
@@ -99,6 +101,17 @@
     </div>
     <script>
         (function() {
+            const seelctBox = new window.DevExpress.ui.dxSelectBoxWrapper(document.querySelector('#selectbox'), {
+                itemTemplate: (item, index, container) => {
+                    const el = document.createElement('div');
+                    el.style = "background-color: red;";
+                    el.append(index);
+                    container.appendChild(el);
+                }
+            });
+            document.querySelector('#button').addEventListener('click', () => {
+                seelctBox.option('readOnly', !seelctBox.option('readOnly'))
+            })
             const CustomPageNumberItem = (data) => {
                 const { item, selectPage } = data;
                 const clickHandler = () => selectPage(item.value);
