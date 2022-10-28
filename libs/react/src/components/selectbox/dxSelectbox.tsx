@@ -9,13 +9,14 @@ import 'devextreme/dist/css/dx.light.compact.css';
 import type { template } from 'devextreme/core/templates/template';
 
 //* Component={"name":"DxSelectBox", "jQueryRegistered":true, "hasApiMethod":false}
-export function DxSelectBox(props: { readOnly?: boolean, itemTemplate : template}) {
+export function DxSelectBox(props: { readOnly?: boolean, itemTemplate?: template }) {
     return (
         <div>
             <span>Devextreme selectbox is here:</span>
-            <SelectBox items={[1, 2, 3]} 
-            readOnly={props.readOnly} 
-            itemTemplate={props.itemTemplate}>
+            <SelectBox
+                items={[10, 20, 30]}
+                readOnly={props.readOnly}
+            >
             </SelectBox>
         </div>)
 }

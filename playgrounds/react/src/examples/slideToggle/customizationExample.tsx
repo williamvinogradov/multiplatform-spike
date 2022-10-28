@@ -54,12 +54,6 @@ function CustomizationExample() {
     <>
       <div className="example">
         <div className="example__title">
-          Select box
-        </div>
-        <DxSelectBox/>
-      </div>
-      <div className="example">
-        <div className="example__title">
           Customization
         </div>
         <div className="example__control">
