@@ -1,5 +1,5 @@
 import {useMemo} from 'react';
-import {DxSlideToggleProps} from '../types/public';
+import {DxSlideToggleProps} from '../dxSlideToggle';
 
 const useIsControlled = (props: DxSlideToggleProps): boolean => {
   return useMemo(() => props.value !== undefined, []);

@@ -3,9 +3,8 @@ import {
   SlideToggleContractModels,
   SlideToggleContracts,
 } from '@dx/core/components/slideToggle';
-import {DxSlideToggleProps} from '../types/public';
+import {DxSlideToggleProps} from '../dxSlideToggle';
 import {SLIDE_TOGGLE_DEFAULT_VIEWS} from '../views';
-
 
 const getContractsModel =(
   props: DxSlideToggleProps,

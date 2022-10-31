@@ -1,7 +1,7 @@
 import {useMemo} from 'react';
 import {createSlideToggleStore, SlideToggleStore} from '@dx/core/components/slideToggle';
 import {SlideToggleCallbacks, SlideToggleContextType} from '../dxSlideToggleContext';
-import {DxSlideToggleProps} from '../types/public';
+import {DxSlideToggleProps} from '../dxSlideToggle';
 import {propsToContracts, valueChangeControlled, valueChangeUncontrolled} from '../utils';
 
 const useCoreContext = (

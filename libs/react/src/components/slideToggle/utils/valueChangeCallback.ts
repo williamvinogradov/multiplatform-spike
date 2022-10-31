@@ -1,6 +1,6 @@
 import {SlideToggleStore, UpdateValueAction} from '@dx/core/components/slideToggle';
 import {callPropCallback} from '../../../internal';
-import {DxSlideToggleProps} from '../types/public';
+import {DxSlideToggleProps} from '../dxSlideToggle';
 
 const valueChangeControlled = (props: DxSlideToggleProps): (value: boolean) => void => {
   return (value) => callPropCallback(props.valueChange, value);

@@ -4,7 +4,7 @@ import {SLIDE_TOGGLE_GENERAL_SELECTOR} from '@dx/core/components/slideToggle';
 import './dxSlideToggleContainer.scss';
 import {useSelector} from '../../../internal';
 import {SlideToggleContext} from '../dxSlideToggleContext';
-import {IndicatorViewTemplate, TextViewTemplate} from '../types/public';
+import {IndicatorViewTemplate, TextViewTemplate} from '../dxSlideToggle';
 
 
 const DxSlideToggleContainer = React.memo(() => {

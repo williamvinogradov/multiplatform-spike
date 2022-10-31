@@ -1,14 +1,42 @@
 import React from 'react';
 import {
+  SlideToggleContractConfigs,
+  SlideToggleContractModels,
+  SlideToggleContractTemplates,
   UpdateFromContractsAction,
 } from '@dx/core/components/slideToggle';
-import {useSecondEffect} from '../../internal';
+import {
+  useSecondEffect,
+  ReactContracts,
+} from '../../internal';
 import {DxSlideToggleContainer} from './containers/dxSlideToggleContainer';
 import {SlideToggleContext} from './dxSlideToggleContext';
 import {useCoreContext, useIsControlled} from './hooks';
-import {propsToContracts} from './utils';
-import {DxSlideToggleProps} from './types/public';
+import {
+  propsToContracts,
+  ViewTemplate,
+} from './utils';
 
+import {
+  DxSlideToggleIndicatorViewProps,
+  DxSlideToggleTextViewProps,
+} from './views';
+
+/** @public */
+export type IndicatorViewTemplate = ViewTemplate<DxSlideToggleIndicatorViewProps>;
+
+/** @public */
+export type TextViewTemplate = ViewTemplate<DxSlideToggleTextViewProps>;
+
+/** @public */
+export type DxSlideToggleProps = ReactContracts<
+  SlideToggleContractModels,
+  SlideToggleContractConfigs,
+  SlideToggleContractTemplates
+> & {
+  indicatorView?: IndicatorViewTemplate;
+  textView?: TextViewTemplate;
+}
 
 // TODO jQuery: export here for the inferno generator.
 export const DxSlideToggle = React.memo((props: DxSlideToggleProps) => {
