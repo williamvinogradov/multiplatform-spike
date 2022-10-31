@@ -7,10 +7,10 @@ export interface SlideToggleContracts {
   indicatorView: unknown;
   textView: unknown;
 }
-type TemplateNames = 'indicatorView' | 'textView';
-type ModelNames = 'value';
-type OtherNames = Exclude<keyof SlideToggleContracts, TemplateNames | ModelNames>;
+export type TemplateNames = 'indicatorView' | 'textView';
+export type Bindables = 'value';
+type OtherNames = Exclude<keyof SlideToggleContracts, TemplateNames | Bindables>;
 
-export type SlideToggleContractModels = Pick<SlideToggleContracts, ModelNames>;
+export type SlideToggleContractModels = Pick<SlideToggleContracts, Bindables>;
 export type SlideToggleContractTemplates = Pick<SlideToggleContracts, TemplateNames>;
 export type SlideToggleContractConfigs = Pick<SlideToggleContracts, OtherNames>

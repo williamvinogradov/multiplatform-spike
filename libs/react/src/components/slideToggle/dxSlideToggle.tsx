@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   SlideToggleContracts,
-  SlideToggleContractModels,
+  Bindables,
   UpdateFromContractsAction,
 } from '@dx/core/components/slideToggle';
 import {
@@ -28,7 +28,7 @@ export type IndicatorViewTemplate = ViewTemplate<DxSlideToggleIndicatorViewProps
 export type TextViewTemplate = ViewTemplate<DxSlideToggleTextViewProps>;
 
 /** @public */
-export type DxSlideToggleProps = Partial<SlideToggleContracts> & ReactProps<SlideToggleContractModels>
+export type DxSlideToggleProps = ReactProps<SlideToggleContracts, Bindables>
 & {
   indicatorView?: IndicatorViewTemplate;
   textView?: TextViewTemplate;
