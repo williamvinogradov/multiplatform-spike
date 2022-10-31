@@ -7,7 +7,7 @@ import {
   PageSizeItemTemplate,
   PageSizeTemplate
 } from './templates';
-interface DxPagerProps extends ReactProps<PagerContractModels & PagerContractConfigs & PagerContractTemplates, keyof PagerContractModels> {
+interface DxPagerProps extends ReactProps<Partial<PagerContractModels & PagerContractConfigs & PagerContractTemplates>, keyof PagerContractModels> {
   pagerView?: PagerTemplate;
   pageNumberView?: PageNumberTemplate;
   pageNumberItemView?: PageNumberItemTemplate;

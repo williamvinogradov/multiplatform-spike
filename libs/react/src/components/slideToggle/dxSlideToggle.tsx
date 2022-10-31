@@ -28,7 +28,7 @@ export type IndicatorViewTemplate = ViewTemplate<DxSlideToggleIndicatorViewProps
 export type TextViewTemplate = ViewTemplate<DxSlideToggleTextViewProps>;
 
 /** @public */
-export type DxSlideToggleProps = ReactProps<SlideToggleContracts, Bindables>
+export type DxSlideToggleProps = ReactProps<Partial<SlideToggleContracts>, Bindables>
 & {
   indicatorView?: IndicatorViewTemplate;
   textView?: TextViewTemplate;
