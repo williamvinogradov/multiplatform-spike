@@ -1,6 +1,6 @@
-import {ReactCallbacks} from '../types';
+import {ChangeCallbacks} from '../types';
 
-type ContextCallbacks<TModel> = Required<ReactCallbacks<TModel>>;
+type ContextCallbacks<TModel> = Required<ChangeCallbacks<TModel>>;
 type ComponentContext<TStore, TModel> = [
   store: TStore,
   callbacks: ContextCallbacks<TModel>

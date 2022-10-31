@@ -7,7 +7,7 @@ import {
 } from '@dx/core/components/slideToggle';
 import {
   useSecondEffect,
-  ReactContracts,
+  ReactProps,
 } from '../../internal';
 import {DxSlideToggleContainer} from './containers/dxSlideToggleContainer';
 import {SlideToggleContext} from './dxSlideToggleContext';
@@ -29,11 +29,9 @@ export type IndicatorViewTemplate = ViewTemplate<DxSlideToggleIndicatorViewProps
 export type TextViewTemplate = ViewTemplate<DxSlideToggleTextViewProps>;
 
 /** @public */
-export type DxSlideToggleProps = ReactContracts<
-  SlideToggleContractModels,
-  SlideToggleContractConfigs,
-  SlideToggleContractTemplates
-> & {
+export type DxSlideToggleProps = Partial<SlideToggleContractModels & SlideToggleContractConfigs & SlideToggleContractTemplates>
+& ReactProps<SlideToggleContractModels>
+& {
   indicatorView?: IndicatorViewTemplate;
   textView?: TextViewTemplate;
 }

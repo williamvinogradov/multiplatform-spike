@@ -1,18 +1,10 @@
-type OutputProp<P extends string> = `${P}Change`;
-type DefaultProp<P extends string> = `default${Capitalize<P>}`;
+type StringKeys<T> = Extract<keyof T, string>;
 
-type WithOutputCallback<T> = { [P in keyof T & string as OutputProp<P>]?: (value: T[P]) => void };
-type WithDefaultModels<T> = { [P in keyof T & string as DefaultProp<P>]?: T[P] };
+export type ChangeCallbacks<T> = {
+  [P in StringKeys<T> as `${P}Change`]?: (value: T[P]) => void
+};
+type DefaultProps<T> = {
+  [P in StringKeys<T> as `default${Capitalize<P>}`]?: T[P]
+};
 
-type ReactCallbacks<TModel> = WithOutputCallback<TModel>;
-type ReactContracts<TModel, TConfig, TTemplate> =
-  Partial<TModel>
-  & WithDefaultModels<TModel>
-  & ReactCallbacks<TModel>
-  & Partial<TConfig>
-  & Partial<TTemplate>
-
-export type {
-  ReactCallbacks,
-  ReactContracts
-}
+export type ReactProps<TModel> = DefaultProps<TModel> & ChangeCallbacks<TModel>;
