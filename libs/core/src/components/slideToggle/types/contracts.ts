@@ -1,29 +1,16 @@
 import {TTextPosition} from './index';
 
-/* models */
-interface SlideToggleContractModels {
+export interface SlideToggleContracts {
   value: boolean;
-}
-
-/* configs */
-interface SlideToggleContractConfigs {
   text: string;
   textPosition: TTextPosition;
-}
-
-/* templates */
-interface SlideToggleContractTemplates {
   indicatorView: unknown;
   textView: unknown;
 }
+type TemplateNames = 'indicatorView' | 'textView';
+type ModelNames = 'value';
+type OtherNames = Exclude<keyof SlideToggleContracts, TemplateNames | ModelNames>;
 
-interface SlideToggleContracts
-  extends SlideToggleContractModels, SlideToggleContractConfigs, SlideToggleContractTemplates {
-}
-
-export {
-  SlideToggleContractModels,
-  SlideToggleContractConfigs,
-  SlideToggleContractTemplates,
-  SlideToggleContracts,
-}
+export type SlideToggleContractModels = Pick<SlideToggleContracts, ModelNames>;
+export type SlideToggleContractTemplates = Pick<SlideToggleContracts, TemplateNames>;
+export type SlideToggleContractConfigs = Pick<SlideToggleContracts, OtherNames>
