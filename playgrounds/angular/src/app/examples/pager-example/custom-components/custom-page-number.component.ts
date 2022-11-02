@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {DxPagerPageNumberViewComponent} from '@dx/angular/components/pager';
+import {DxPagerPageNumberViewBase} from '@dx/angular/components/pager';
 
 @Component({
   selector: 'custom-page-number',
@@ -26,5 +26,5 @@ import {DxPagerPageNumberViewComponent} from '@dx/angular/components/pager';
   `],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CustomPageNumberComponent extends DxPagerPageNumberViewComponent {
+export class CustomPageNumberComponent extends DxPagerPageNumberViewBase {
 }

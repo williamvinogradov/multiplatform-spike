@@ -1,4 +1,4 @@
-import { DxPager } from '@dx/react/components/pager';
+import {DxPager} from '@dx/react/components/pager';
 import React, {useCallback, useState} from 'react';
 
 const PAGE_SIZES = [
@@ -24,6 +24,7 @@ function ControlledPagerExample() {
   const [pagerState, setPagerState] = useState(DEFAULT_CLIENT_PAGER_STATE);
 
   const changePageNumber = useCallback((pageNumber: number) => {
+    console.log('pager state: ', pagerState);
     setPagerState({
       ...pagerState,
       selectedPage: pageNumber,
@@ -80,7 +81,8 @@ function ControlledPagerExample() {
         </div>
         <div className="example__play-part">
           <span>Set page count:</span>
-          <input className="example-input" type="number" min="1" value={pagerState.pageCount} onChange={changePageCountConf} />
+          <input className="example-input" type="number" min="1" value={pagerState.pageCount}
+                 onChange={changePageCountConf}/>
         </div>
         <div className="example__play-part">
           <div>
