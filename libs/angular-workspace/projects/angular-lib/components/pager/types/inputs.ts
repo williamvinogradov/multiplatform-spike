@@ -1,26 +1,27 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {
-  PagerContractConfigs,
-  PagerContractModels,
-  PagerContractTemplates
+  ModelOptions,
+  ConfigOptions,
+  TemplateOptions,
 } from '@dx/core/components/pager'
 import {AngularContracts, AngularTemplate} from '@dx/angular-common';
 import {
   DxPagerPageNumberItemViewComponent,
   DxPagerPageNumberViewComponent, DxPagerPageSizeItemViewComponent,
-  DxPagerPageSizeViewComponent, DxPagerViewComponent,
-  DxPagerViewContracts
+  DxPagerPageSizeViewComponent,
+  DxPagerViewBase
 } from '../views';
 
+
 @Component({ template: '' })
-export abstract class DxPagerContracts implements AngularContracts<PagerContractModels, PagerContractConfigs, PagerContractTemplates>{
+export abstract class DxPagerInputs implements AngularContracts<ModelOptions, ConfigOptions, TemplateOptions>{
   // inputs.
   @Input() selectedPage?: number;
   @Input() selectedPageSize?: number;
   @Input() pageCount?: number;
   @Input() pageSizes?: number[];
   // customization.
-  @Input() pagerView: AngularTemplate<DxPagerViewContracts>;
+  @Input() pagerView: AngularTemplate<DxPagerViewBase>;
   @Input() pageNumberView: AngularTemplate<DxPagerPageNumberViewComponent>;
   @Input() pageNumberItemView: AngularTemplate<DxPagerPageNumberItemViewComponent>;
   @Input() pageNumberFakeItemView: AngularTemplate<DxPagerPageNumberItemViewComponent>;

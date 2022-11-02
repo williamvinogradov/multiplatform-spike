@@ -8,7 +8,8 @@ import {
   ViewContainerRef
 } from '@angular/core';
 import {AngularTemplate} from '../../types';
-import {DxViewComponent} from './dx-view.component';
+import {DxView} from './dx-view';
+
 
 type Nullable<T> = T | null
 
@@ -22,7 +23,7 @@ interface AngularTemplateContext<TComponent> {
   styles: [':host {display: none; }'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DxDynamicTemplateComponent<TComponent extends DxViewComponent> {
+export class DxDynamicTemplateComponent<TComponent extends DxView> {
   @Input() set template(template: Nullable<AngularTemplate<TComponent>>) {
     template && this.setTemplate(template);
   }

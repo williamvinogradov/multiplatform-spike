@@ -1,6 +1,7 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {AngularViewData, DxViewContracts} from '@dx/angular-common';
+import {AngularViewData, DxViewBase} from '@dx/angular-common';
 import {PageNumberAngularVM, PageSizeAngularVM} from '../types';
+
 
 export interface DxPagerViewModel {
   pageSizeViewModel: PageSizeAngularVM;
@@ -12,10 +13,10 @@ export interface DxPagerViewActions {
   selectPageSize: (pageSize: number) => void;
 }
 
-export interface DxPagerViewContractsType extends AngularViewData<DxPagerViewModel, DxPagerViewActions> {}
+export interface DxPagerViewData extends AngularViewData<DxPagerViewModel, DxPagerViewActions> {}
 
 @Component({ template: '' })
-export abstract class DxPagerViewContracts extends DxViewContracts<DxPagerViewModel, DxPagerViewActions>{
+export abstract class DxPagerViewBase extends DxViewBase<DxPagerViewModel, DxPagerViewActions>{
 }
 
 @Component({
@@ -39,5 +40,5 @@ export abstract class DxPagerViewContracts extends DxViewContracts<DxPagerViewMo
   styleUrls: ['./dx-pager-view.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DxPagerViewComponent extends DxPagerViewContracts {
+export class DxPagerViewComponent extends DxPagerViewBase {
 }

@@ -1,9 +1,14 @@
-import {ItemVM, PageNumberVM, PageSizeVM} from '@dx/core/components/pager';
+import {ItemVM, PageNumberVM, PageSizeVM, RootTemplateVM} from '@dx/core/components/pager';
 import {
   DxPagerPageNumberItemViewComponent, DxPagerPageNumberViewComponent,
   DxPagerPageSizeItemViewComponent,
-  DxPagerPageSizeViewComponent
+  DxPagerPageSizeViewComponent, DxPagerViewComponent
 } from '../views';
+
+
+interface RootTemplateAngularVM extends RootTemplateVM {
+  template: DxPagerViewComponent;
+}
 
 interface ItemAngularVM<Template> extends ItemVM {
   template: Template;
@@ -20,6 +25,7 @@ interface PageNumberAngularVM extends PageNumberVM {
 }
 
 export type {
+  RootTemplateAngularVM,
   ItemAngularVM,
   PageSizeAngularVM,
   PageNumberAngularVM,

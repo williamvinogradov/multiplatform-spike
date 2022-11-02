@@ -1,14 +1,15 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {DxViewContracts} from '@dx/angular-common';
+import {DxViewBase} from '@dx/angular-common';
 import {ItemAngularVM} from '../types';
+
 
 interface DxPagerPageNumberItemActions {
   selectPage: (pageNumber: number) => void;
 }
 
 @Component({template: ''})
-export abstract class DxPagerPageNumberItemViewContracts
-  extends DxViewContracts<ItemAngularVM<DxPagerPageNumberItemViewComponent>, DxPagerPageNumberItemActions> {
+export abstract class DxPagerPageNumberItemViewBase
+  extends DxViewBase<ItemAngularVM<DxPagerPageNumberItemViewComponent>, DxPagerPageNumberItemActions> {
 }
 
 @Component({
@@ -24,6 +25,6 @@ export abstract class DxPagerPageNumberItemViewContracts
   styleUrls: ['./dx-pager-page-number-item-view.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DxPagerPageNumberItemViewComponent extends DxPagerPageNumberItemViewContracts {
+export class DxPagerPageNumberItemViewComponent extends DxPagerPageNumberItemViewBase {
 }
 

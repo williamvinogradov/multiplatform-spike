@@ -12,7 +12,6 @@ import {
 } from './views';
 
 
-
 @NgModule({
   declarations: [
     DxPagerComponent,
