@@ -1,5 +1,5 @@
 import React from 'react';
-import {PageNumberItemTemplate, ItemReactVM} from '../types/public';
+import {PageNumberItemTemplate, ItemReactVM} from '../types';
 
 
 interface DxPagerPageNumberItemViewProps {

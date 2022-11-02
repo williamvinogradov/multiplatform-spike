@@ -1,12 +1,12 @@
 import {
-  SlideToggleContractConfigs,
-  SlideToggleContractModels,
-  SlideToggleContractTemplates,
+  ModelOptions,
+  ConfigOptions,
+  TemplateOptions,
 } from '@dx/core/components/slideToggle';
-import {ReactContracts} from '../../../../internal';
+import {ReactContracts} from '../../../internal';
 import {IndicatorViewTemplate, TextViewTemplate} from './templates';
 
-type ReactSlideToggleContracts = ReactContracts<SlideToggleContractModels, SlideToggleContractConfigs, SlideToggleContractTemplates>;
+type ReactSlideToggleContracts = ReactContracts<ModelOptions, ConfigOptions, TemplateOptions>;
 
 interface DxSlideToggleProps extends ReactSlideToggleContracts {
   indicatorView?: IndicatorViewTemplate;

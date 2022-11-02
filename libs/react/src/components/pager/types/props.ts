@@ -1,5 +1,5 @@
-import {PagerContractModels, PagerContractConfigs, PagerContractTemplates} from '@dx/core/components/pager';
-import {ReactContracts} from '../../../../internal';
+import {ModelOptions, ConfigOptions, TemplateOptions} from '@dx/core/components/pager';
+import {ReactContracts} from '../../../internal';
 import {
   PageNumberItemTemplate,
   PageNumberTemplate,
@@ -8,7 +8,7 @@ import {
   PageSizeTemplate
 } from './templates';
 
-type ReactPagerContracts = ReactContracts<PagerContractModels, PagerContractConfigs, PagerContractTemplates>;
+type ReactPagerContracts = ReactContracts<ModelOptions, ConfigOptions, TemplateOptions>;
 
 interface DxPagerProps extends ReactPagerContracts {
   pagerView?: PagerTemplate;

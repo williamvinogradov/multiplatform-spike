@@ -4,7 +4,7 @@ import {
   DxPagerPageSizeItemViewProps,
   DxPagerPageSizeViewProps,
   DxPagerViewProps
-} from '../../views';
+} from '../views';
 
 type PagerTemplate = (props: DxPagerViewProps) => JSX.Element;
 type PageNumberTemplate = (props: DxPagerPageNumberViewProps) => JSX.Element;

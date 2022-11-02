@@ -1,2 +1,2 @@
 export * from './useSecondEffect';
-export * from './useSelector';
+export * from './useViewModel';

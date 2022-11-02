@@ -1,11 +1,7 @@
 import { createContext } from 'react';
-import {PagerContractModels, PagerStore} from '@dx/core/components/pager';
-import {ComponentContext, ContextCallbacks} from '../../internal';
+import {ContainerPagerCore} from '@dx/core/components/pager';
 
-type PagerCallbacks = ContextCallbacks<PagerContractModels>;
-type PagerContextType = ComponentContext<PagerStore, PagerContractModels>;
 
-const PagerContext = createContext<PagerContextType | null>(null);
+const PagerContext = createContext<ContainerPagerCore | null>(null);
 
-export type {PagerCallbacks, PagerContextType};
 export {PagerContext};

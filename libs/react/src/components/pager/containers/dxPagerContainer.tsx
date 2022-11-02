@@ -1,27 +1,38 @@
-import React, { useContext } from 'react';
+import React, {useContext, useMemo} from 'react';
 import {
-  PAGER_PAGE_NUMBER_SELECTOR,
-  PAGER_PAGE_SIZE_SELECTOR,
-  PAGER_ROOT_TEMPLATE_SELECTOR
+  SelectPageAction,
+  SelectPageSizeAction,
+  PageNumberVM,
+  PageSizeVM,
+  RootTemplateVM,
 } from '@dx/core/components/pager';
-import { useSelector } from '../../../internal';
+import {useViewModel} from '../../../internal';
 import { PagerContext } from '../dxPagerContext';
-import { PagerTemplate, PageNumberReactVM, PageSizeReactVM } from '../types/public';
+import {PageNumberReactVM, PageSizeReactVM, RootTemplateReactVM} from '../types';
 
 //* Component={"name":"DxPagerContainer"}
 // TODO inferno isn't support React.memo(
 export function DxPagerContainer() {
-  const [store, callbacks] = useContext(PagerContext)!;
-  // TODO: Think how these ugly casts can be removed (template from the unknown problem).
-  const pageNumberViewModel = useSelector(store, PAGER_PAGE_NUMBER_SELECTOR) as PageNumberReactVM;
-  const pageSizeViewModel = useSelector(store, PAGER_PAGE_SIZE_SELECTOR) as PageSizeReactVM;
-  const { template } = useSelector(store, PAGER_ROOT_TEMPLATE_SELECTOR) as { template: PagerTemplate };
+  const core = useContext(PagerContext)!;
+  const pageNumberViewModel = useViewModel<PageNumberVM, PageNumberReactVM>(core.viewModels.pageNumber);
+  const pageSizeViewModel = useViewModel<PageSizeVM, PageSizeReactVM>(core.viewModels.pageSize);
+  const rootTemplate = useViewModel<RootTemplateVM, RootTemplateReactVM>(core.viewModels.rootTemplate);
 
+  const selectedPageChange = useMemo(() => (pageNumber: number) => {
+    core.dispatch(new SelectPageAction(pageNumber))
+  }, []);
+  const selectedPageSizeChange = useMemo(() => (pageSize: number) => {
+    core.dispatch(new SelectPageSizeAction(pageSize))
+  }, []);
+
+
+  const { template } = rootTemplate;
   const templateData = {
     data: {
       pageNumberViewModel,
       pageSizeViewModel,
-      ...callbacks,
+      selectedPageChange,
+      selectedPageSizeChange
     }
   };
 

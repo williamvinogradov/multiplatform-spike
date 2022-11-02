@@ -1,11 +1,7 @@
 import React from 'react';
-import {SlideToggleContractModels, SlideToggleStore} from '@dx/core/components/slideToggle';
-import {ComponentContext, ContextCallbacks} from '../../internal';
+import {ContainerSlideToggleCore} from '@dx/core/components/slideToggle';
 
-type SlideToggleCallbacks = ContextCallbacks<SlideToggleContractModels>;
-type SlideToggleContextType = ComponentContext<SlideToggleStore, SlideToggleContractModels>;
 
-const SlideToggleContext = React.createContext<SlideToggleContextType | null>(null);
+const SlideToggleContext = React.createContext<ContainerSlideToggleCore | null>(null);
 
-export type {SlideToggleCallbacks, SlideToggleContextType};
 export {SlideToggleContext};

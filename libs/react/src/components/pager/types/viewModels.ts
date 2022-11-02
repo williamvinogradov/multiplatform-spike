@@ -1,5 +1,15 @@
-import {PageNumberVM, ItemVM, PageSizeVM} from '@dx/core/components/pager';
-import {PageNumberItemTemplate, PageNumberTemplate, PageSizeItemTemplate, PageSizeTemplate} from './templates';
+import {PageNumberVM, ItemVM, PageSizeVM, RootTemplateVM} from '@dx/core/components/pager';
+import {
+  PageNumberItemTemplate,
+  PageNumberTemplate,
+  PagerTemplate,
+  PageSizeItemTemplate,
+  PageSizeTemplate
+} from './templates';
+
+interface RootTemplateReactVM extends RootTemplateVM {
+  template: PagerTemplate;
+}
 
 interface ItemReactVM<Template> extends ItemVM {
   template: Template;
@@ -16,6 +26,7 @@ interface PageSizeReactVM extends PageSizeVM {
 }
 
 export type {
+  RootTemplateReactVM,
   ItemReactVM,
   PageNumberReactVM,
   PageSizeReactVM,
