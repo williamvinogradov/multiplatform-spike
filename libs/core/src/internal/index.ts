@@ -1,3 +1,1 @@
-export * from './component';
-export * from './store';
-export * from './utils';
+export * from './component/public_api';
