@@ -10,7 +10,7 @@ gulp.task('build-inferno', gulp.series(
   (done) => {
     fs.rmSync('./src/generated/components/slideToggle', { recursive: true });
 
-    fs.copyFileSync('./patch/empty.js', './src/generated/components/pager/types/public/index.js');
+    fs.copyFileSync('./patch/empty.js', './src/generated/components/pager/types/index.js');
     fs.copyFileSync('./patch/empty.js', './src/generated/internal/types/index.js');
     fs.copyFileSync('./patch/internal-index.js',
       './src/generated/internal/index.js');
