@@ -1,4 +1,4 @@
-# Core framework alpha
+# Core framework alpha 2
 
 ## Installation
 
