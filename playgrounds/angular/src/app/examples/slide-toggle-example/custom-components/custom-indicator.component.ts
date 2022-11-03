@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {DxSlideToggleIndicatorViewComponent} from '@dx/angular/components/slide-toggle';
+import {DxSlideToggleIndicatorViewBase} from '@dx/angular/components/slide-toggle';
 
 @Component({
   selector: 'app-custom-indicator',
@@ -23,5 +23,5 @@ import {DxSlideToggleIndicatorViewComponent} from '@dx/angular/components/slide-
     }
   `]
 })
-export class CustomIndicatorComponent extends DxSlideToggleIndicatorViewComponent {
+export class CustomIndicatorComponent extends DxSlideToggleIndicatorViewBase {
 }

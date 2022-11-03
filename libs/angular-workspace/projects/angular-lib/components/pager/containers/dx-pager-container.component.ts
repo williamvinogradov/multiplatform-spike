@@ -1,13 +1,13 @@
 import {ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core';
-import {useSelector} from '@dx/angular-common';
+import {useViewModel} from '@dx/angular-common';
 import {
-  PAGER_PAGE_NUMBER_SELECTOR,
-  PAGER_PAGE_SIZE_SELECTOR, PAGER_ROOT_TEMPLATE_SELECTOR,
-  PagerStore,
+  ContainerPagerCore, PageNumberVM, PageSizeVM, RootTemplateVM, SelectPageAction, SelectPageSizeAction,
 } from '@dx/core/components/pager';
 import {combineLatest, map, Observable} from 'rxjs';
-import {PAGER_CONTEXT_TOKEN, PagerCallbacks, PagerContext} from '../context';
-import {DxPagerViewContracts, DxPagerViewContractsType} from '../views';
+import {PAGER_CONTEXT_TOKEN, PagerContext} from '../context';
+import {PageNumberAngularVM, PageSizeAngularVM, RootTemplateAngularVM} from '../types';
+import {DxPagerViewBase, DxPagerViewData,} from '../views';
+
 
 @Component({
   selector: 'dx-pager-container',
@@ -20,36 +20,34 @@ import {DxPagerViewContracts, DxPagerViewContractsType} from '../views';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DxPagerContainerComponent implements OnInit {
-  viewModel$?: Observable<DxPagerViewContractsType>;
-  template$?: Observable<DxPagerViewContracts>;
+  viewModel$?: Observable<DxPagerViewData>;
+  template$?: Observable<DxPagerViewBase>;
+
+  private core?: ContainerPagerCore;
 
   constructor(@Inject(PAGER_CONTEXT_TOKEN) private contextContainer: PagerContext) {
   }
 
   ngOnInit(): void {
-    const [store, callbacks] = this.contextContainer.context!;
-    this.viewModel$ = this.getTemplateViewModel(store, callbacks);
-    this.template$ = useSelector(store, PAGER_ROOT_TEMPLATE_SELECTOR).pipe(map(({template}) => template));
-  }
+    this.core = this.contextContainer.context!;
 
-  protected getTemplateViewModel(store: PagerStore, callbacks: PagerCallbacks): Observable<DxPagerViewContractsType> {
-    const pageNumberViewModel$ = useSelector(store, PAGER_PAGE_NUMBER_SELECTOR);
-    const pageSizeViewModel$ = useSelector(store, PAGER_PAGE_SIZE_SELECTOR);
+    this.template$ = useViewModel<RootTemplateVM, RootTemplateAngularVM>(this.core.viewModels.rootTemplate)
+      .pipe(map(({template}) => template));
 
-    return combineLatest([
-      pageNumberViewModel$,
-      pageSizeViewModel$
+    this.viewModel$ = combineLatest([
+      useViewModel<PageNumberVM, PageNumberAngularVM>(this.core.viewModels.pageNumber),
+      useViewModel<PageSizeVM, PageSizeAngularVM>(this.core.viewModels.pageSize),
     ]).pipe(
-      map(([pageNumberViewModel, pageSizeViewModel]) => ({
+      map(([pageNumberVM, pageSizeVM]) => ({
         viewModel: {
-          pageNumberViewModel,
-          pageSizeViewModel,
+          pageNumberViewModel: pageNumberVM,
+          pageSizeViewModel: pageSizeVM,
         },
         actions: {
-          selectPage: callbacks.selectedPageChange,
-          selectPageSize: callbacks.selectedPageSizeChange,
+          selectPage: (value: number) => this.core?.dispatch(new SelectPageAction(value)),
+          selectPageSize: (value: number) => this.core?.dispatch(new SelectPageSizeAction(value))
         }
       }))
-    )
+    );
   }
 }

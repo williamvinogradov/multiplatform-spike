@@ -1,15 +1,11 @@
-import {PagerContractModels, PagerStore} from '@dx/core/components/pager';
-import {ComponentContextContainer, ContextCallbacks, createInjectionToken} from '@dx/angular-common';
+import {ContainerPagerCore} from '@dx/core/components/pager';
+import {ComponentContextContainer, createInjectionToken} from '@dx/angular-common';
 
-type PagerCallbacks = ContextCallbacks<PagerContractModels>;
-type PagerContext = ComponentContextContainer<PagerStore, PagerContractModels>;
+type PagerContext = ComponentContextContainer<ContainerPagerCore>;
 
 const pagerContextFactory = (): PagerContext => ({ context: undefined });
 const PAGER_CONTEXT_TOKEN = createInjectionToken('PAGER_TOKEN');
 
 
-export type {PagerContext, PagerCallbacks};
-export {
-  pagerContextFactory,
-  PAGER_CONTEXT_TOKEN,
-}
+export type {PagerContext};
+export {pagerContextFactory, PAGER_CONTEXT_TOKEN}

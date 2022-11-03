@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {DxPagerViewComponent} from '@dx/angular/components/pager';
+import {DxPagerViewBase} from '@dx/angular/components/pager';
 
 @Component({
   selector: 'custom-pager',
@@ -28,6 +28,6 @@ import {DxPagerViewComponent} from '@dx/angular/components/pager';
   `],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CustomPagerComponent extends DxPagerViewComponent {
+export class CustomPagerComponent extends DxPagerViewBase {
 
 }

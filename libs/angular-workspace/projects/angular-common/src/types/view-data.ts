@@ -1,11 +1,9 @@
-import {DeepReadonly} from 'ts-essentials';
-
 interface AngularViewModelData<TViewModel> {
-  viewModel: DeepReadonly<TViewModel>;
+  viewModel: TViewModel;
 }
 
 interface AngularViewActionsData<TActions> {
-  actions: DeepReadonly<TActions>;
+  actions: TActions;
 }
 
 interface AngularViewData<TViewModel, TActions>

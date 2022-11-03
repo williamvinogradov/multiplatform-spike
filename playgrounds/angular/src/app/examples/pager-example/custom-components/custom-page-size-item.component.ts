@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {DxPagerPageSizeItemViewComponent} from '@dx/angular/components/pager';
+import {DxPagerPageSizeItemViewBase} from '@dx/angular/components/pager';
 
 @Component({
   selector: 'custom-page-size-item',
@@ -34,5 +34,5 @@ import {DxPagerPageSizeItemViewComponent} from '@dx/angular/components/pager';
   `],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CustomPageSizeItemComponent extends DxPagerPageSizeItemViewComponent {
+export class CustomPageSizeItemComponent extends DxPagerPageSizeItemViewBase {
 }

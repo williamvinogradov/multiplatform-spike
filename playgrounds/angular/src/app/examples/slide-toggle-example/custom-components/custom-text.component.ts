@@ -1,11 +1,11 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {DxSlideToggleTextViewComponent} from '@dx/angular/components/slide-toggle';
+import {DxSlideToggleTextViewBase} from '@dx/angular/components/slide-toggle';
 
 @Component({
   selector: 'app-custom-text',
   template: `
     <div class="custom-text">
-      {{ viewModel.config.text }}
+      {{ viewModel.dictionary.text }}
     </div>
   `,
   styles: [`
@@ -21,5 +21,5 @@ import {DxSlideToggleTextViewComponent} from '@dx/angular/components/slide-toggl
   `],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CustomTextComponent extends DxSlideToggleTextViewComponent {
+export class CustomTextComponent extends DxSlideToggleTextViewBase {
 }

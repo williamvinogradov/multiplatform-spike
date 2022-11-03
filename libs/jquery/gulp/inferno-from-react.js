@@ -20,7 +20,7 @@ class ImportWrap {
         this.importDeclaration = importDeclaration;
     }
     toString() {
-        return `import { HookContainer, InfernoWrapperComponent } from '@devextreme/runtime/inferno-hooks'
+        return `import { HookContainer, InfernoWrapperComponent, useMemo, useEffect } from '@devextreme/runtime/inferno-hooks'
         ${this.importDeclaration.toString()}`;
     }
 }

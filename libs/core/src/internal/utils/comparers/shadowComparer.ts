@@ -1,8 +1,8 @@
 // shadow equality
-function shadowComparer(
+const shadowComparer = (
   prev: unknown,
   next: unknown,
-): boolean {
+): boolean => {
   const isDifferentTypes = typeof prev !== typeof next;
 
   if(isDifferentTypes) {

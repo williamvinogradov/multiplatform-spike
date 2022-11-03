@@ -1,5 +1,5 @@
 import React from 'react';
-import {PageSizeReactVM} from '../types/public';
+import {PageSizeReactVM} from '../types';
 
 interface DxPagerPageSizeViewProps {
   // TODO jQuery: Temporary wrapping for the inferno generator.

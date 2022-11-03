@@ -1,28 +1,46 @@
-import React from 'react';
-import {
-  UpdateFromContractsAction,
-} from '@dx/core/components/slideToggle';
+import React, {useEffect, useMemo} from 'react';
 import {useSecondEffect} from '../../internal';
+import {useCallbackCollector} from '../../internal/hooks/useCallbackCollector';
 import {DxSlideToggleContainer} from './containers/dxSlideToggleContainer';
 import {SlideToggleContext} from './dxSlideToggleContext';
-import {useCoreContext, useIsControlled} from './hooks';
-import {propsToContracts} from './utils';
-import {DxSlideToggleProps} from './types/public';
+import {propsToDictionary, propsToModel} from './mappers';
+import {DxSlideToggleProps} from './types';
+
+import {createSlideToggleCore, ModelOptions} from '@dx/core/components/slideToggle';
 
 
 // TODO jQuery: export here for the inferno generator.
 export const DxSlideToggle = React.memo((props: DxSlideToggleProps) => {
-  const isControlled = useIsControlled(props);
-  const [store, context] = useCoreContext(props, isControlled);
+  const isControlled = useMemo(() => props.defaultValue === undefined, []);
+  const callbacks = useCallbackCollector<ModelOptions>(props);
 
-  /* update state from contracts */
-  const contracts = propsToContracts(props, false, isControlled);
+  const [rootCore, containerCore] = useMemo(() => createSlideToggleCore(
+    {
+      model: propsToModel(props, isControlled),
+      dictionary: propsToDictionary(props),
+    },
+    {
+      value: {
+        isControlled,
+        // TODO Vinogradov
+        publicCallback: (value: boolean) =>
+          callbacks.current.valueChange && callbacks.current.valueChange!(value),
+      }
+    }
+  ), []);
+
   useSecondEffect(() => {
-    store.dispatch(new UpdateFromContractsAction(contracts));
-  }, [contracts]);
+    isControlled && rootCore.updateState({ model: propsToModel(props, true) });
+    rootCore.updateState({ dictionary: propsToDictionary(props) });
+    rootCore.completeUpdate();
+  }, [props]);
+
+  useEffect(() => () => {
+    rootCore.destroy();
+  }, []);
 
   return (
-    <SlideToggleContext.Provider value={context}>
+    <SlideToggleContext.Provider value={containerCore}>
       <DxSlideToggleContainer/>
     </SlideToggleContext.Provider>
   )

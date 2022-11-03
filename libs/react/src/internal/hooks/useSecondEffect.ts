@@ -1,9 +1,10 @@
 import {useEffect, useRef} from 'react';
 
-function useSecondEffect(
+
+const useSecondEffect = (
   func: () => void,
   deps: unknown[],
-): void {
+): void => {
   const isFirstRender = useRef(true);
 
   useEffect(() => {

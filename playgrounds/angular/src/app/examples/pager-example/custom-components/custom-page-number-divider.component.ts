@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {DxPagerPageNumberItemViewContracts} from '@dx/angular/components/pager';
+import {DxPagerPageNumberItemViewBase} from '@dx/angular/components/pager';
 
 @Component({
   selector: 'custom-page-number-divider',
@@ -23,5 +23,5 @@ import {DxPagerPageNumberItemViewContracts} from '@dx/angular/components/pager';
   `],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CustomPageNumberDividerComponent extends DxPagerPageNumberItemViewContracts {
+export class CustomPageNumberDividerComponent extends DxPagerPageNumberItemViewBase {
 }

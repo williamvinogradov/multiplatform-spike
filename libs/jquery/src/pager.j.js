@@ -38,7 +38,7 @@ export default class Pager extends BaseComponent {
 
   get _propsInfo() {
     return {
-      twoWay: [['selectedPageSize', 'defaultSelectedPageSize', 'selectedPageSize'], ['selectedPage', 'defaultSelectedPage', 'selectedPageChange'],],
+      twoWay: [['selectedPageSize', 'defaultSelectedPageSize', 'selectedPageSizeChange'], ['selectedPage', 'defaultSelectedPage', 'selectedPageChange'],],
       allowNull: [],
       elements: [],
       templates: ['pagerView', 'pageNumberView', 'pageNumberItemView', 'pageNumberFakeItemView', 'pageSizeItemView'],
@@ -62,4 +62,4 @@ window.DXViews = {
   'DxPagerPageNumberView': (props, containerNode) => {
     render.render(DxPagerPageNumberView, { data: props }, containerNode, false)
   }
-} 
+}

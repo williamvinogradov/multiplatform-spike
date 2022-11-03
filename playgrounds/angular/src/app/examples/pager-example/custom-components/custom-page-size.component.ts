@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {DxPagerPageSizeViewContracts} from '@dx/angular/components/pager';
+import {DxPagerPageSizeViewBase} from '@dx/angular/components/pager';
 
 @Component({
   selector: 'custom-page-size',
@@ -19,6 +19,6 @@ import {DxPagerPageSizeViewContracts} from '@dx/angular/components/pager';
   `],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CustomPageSizeComponent extends DxPagerPageSizeViewContracts {
+export class CustomPageSizeComponent extends DxPagerPageSizeViewBase {
 
 }

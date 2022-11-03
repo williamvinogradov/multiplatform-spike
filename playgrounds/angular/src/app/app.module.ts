@@ -11,6 +11,7 @@ import {PagerExampleModule} from './examples/pager-example';
 import {SlideToggleExampleModule} from './examples/slide-toggle-example';
 import {HomeComponent} from './home.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,

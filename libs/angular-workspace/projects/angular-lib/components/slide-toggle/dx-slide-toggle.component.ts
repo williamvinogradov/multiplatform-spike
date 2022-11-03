@@ -8,17 +8,15 @@ import {
 } from '@angular/core';
 import {NgControl} from '@angular/forms';
 import {
-  createSlideToggleStore,
-  UpdateValueAction,
-  UpdateFromContractsAction, SlideToggleStore
+ createSlideToggleCore, RootSlideToggleCore
 } from '@dx/core/components/slideToggle';
 import {
   SLIDE_TOGGLE_CONTEXT_TOKEN,
   SlideToggleContext,
   slideToggleContextFactory
 } from './context';
-import {DxSlideToggleContracts} from './types';
-import {propsToContracts} from './utils';
+import {inputsToModel, inputsToDictionary} from './mappers';
+import {DxSlideToggleInputs} from './types';
 
 
 @Component({
@@ -33,10 +31,10 @@ import {propsToContracts} from './utils';
     useFactory: slideToggleContextFactory,
   }],
 })
-export class DxSlideToggleComponent extends DxSlideToggleContracts
+export class DxSlideToggleComponent extends DxSlideToggleInputs
   implements OnInit, OnChanges {
 
-  private store?: SlideToggleStore;
+  private rootCore?: RootSlideToggleCore;
 
   constructor(@Inject(SLIDE_TOGGLE_CONTEXT_TOKEN) private contextContainer: SlideToggleContext,
               @Optional() ngControl: NgControl) {
@@ -44,19 +42,24 @@ export class DxSlideToggleComponent extends DxSlideToggleContracts
   }
 
   ngOnInit(): void {
-    const contracts = propsToContracts(this);
-    this.store = createSlideToggleStore(contracts);
-    // init context.
-    this.contextContainer.context = [
-      this.store,
+    const [rootCore, containerCore] = createSlideToggleCore(
       {
-        valueChange: (value: boolean) => {
-          this.store?.dispatch(new UpdateValueAction(value));
-          this.valueChange.emit(value);
-          this.updateFormValue(value);
+        model: inputsToModel(this),
+        dictionary: inputsToDictionary(this),
+      },
+      {
+        value: {
+          isControlled: false,
+          publicCallback: (value: boolean) => {
+            this.updateFormValue(value);
+            this.valueChange.emit(value);
+          },
         }
       }
-    ];
+    );
+
+    this.rootCore = rootCore;
+    this.contextContainer.context = containerCore;
   }
 
   ngOnChanges(): void {
@@ -64,8 +67,11 @@ export class DxSlideToggleComponent extends DxSlideToggleContracts
   }
 
   protected updateStateFromInputs(): void {
-    const contracts = propsToContracts(this);
-    this.store?.dispatch(new UpdateFromContractsAction(contracts));
+    this.rootCore?.updateState({
+      model: inputsToModel(this),
+      dictionary: inputsToDictionary(this),
+    });
+    this.rootCore?.completeUpdate();
   }
 
   /* Support angular reactive forms methods */

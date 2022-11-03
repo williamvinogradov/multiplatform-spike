@@ -1,8 +1,8 @@
-import {SlideToggleContractTemplates} from '@dx/core/components/slideToggle';
+import {TemplateOptions} from '@dx/core/components/slideToggle';
 import {DxSlideToggleIndicatorView} from './dxSlideToggleIndicatorView';
 import {DxSlideToggleTextView} from './dxSlideToggleTextView';
 
-const SLIDE_TOGGLE_DEFAULT_VIEWS: SlideToggleContractTemplates = {
+const SLIDE_TOGGLE_DEFAULT_VIEWS: TemplateOptions = {
   indicatorView: DxSlideToggleIndicatorView,
   textView: DxSlideToggleTextView,
 }

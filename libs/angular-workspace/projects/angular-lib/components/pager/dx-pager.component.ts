@@ -1,15 +1,12 @@
 import {ChangeDetectionStrategy, Component, Inject, OnChanges, OnInit} from '@angular/core';
 import {
-  createPagerStore,
-  PagerStore,
-  SelectPageAction,
-  SelectPageSizeAction,
-  UpdateFromContractsAction, validatePageNumber, validatePageSize
+  createPagerCore,
+  RootPagerCore,
 } from '@dx/core/components/pager'
-import {createValidator} from '@dx/core/internal';
 import {PAGER_CONTEXT_TOKEN, PagerContext, pagerContextFactory} from './context';
-import {DxPagerContracts} from './types';
-import {propsToContracts} from './utils';
+import {inputsToDictionary, inputsToModel} from './mappers';
+import {DxPagerInputs} from './types';
+
 
 @Component({
   selector: 'dx-pager',
@@ -20,43 +17,42 @@ import {propsToContracts} from './utils';
     useFactory: pagerContextFactory,
   }]
 })
-export class DxPagerComponent extends DxPagerContracts
+export class DxPagerComponent extends DxPagerInputs
   implements OnInit, OnChanges {
 
-  private store?: PagerStore;
+  private rootCore?: RootPagerCore;
 
   constructor(@Inject(PAGER_CONTEXT_TOKEN) private contextContainer: PagerContext) {
     super();
   }
 
   ngOnInit(): void {
-    const contracts = propsToContracts(this);
-    this.store = createPagerStore(contracts);
-
-    const pageNumberValidator = createValidator(validatePageNumber);
-    const pageSizeValidator = createValidator(validatePageSize);
-
-    this.store.addValidators([pageNumberValidator, pageSizeValidator]);
-    this.store.validate();
-
-    // init context
-    this.contextContainer.context = [
-      this.store,
+    const [rootCore, containerCore] = createPagerCore(
       {
-        selectedPageChange: (value: number) => {
-          this.store?.dispatch(new SelectPageAction(value));
-          this.selectedPageChange.emit(value);
+        model: inputsToModel(this),
+        dictionary: inputsToDictionary(this),
+      },
+      {
+        selectedPage: {
+          isControlled: false,
+          publicCallback: (value: number) => this.selectedPageChange.emit(value),
         },
-        selectedPageSizeChange: (value: number) => {
-          this.store?.dispatch(new SelectPageSizeAction(value));
-          this.selectedPageSizeChange.emit(value);
+        selectedPageSize: {
+          isControlled: false,
+          publicCallback: (value: number) => this.selectedPageSizeChange.emit(value),
         }
       }
-    ];
+    );
+
+    this.rootCore = rootCore;
+    this.contextContainer.context = containerCore;
   }
 
   ngOnChanges(): void {
-    const contracts = propsToContracts(this);
-    this.store?.dispatch(new UpdateFromContractsAction(contracts));
+    this.rootCore?.updateState({
+      model: inputsToModel(this),
+      dictionary: inputsToDictionary(this),
+    });
+    this.rootCore?.completeUpdate();
   }
 }

@@ -1,5 +1,5 @@
 import { DxPager } from '@dx/react/components/pager';
-import React, {useCallback, useMemo, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 
 const PAGE_SIZES = [
   [15, 30, 45, 60],

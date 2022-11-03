@@ -1,37 +1,34 @@
 import React, {useCallback, useContext} from 'react';
-import {SLIDE_TOGGLE_GENERAL_SELECTOR} from '@dx/core/components/slideToggle';
+import {SlideToggleVM, UpdateValueAction} from '@dx/core/components/slideToggle';
 
 import './dxSlideToggleContainer.scss';
-import {useSelector} from '../../../internal';
+import {useViewModel} from '../../../internal';
 import {SlideToggleContext} from '../dxSlideToggleContext';
-import {IndicatorViewTemplate, TextViewTemplate} from '../types/public';
+import {SlideToggleReactVM} from '../types';
 
 
 const DxSlideToggleContainer = React.memo(() => {
-  const [store, callbacks] = useContext(SlideToggleContext)!;
-  const viewModel = useSelector(store, SLIDE_TOGGLE_GENERAL_SELECTOR);
+  const core = useContext(SlideToggleContext)!;
+  const {model, dictionary} = useViewModel<SlideToggleVM, SlideToggleReactVM>(core.viewModels.general);
+  console.log('container: ', model);
 
   const updateValueCallback = useCallback(
-    () => callbacks.valueChange(!viewModel.model.value),
-    [viewModel.model.value]);
-
-  // TODO: Think about how to save a template types without casting from the unknown.
-  const indicatorView = viewModel.template.indicatorView as IndicatorViewTemplate;
-  const textView = viewModel.template.textView as TextViewTemplate;
+    () => core.dispatch(new UpdateValueAction()),
+    []);
 
   return (
-    <div className={`dx-slide-toggle ${viewModel.config.textPosition === 'left' ? '-left' : '-right'}`}
+    <div className={`dx-slide-toggle ${dictionary.textPosition === 'left' ? '-left' : '-right'}`}
          onClick={updateValueCallback}>
       {
-        indicatorView({
+        dictionary.indicatorView({
           data: {
-            value: viewModel.model.value,
-            textPosition: viewModel.config.textPosition
+            value: model.value,
+            textPosition: dictionary.textPosition
           }
         })
       }
       {
-        textView({data: {text: viewModel.config.text}})
+        dictionary.textView({data: {text: dictionary.text}})
       }
     </div>
   );
