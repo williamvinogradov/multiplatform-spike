@@ -1,0 +1,17 @@
+name: PR checks
+
+on:
+  pull_request:
+
+jobs:
+  core:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Build
+        run: "npm run lib:core:build"
+      - name: Lint
+        run: "npm run lib:core:lint"
+      - name: Test:unit
+        runt: "npm run lib:core:test:unit"

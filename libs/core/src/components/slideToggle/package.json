@@ -1,6 +1,0 @@
-{
-  "sideEffects": false,
-  "typings": "index.d.ts",
-  "main": "../cjs/components/slideToggle/index.cjs",
-  "module": "../esm/components/slideToggle/index.mjs"
-}

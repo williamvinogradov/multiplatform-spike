@@ -1,29 +1,22 @@
-# Multiplatform spike
-
-The demo project tests 
-a hypothesis about the native way to develop web components.
+# Core framework alpha
 
 ## Installation
 
 ```bash
-# install general repo dependencies
-npm install
+# install general repo dependencies.
+npm run lib:core:install
 ```
 
-## Usage
+## Lint
 
-To run react playground project with live-reloading:
 ```bash
-# install react dependencies and link local packages
-npm run react:install:local
-# run react demo
-npm run react:start
+# lint the core package code.
+npm run lib:core:lint
 ```
 
-To run angular playground project with live-reloading:
+## Tests
+
 ```bash
-# install angular dependencies and link local packages
-npm run angular:install:local
-# run angular demo
-npm run angular:start
+# run unit test for the core package.
+npm run lib:core:test:unit
 ```

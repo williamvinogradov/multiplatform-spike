@@ -1,6 +1,0 @@
-{
-  "sideEffects": false,
-  "main": "index.js",
-  "module": "../../esm/slideToggle/index.js",
-  "types": "index.d.ts"
-}
