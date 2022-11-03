@@ -18,7 +18,8 @@
     "source-map-explorer": "^2.5.2",
     "typescript": "^4.7.4",
     "web-vitals": "^2.1.4",
-    "@dx/react": "^1.0.0"
+    "@dx/react": "^1.0.0",
+    "devextreme-react": "^22.1.5"
   },
   "scripts": {
     "build": "react-scripts build",

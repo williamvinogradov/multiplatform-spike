@@ -1,4 +1,5 @@
 import Pager from './pager.j';
+import SelectBoxWrapper from './selectbox.j';
 import {DxPagerPageSizeView} from './generated/components/pager/views/dxPagerPageSizeView';
 import {render} from 'inferno';
 
@@ -14,6 +15,7 @@ const sizeView = (options, element) => {
 window.DevExpress = window.DevExpress || {
   ui: {
     dxPager: Pager,
-    DxPagerPageSizeView: sizeView
+    dxSelectBoxWrapper: SelectBoxWrapper
+    // DxPagerPageSizeView: sizeView
   }
 };

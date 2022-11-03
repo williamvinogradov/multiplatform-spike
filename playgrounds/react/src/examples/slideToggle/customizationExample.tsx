@@ -1,29 +1,30 @@
-import {TTextPosition} from '@dx/react/components/slideToggle';
+import { TTextPosition } from '@dx/react/components/slideToggle';
 import {
   DxSlideToggle,
   DxSlideToggleIndicatorViewProps,
   DxSlideToggleTextViewProps
 } from '@dx/react/components/slideToggle';
-import React, {useCallback, useState} from 'react';
+
+import { DxSelectBox } from '@dx/react/components/selectbox';
+import React, { useCallback, useState } from 'react';
 
 import './customizationExample.css';
 import catImage from '../../assets/cat.jpeg';
 import dogImage from '../../assets/dog.webp';
 
-
-const CustomIndicator = ({data: {value}}: DxSlideToggleIndicatorViewProps) => {
+const CustomIndicator = ({ data: { value } }: DxSlideToggleIndicatorViewProps) => {
   return (
     <div className={'custom-indicator'}>
       {
         value
-          ? <img className={'custom-indicator__image'} src={catImage} alt={'cat'}/>
-          : <img className={'custom-indicator__image'} src={dogImage} alt={'dog'}/>
+          ? <img className={'custom-indicator__image'} src={catImage} alt={'cat'} />
+          : <img className={'custom-indicator__image'} src={dogImage} alt={'dog'} />
       }
     </div>
   )
 }
 
-const CustomText = ({data: {text}}: DxSlideToggleTextViewProps) => {
+const CustomText = ({ data: { text } }: DxSlideToggleTextViewProps) => {
   return (
     <div className={'custom-text'}>
       {text}
@@ -50,32 +51,34 @@ function CustomizationExample() {
     }), [config]);
 
   return (
-    <div className="example">
-      <div className="example__title">
-        Customization
-      </div>
-      <div className="example__control">
-        <DxSlideToggle defaultValue={false}
-                       text={config.text}
-                       textPosition={config.textPosition}
-                       indicatorView={CustomIndicator}
-                       textView={CustomText}/>
-      </div>
-      <div className="example__info">
-        <div className="example__play-part">
-          <span>Select text position:</span>
-          <select className="example-input" value={config.textPosition} onChange={changeTextPosition}>
-            <option value={'left'}>Left</option>
-            <option value={'right'}>Right</option>
-          </select>
+    <>
+      <div className="example">
+        <div className="example__title">
+          Customization
         </div>
-        <div className="example__play-part">
-          <span>Set text:</span>
-          <input className="example-input" type="text" value={config.text} onChange={changeText}/>
+        <div className="example__control">
+          <DxSlideToggle defaultValue={false}
+            text={config.text}
+            textPosition={config.textPosition}
+            indicatorView={CustomIndicator}
+            textView={CustomText} />
+        </div>
+        <div className="example__info">
+          <div className="example__play-part">
+            <span>Select text position:</span>
+            <select className="example-input" value={config.textPosition} onChange={changeTextPosition}>
+              <option value={'left'}>Left</option>
+              <option value={'right'}>Right</option>
+            </select>
+          </div>
+          <div className="example__play-part">
+            <span>Set text:</span>
+            <input className="example-input" type="text" value={config.text} onChange={changeText} />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 
-export {CustomizationExample};
+export { CustomizationExample };

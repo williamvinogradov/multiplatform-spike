@@ -8,6 +8,7 @@ function Home() {
     <div className="link-list">
       <Link to="/slideToggle">slideToggle example</Link>
       <Link to="/pager">pager example</Link>
+      <Link to="/wrapped-selectbox">wrapped selectbox example</Link>
     </div>
   )
 }
