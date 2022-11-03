@@ -1,0 +1,37 @@
+name: PR checks
+
+on:
+  pull_request:
+    branches:
+      - production
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      changes-core: ${{ steps.filter.outputs.core }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            core:
+              - 'packages/core/**'
+      - run: echo "${{ steps.filter.outputs }}"
+
+  core:
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: needs.detect-changes.outputs.changes-core == 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install
+        run: "npm run lib:core:install"
+      - name: Build
+        run: "npm run lib:core:build"
+      - name: Lint
+        run: "npm run lib:core:lint"
+      - name: Test:unit
+        run: "npm run lib:core:test:unit"

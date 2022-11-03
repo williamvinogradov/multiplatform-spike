@@ -1,51 +1,11 @@
 {
   "name": "multiplatform-spike",
   "scripts": {
-    "lib:core:install": "npm install --prefix libs/core",
-    "lib:core:build": "npm run build --prefix libs/core",
-    "lib:core:watch": "npm run watch --prefix libs/core",
-    "lib:core:link": "cd ./dist/core && npm link",
-
-    "prelib:react:install:local": "npm run lib:core:install && npm run lib:core:build && npm run lib:core:link",
-    "lib:react:install:local": "cd ./libs/react && npm link @dx/core",
-    "lib:react:install": "npm install --prefix libs/react",
-    "lib:react:build": "npm run build --prefix libs/react",
-    "lib:react:watch": "npm run watch --prefix libs/react",
-    "lib:react:link": "cd ./dist/react && npm link",
-
-    "prelib:angular:install:local": "npm run lib:core:install && npm run lib:core:build && npm run lib:core:link",
-    "lib:angular:install:local": "cd ./libs/angular-workspace && npm link @dx/core",
-    "lib:angular:install": "npm install --prefix libs/angular-workspace",
-    "lib:angular:build": "npm run build:all --prefix libs/angular-workspace",
-    "lib:angular:watch:common": "npm run watch:common --prefix libs/angular-workspace",
-    "lib:angular:watch:lib": "npm run watch:lib --prefix libs/angular-workspace",
-    "lib:angular:link": "cd dist/angular-common && npm link && cd ../angular && npm link",
-
-    "jquery:install:local": "cd libs/jquery && npm link @dx/core",
-    "jquery:build" : ",",
-    
-    "prereact:install:local": "npm run lib:react:install:local && npm run lib:react:build && npm run lib:react:link",
-    "react:install:local": "cd playgrounds/react && npm link @dx/core @dx/react",
-    "react:install": "npm install --prefix playgrounds/react",
-    "react:build": "npm run build --prefix playgrounds/react",
-    "react:watch": "npm run start --prefix playgrounds/react",
-    "react:start:core": "npm run lib:core:watch",
-    "react:start:lib": "wait-on dist/core/package.json && npm run lib:react:watch",
-    "react:start:app": "wait-on dist/react/package.json && npm run react:watch",
-    "prereact:start": "del-cli dist/core && del-cli dist/react",
-    "react:start": "concurrently --kill-others npm:react:start:core npm:react:start:lib npm:react:start:app",
-
-    "preangular:install:local": "npm run lib:angular:install:local && npm run lib:angular:build && npm run lib:angular:link",
-    "angular:install:local": "cd playgrounds/angular && npm link @dx/core @dx/angular-common @dx/angular",
-    "angular:install": "npm install --prefix playgrounds/angular",
-    "angular:build": "npm run build --prefix playgrounds/angular",
-    "angular:watch": "npm run start --prefix playgrounds/angular",
-    "angular:start:core": "npm run lib:core:watch",
-    "angular:start:lib:common": "wait-on dist/core/package.json && npm run lib:angular:watch:common",
-    "angular:start:lib": "wait-on dist/angular-common/package.json && npm run lib:angular:watch:lib",
-    "angular:start:app": "wait-on dist/angular/package.json && npm run angular:watch",
-    "preangular:start": "del-cli dist/core && del-cli dist/angular-common && del-cli dist/angular",
-    "angular:start": "concurrently --kill-others npm:angular:start:core npm:angular:start:lib:common npm:angular:start:lib npm:angular:start:app"
+    "lib:core:install": "npm install --prefix packages/core",
+    "lib:core:build": "npm run build --prefix packages/core",
+    "lib:core:watch": "npm run watch --prefix packages/core",
+    "lib:core:lint": "npm run lint --prefix packages/core",
+    "lib:core:test:unit": "npm run test:unit --prefix packages/core"
   },
   "repository": {
     "type": "git",
@@ -56,11 +16,5 @@
   "bugs": {
     "url": "https://github.com/williamvinogradov/multiplatform-spike/issues"
   },
-  "homepage": "https://github.com/williamvinogradov/multiplatform-spike#readme",
-  "devDependencies": {
-    "colors": "^1.4.0",
-    "concurrently": "^7.3.0",
-    "del-cli": "^5.0.0",
-    "wait-on": "^6.0.1"
-  }
+  "homepage": "https://github.com/williamvinogradov/multiplatform-spike#readme"
 }
