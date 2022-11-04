@@ -25,7 +25,7 @@ const shadowComparer = <T>(
     return false;
   }
 
-  return !prevKeys.find((key) => prevObj[key] !== nextObj[key]);
+  return !prevKeys.some((key) => prevObj[key] !== nextObj[key]);
 };
 
 export { shadowComparer };

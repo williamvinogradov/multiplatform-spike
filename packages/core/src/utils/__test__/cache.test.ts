@@ -2,17 +2,8 @@ import { createCache } from '../cache';
 import fn = jest.fn;
 
 describe('Core: Utils: cache', () => {
-  const funcToCache = (a: number, b: number) => ({
-    result: a + b,
-  });
-
-  const testComparer = (
-    prev: [number, number],
-    next: [number, number],
-  ) => prev[0] === next[0] && prev[1] === next[1];
-
   test('It should always call cached func on the first call', () => {
-    const spyFunc = fn().mockReturnValue({ result: 4 });
+    const spyFunc = fn();
     const cachedFunc = createCache(spyFunc, () => true);
 
     cachedFunc();
@@ -21,7 +12,7 @@ describe('Core: Utils: cache', () => {
   });
 
   test('It shouldn\'t call comparer on the first call', () => {
-    const spyComparer = fn().mockReturnValue(true);
+    const spyComparer = fn();
     const cachedFunc = createCache(() => 4, spyComparer);
 
     cachedFunc();
@@ -30,9 +21,10 @@ describe('Core: Utils: cache', () => {
   });
 
   test('It shouldn\'t call cached func if the arguments haven\'t changed', () => {
-    const spyFunc = fn().mockReturnValue({ result: 4 });
     const args: [number, number] = [2, 2];
-    const cachedFunc = createCache(spyFunc, testComparer);
+    const spyFunc = fn();
+    const spyComparer = fn().mockReturnValue(true);
+    const cachedFunc = createCache(spyFunc, spyComparer);
 
     cachedFunc(...args);
     cachedFunc(...args);
@@ -42,21 +34,22 @@ describe('Core: Utils: cache', () => {
   });
 
   test('It should call cached func if the arguments have changed', () => {
-    const spyFunc = fn().mockReturnValue({ result: 4 });
-    const firstArgs: [number, number] = [2, 2];
-    const secondArgs: [number, number] = [2, 1];
-    const cachedFunc = createCache(spyFunc, testComparer);
+    const args: [number, number] = [2, 2];
+    const spyComparer = fn().mockReturnValue(false);
+    const spyFunc = fn();
+    const cachedFunc = createCache(spyFunc, spyComparer);
 
-    cachedFunc(...firstArgs);
-    cachedFunc(...secondArgs);
+    cachedFunc(...args);
+    cachedFunc(...args);
 
     expect(spyFunc).toHaveBeenCalledTimes(2);
   });
 
-  test('It should call always call comparer, except first call', () => {
-    const spyComparer = fn().mockReturnValue(true);
+  test('It should always call comparer, except first call', () => {
     const args: [number, number] = [2, 2];
-    const cachedFunc = createCache(funcToCache, spyComparer);
+    const spyFunc = fn();
+    const spyComparer = fn();
+    const cachedFunc = createCache(spyFunc, spyComparer);
 
     cachedFunc(...args);
     cachedFunc(...args);
@@ -68,22 +61,25 @@ describe('Core: Utils: cache', () => {
 
   test('It should return cached result if the arguments haven\'t changed', () => {
     const args: [number, number] = [2, 2];
-    const cachedFunc = createCache(funcToCache, testComparer);
+    const spyFunc = fn().mockImplementation(() => ({ result: 4 }));
+    const spyComparer = fn().mockReturnValue(true);
+    const cachedFunc = createCache(spyFunc, spyComparer);
 
     const firstResult = cachedFunc(...args);
     const secondResult = cachedFunc(...args);
 
-    expect(firstResult === secondResult).toBeTruthy();
+    expect(firstResult).toBe(secondResult);
   });
 
   test('It should return new result from cached func if the arguments have changed', () => {
-    const firstArgs: [number, number] = [2, 2];
-    const secondArgs: [number, number] = [2, 1];
-    const cachedFunc = createCache(funcToCache, testComparer);
+    const args: [number, number] = [2, 2];
+    const spyFunc = fn().mockImplementation(() => ({ result: 4 }));
+    const spyComparer = fn().mockReturnValue(false);
+    const cachedFunc = createCache(spyFunc, spyComparer);
 
-    const firstResult = cachedFunc(...firstArgs);
-    const secondResult = cachedFunc(...secondArgs);
+    const firstResult = cachedFunc(...args);
+    const secondResult = cachedFunc(...args);
 
-    expect(firstResult !== secondResult).toBeTruthy();
+    expect(firstResult).not.toBe(secondResult);
   });
 });

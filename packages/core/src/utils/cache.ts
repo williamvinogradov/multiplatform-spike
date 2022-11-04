@@ -1,22 +1,19 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type Func = (...args: any[]) => any;
+import { FunctionType } from './types';
 
-const createCache = <TFunction extends Func>(
+const createCache = <TFunction extends FunctionType>(
   func: TFunction,
   comparer: (prev: Parameters<TFunction>, next: Parameters<TFunction>) => boolean,
 ): (...arg: Parameters<TFunction>) => ReturnType<TFunction> => {
-  let isFirstCall = true;
   let cachedArg: Parameters<TFunction>;
   let cachedResult: ReturnType<TFunction>;
 
   return (...arg: Parameters<TFunction>) => {
-    const comparerResult = !isFirstCall && comparer(cachedArg, arg);
+    const comparerResult = cachedArg !== undefined && comparer(cachedArg, arg);
 
     if (comparerResult) {
       return cachedResult;
     }
 
-    isFirstCall = false;
     cachedArg = arg;
     cachedResult = func(...arg) as ReturnType<TFunction>;
 

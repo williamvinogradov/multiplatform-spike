@@ -7,7 +7,7 @@ describe('Core: Utils: getKeys', () => {
     c: true,
   };
 
-  test('It should returns key array of the passed object', () => {
+  test('It should return key array of the passed object', () => {
     const expectedResult = ['a', 'b', 'c'];
 
     const keys = getKeys(testObj);

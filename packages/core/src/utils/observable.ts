@@ -13,16 +13,16 @@ interface ReactiveObject<T> extends Observable<T> {
 }
 
 function createObservable<T>(): ObservableInternal<T> {
-  let listeners: Listener<T>[] = [];
+  const listeners = new Set<Listener<T>>();
 
   const emit = (value: T): void => {
     listeners.forEach((listener) => listener(value));
   };
 
   const subscribe = (newListener: Listener<T>): () => void => {
-    listeners = [...listeners, newListener];
+    listeners.add(newListener);
 
-    return () => { listeners = listeners.filter((listener) => listener !== newListener); };
+    return () => { listeners.delete(newListener); };
   };
 
   return {
