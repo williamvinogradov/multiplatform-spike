@@ -10,7 +10,7 @@ describe('Core: Utils: shadowComparer', () => {
     expect(result).toBeFalsy();
   });
 
-  it('Compares value types by value and return true if these values are equal', () => {
+  it('Returns true if compared values have value types and equal', () => {
     const prev = 2;
     const next = 2;
 
@@ -19,7 +19,7 @@ describe('Core: Utils: shadowComparer', () => {
     expect(result).toBeTruthy();
   });
 
-  it('Compares value types by value and return false if these values aren\'t equal', () => {
+  it('Returns false if compared values have value types and not equal', () => {
     const prev = true;
     const next = false;
 
@@ -28,7 +28,7 @@ describe('Core: Utils: shadowComparer', () => {
     expect(result).toBeFalsy();
   });
 
-  it('Compares functions by reference and return true if these references are equal', () => {
+  it('Returns true if compared values are functions and equal', () => {
     const firstFunc = () => {};
 
     const result = shadowComparer(firstFunc, firstFunc);
@@ -36,7 +36,7 @@ describe('Core: Utils: shadowComparer', () => {
     expect(result).toBeTruthy();
   });
 
-  it('Compares functions by reference and return false if these references aren\'t equal', () => {
+  it('Returns false if compared values are functions and not equal', () => {
     const firstFunc = () => {};
     const secondFunc = () => {};
 
@@ -45,7 +45,7 @@ describe('Core: Utils: shadowComparer', () => {
     expect(result).toBeFalsy();
   });
 
-  it('Compares dates by a date value comparison and returns true if dates are equal', () => {
+  it('Returns true if compared values are dates and equal', () => {
     const firstDate = new Date('2022-10-10T00:00:00Z');
     const secondDate = new Date('2022-10-10T00:00:00Z');
 
@@ -54,7 +54,7 @@ describe('Core: Utils: shadowComparer', () => {
     expect(result).toBeTruthy();
   });
 
-  it('Compares dates by a date value comparison and returns false if dates aren\'t equal', () => {
+  it('Returns false if compared values are dates and not equal', () => {
     const firstDate = new Date('2022-10-10T00:00:00Z');
     const secondDate = new Date('2021-10-10T00:00:00Z');
 
@@ -64,9 +64,8 @@ describe('Core: Utils: shadowComparer', () => {
   });
 
   it('Returns false if keys count aren\'t equal', () => {
-    type Test = { a: number, b?: number };
-    const prev:Test = { a: 1 };
-    const next:Test = { a: 1, b: 2 };
+    const prev = { a: 1 };
+    const next = { a: 1, b: 2 };
 
     const result = shadowComparer(prev, next);
 
@@ -74,25 +73,16 @@ describe('Core: Utils: shadowComparer', () => {
   });
 
   it('Returns true if all keys on the first level are equal', () => {
-    type Test = {
-      a: number,
-      ref: {
-        b: number,
-      },
-      func: () => void,
-      array: number[],
-    };
-
     const testFunc = () => {};
     const testArray = [0, 1, 2];
     const testRef = { b: 2 };
-    const prev: Test = {
+    const prev = {
       a: 1,
       ref: testRef,
       func: testFunc,
       array: testArray,
     };
-    const next: Test = {
+    const next = {
       a: 1,
       ref: testRef,
       func: testFunc,
@@ -122,12 +112,7 @@ describe('Core: Utils: shadowComparer', () => {
   });
 
   it('Compares only first level keys', () => {
-    type Test = {
-      a: {
-        b: boolean,
-      }
-    };
-    const testRef: Test = {
+    const testRef = {
       a: {
         b: true,
       },
