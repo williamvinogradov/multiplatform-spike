@@ -1,8 +1,8 @@
-import { FunctionType } from './types';
+import { Comparer, FunctionType } from './types';
 
 export const memoize = <TFunction extends FunctionType>(
   func: TFunction,
-  comparer: (prev: Parameters<TFunction>, next: Parameters<TFunction>) => boolean,
+  comparer: Comparer<Parameters<TFunction>>,
 ): (...arg: Parameters<TFunction>) => ReturnType<TFunction> => {
   let cachedArg: Parameters<TFunction>;
   let cachedResult: ReturnType<TFunction>;
