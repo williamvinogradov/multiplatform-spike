@@ -1,23 +1,28 @@
 // shadow equality
 export const shadowComparer = <T>(
-  prev: T,
-  next: T,
+  firstValue: T,
+  secondValue: T,
 ): boolean => {
-  const isDifferentTypes = typeof prev !== typeof next;
+  const differentTypes = typeof firstValue !== typeof secondValue;
 
-  if (isDifferentTypes) {
+  if (differentTypes) {
     return false;
   }
 
-  const notReferenceTypes = !(prev instanceof Object) || !(next instanceof Object);
-  const isFunctionTypes = typeof prev === 'function' && typeof next === 'function';
+  const notReferenceTypes = !(firstValue instanceof Object) || !(secondValue instanceof Object);
+  const functionTypes = typeof firstValue === 'function' && typeof secondValue === 'function';
+  const dateTypes = firstValue instanceof Date && secondValue instanceof Date;
 
-  if (notReferenceTypes || isFunctionTypes) {
-    return prev === next;
+  if (notReferenceTypes || functionTypes) {
+    return firstValue === secondValue;
   }
 
-  const prevObj = prev as { [index: string]: unknown };
-  const nextObj = next as { [index: string]: unknown };
+  if (dateTypes) {
+    return firstValue.getTime() === secondValue.getTime();
+  }
+
+  const prevObj = firstValue as { [index: string]: unknown };
+  const nextObj = secondValue as { [index: string]: unknown };
   const prevKeys = Object.keys(prevObj);
   const nextKeys = Object.keys(nextObj);
 

@@ -2,7 +2,7 @@ import { memoize } from '../memoize';
 import fn = jest.fn;
 
 describe('Core: Utils: memoize', () => {
-  it('Should always call cached func on the first call', () => {
+  it('Calls cached func on the first call', () => {
     const spyFunc = fn();
     const cachedFunc = memoize(spyFunc, () => true);
 
@@ -34,7 +34,7 @@ describe('Core: Utils: memoize', () => {
     expect(spyFunc).toHaveBeenCalledTimes(1);
   });
 
-  it('Should call cached func if the arguments have changed', () => {
+  it('Calls cached func if the arguments have changed', () => {
     const args: [number, number] = [2, 2];
     const spyComparer = fn().mockReturnValue(false);
     const spyFunc = fn();
@@ -60,7 +60,7 @@ describe('Core: Utils: memoize', () => {
     expect(spyComparer).toHaveBeenCalledTimes(3);
   });
 
-  it('Should return cached result if the arguments haven\'t changed', () => {
+  it('Returns cached result if the arguments haven\'t changed', () => {
     const args: [number, number] = [2, 2];
     const spyFunc = fn().mockImplementation(() => ({ result: 4 }));
     const spyComparer = fn().mockReturnValue(true);
@@ -72,7 +72,7 @@ describe('Core: Utils: memoize', () => {
     expect(firstResult).toBe(secondResult);
   });
 
-  it('Should return new result from cached func if the arguments have changed', () => {
+  it('Returns new result from cached func if the arguments have changed', () => {
     const args: [number, number] = [2, 2];
     const spyFunc = fn().mockImplementation(() => ({ result: 4 }));
     const spyComparer = fn().mockReturnValue(false);

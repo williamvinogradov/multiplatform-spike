@@ -6,7 +6,7 @@ describe('Core: Utils: observable', () => {
     value: number
   }
 
-  it('Should emit same value to all subscribers', () => {
+  it('Emits same value to all subscribers', () => {
     const testValue: Observed = { value: 2 };
     const observable = createObservable<Observed>();
 
@@ -19,7 +19,7 @@ describe('Core: Utils: observable', () => {
     expect(firstResult === secondResult).toBeTruthy();
   });
 
-  it('Should call all subscribers on each emit', () => {
+  it('Calls all subscribers on each emit', () => {
     const testValue: Observed = { value: 2 };
     const observable = createObservable<Observed>();
     const spySubscribers = [fn(), fn(), fn(), fn()];
@@ -49,7 +49,7 @@ describe('Core: Utils: observable', () => {
     expect(spySubscriber).toHaveBeenCalledTimes(1);
   });
 
-  it('Should emit new values for not unsubscribed subscribers', () => {
+  it('Emits new values for not unsubscribed subscribers', () => {
     const testValue: Observed = { value: 2 };
     const observable = createObservable<Observed>();
     const spySubscriberFirst = fn();
@@ -64,7 +64,7 @@ describe('Core: Utils: observable', () => {
     expect(spySubscriberSecond).toHaveBeenCalledTimes(2);
   });
 
-  it('Should correctly handle the same function passed to subscribe multiple times', () => {
+  it('Handles the same function passed to subscribe multiple times', () => {
     const testValue: Observed = { value: 2 };
     const observable = createObservable<Observed>();
     const spySubscriber = fn();
@@ -91,7 +91,7 @@ describe('Core: Utils: observable', () => {
     expect(spySubscriber).not.toHaveBeenCalled();
   });
 
-  it('Should emit new values to resubscribed function', () => {
+  it('Emits new values to resubscribed function', () => {
     const testValue: Observed = { value: 2 };
     const observable = createObservable<Observed>();
     const spySubscriber = fn();
