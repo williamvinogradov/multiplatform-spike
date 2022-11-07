@@ -1,5 +1,5 @@
 // shadow equality
-const shadowComparer = <T>(
+export const shadowComparer = <T>(
   prev: T,
   next: T,
 ): boolean => {
@@ -27,5 +27,3 @@ const shadowComparer = <T>(
 
   return !prevKeys.some((key) => prevObj[key] !== nextObj[key]);
 };
-
-export { shadowComparer };

@@ -1,7 +1,7 @@
 import { shadowComparer } from '../shadowComparer';
 
 describe('Core: Utils: shadowComparer', () => {
-  test('It should return false if passed values have different js types', () => {
+  it('Should return false if passed values have different js types', () => {
     const prev = { a: 1 } as unknown;
     const next = (() => {}) as unknown;
 
@@ -10,7 +10,7 @@ describe('Core: Utils: shadowComparer', () => {
     expect(result).toBeFalsy();
   });
 
-  test('It should compare value types by value and return true if these values are equal', () => {
+  it('Should compare value types by value and return true if these values are equal', () => {
     const prev = 2;
     const next = 2;
 
@@ -19,7 +19,7 @@ describe('Core: Utils: shadowComparer', () => {
     expect(result).toBeTruthy();
   });
 
-  test('It should compare value types by value and return false if these values aren\'t equal', () => {
+  it('Should compare value types by value and return false if these values aren\'t equal', () => {
     const prev = true;
     const next = false;
 
@@ -28,7 +28,7 @@ describe('Core: Utils: shadowComparer', () => {
     expect(result).toBeFalsy();
   });
 
-  test('It should compare functions by reference and return true if these references are equal', () => {
+  it('Should compare functions by reference and return true if these references are equal', () => {
     const firstFunc = () => {};
 
     const result = shadowComparer(firstFunc, firstFunc);
@@ -36,7 +36,7 @@ describe('Core: Utils: shadowComparer', () => {
     expect(result).toBeTruthy();
   });
 
-  test('It should compare functions by reference and return false if these references aren\'t equal', () => {
+  it('Should compare functions by reference and return false if these references aren\'t equal', () => {
     const firstFunc = () => {};
     const secondFunc = () => {};
 
@@ -45,7 +45,7 @@ describe('Core: Utils: shadowComparer', () => {
     expect(result).toBeFalsy();
   });
 
-  test('It should return false if keys count aren\'t equal', () => {
+  it('Should return false if keys count aren\'t equal', () => {
     type Test = { a: number, b?: number };
     const prev:Test = { a: 1 };
     const next:Test = { a: 1, b: 2 };
@@ -55,7 +55,7 @@ describe('Core: Utils: shadowComparer', () => {
     expect(result).toBeFalsy();
   });
 
-  test('It should return true if all keys on the first level are equal', () => {
+  it('Should return true if all keys on the first level are equal', () => {
     type Test = {
       a: number,
       ref: {
@@ -86,7 +86,7 @@ describe('Core: Utils: shadowComparer', () => {
     expect(result).toBeTruthy();
   });
 
-  test('It should return false if some keys on the first level are different', () => {
+  it('Should return false if some keys on the first level are different', () => {
     const prev = {
       ref: {
         b: 2,
@@ -103,7 +103,7 @@ describe('Core: Utils: shadowComparer', () => {
     expect(result).toBeFalsy();
   });
 
-  it('It should compare only first level keys', () => {
+  it('Should compare only first level keys', () => {
     type Test = {
       a: {
         b: boolean,

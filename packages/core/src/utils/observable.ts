@@ -1,18 +1,11 @@
-type Listener<T> = (value: T) => void;
+export type Listener<T> = (value: T) => void;
 
-interface Observable<T> {
+export interface Observable<T> {
+  emit: (value: T) => void;
   subscribe: (listener: Listener<T>) => () => void;
 }
 
-interface ObservableInternal<T> extends Observable<T> {
-  emit: (value: T) => void;
-}
-
-interface ReactiveObject<T> extends Observable<T> {
-  getValue: () => T;
-}
-
-function createObservable<T>(): ObservableInternal<T> {
+export const createObservable = <T>(): Observable<T> => {
   const listeners = new Set<Listener<T>>();
 
   const emit = (value: T): void => {
@@ -29,7 +22,4 @@ function createObservable<T>(): ObservableInternal<T> {
     emit,
     subscribe,
   };
-}
-
-export type { Observable, ObservableInternal, ReactiveObject };
-export { createObservable };
+};
