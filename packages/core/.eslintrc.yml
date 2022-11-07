@@ -14,4 +14,5 @@ overrides:
       - 'devextreme/typescript'
     rules:
       '@typescript-eslint/no-explicit-any': 'error'
+      'import/exports-last': 'error'
 
