@@ -22,12 +22,12 @@ describe('Core: Component: Middlewares: callbacksMiddleware', () => {
     const next = { a: 4, b: 5, c: 6 };
     const config = {
       a: {
-        isControlled: true,
-        publicCallback: (value: number) => { result.push(value); },
+        controlledMode: true,
+        changeCallback: (value: number) => { result.push(value); },
       },
       c: {
-        isControlled: false,
-        publicCallback: (value: number) => { result.push(value); },
+        controlledMode: false,
+        changeCallback: (value: number) => { result.push(value); },
       },
     };
     getChangedKeysMock.mockReturnValue(['a', 'b', 'c']);

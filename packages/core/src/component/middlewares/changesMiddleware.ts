@@ -1,12 +1,14 @@
 import { ObjectType } from '../../utils';
-import { StateModelConfigMap } from './types';
+import { ModelConfigMap } from './types';
 import { getChangedKeys } from './getChangedKeys';
 
-export const changesMiddleware = <TModel>(
-  prev: ObjectType<TModel>,
-  next: ObjectType<TModel>,
-  config: StateModelConfigMap<TModel> = {},
-): [ObjectType<TModel>, boolean] => {
+type ModelChangesTuple<TModel extends ObjectType> = [newModel: TModel, hasChanges: boolean];
+
+export const changesMiddleware = <TModel extends ObjectType>(
+  prev: TModel,
+  next: TModel,
+  config: ModelConfigMap<TModel> = {},
+): ModelChangesTuple<TModel> => {
   const result = { ...next };
   const changedKeys = getChangedKeys(prev, next);
   let changesCount = changedKeys.length;
@@ -14,7 +16,7 @@ export const changesMiddleware = <TModel>(
   changedKeys.forEach((key) => {
     const configItem = config[key];
 
-    if (configItem && configItem.isControlled) {
+    if (configItem && configItem.controlledMode) {
       result[key] = prev[key];
       changesCount -= 1;
     }

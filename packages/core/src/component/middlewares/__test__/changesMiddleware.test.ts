@@ -34,12 +34,12 @@ describe('Core: Component: Middlewares: changesMiddleware', () => {
     };
     const config = {
       a: {
-        isControlled: false,
-        publicCallback: () => {},
+        controlledMode: false,
+        changeCallback: () => {},
       },
       b: {
-        isControlled: false,
-        publicCallback: () => {},
+        controlledMode: false,
+        changeCallback: () => {},
       },
     };
     getChangedKeysMock.mockReturnValue(['a', 'b']);
@@ -60,12 +60,12 @@ describe('Core: Component: Middlewares: changesMiddleware', () => {
     };
     const config = {
       a: {
-        isControlled: true,
-        publicCallback: () => {},
+        controlledMode: true,
+        changeCallback: () => {},
       },
       b: {
-        isControlled: true,
-        publicCallback: () => {},
+        controlledMode: true,
+        changeCallback: () => {},
       },
     };
     getChangedKeysMock.mockReturnValue(['a', 'b']);
@@ -90,12 +90,12 @@ describe('Core: Component: Middlewares: changesMiddleware', () => {
     };
     const config = {
       a: {
-        isControlled: true,
-        publicCallback: () => {},
+        controlledMode: true,
+        changeCallback: () => {},
       },
       b: {
-        isControlled: false,
-        publicCallback: () => {},
+        controlledMode: false,
+        changeCallback: () => {},
       },
     };
     getChangedKeysMock.mockReturnValue(['a', 'b']);
@@ -120,8 +120,8 @@ describe('Core: Component: Middlewares: changesMiddleware', () => {
     const next = { a: 2 };
     const config = {
       a: {
-        isControlled: true,
-        publicCallback: () => {},
+        controlledMode: true,
+        changeCallback: () => {},
       },
     };
     getChangedKeysMock.mockReturnValue(['a']);

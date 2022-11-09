@@ -1,8 +1,10 @@
-export interface StateModelPropertyConfig<T> {
-  isControlled: boolean;
-  publicCallback: (value: T) => void;
+import { ObjectType } from '../../utils';
+
+export interface ModelPropertyConfig<T> {
+  controlledMode: boolean;
+  changeCallback: (value: T) => void;
 }
 
-export type StateModelConfigMap<TModel> = {
-  [P in keyof TModel]?: StateModelPropertyConfig<TModel[P]>
+export type ModelConfigMap<TModel extends ObjectType> = {
+  [P in keyof TModel]?: ModelPropertyConfig<TModel[P]>
 };
