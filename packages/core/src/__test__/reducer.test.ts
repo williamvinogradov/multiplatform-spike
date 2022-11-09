@@ -3,16 +3,18 @@ import fn = jest.fn;
 
 describe('reducer', () => {
   it('calls event handler', () => {
-    const handler = fn();
-    const value = {};
+    const expectedReturnValue = {};
+    const actionValue = {};
+    const handler = fn().mockReturnValue(expectedReturnValue);
     const reducer = createReducer({
       a: handler,
     });
 
-    reducer({ action: 'a', value });
+    const actualReturnValue = reducer({ action: 'a', value: actionValue });
 
     expect(handler).toBeCalledTimes(1);
-    expect(handler).toBeCalledWith(value);
+    expect(handler).toBeCalledWith(actionValue);
+    expect(actualReturnValue).toBe(expectedReturnValue);
   });
 
   it('does not call other events handlers', () => {
