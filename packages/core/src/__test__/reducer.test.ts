@@ -11,7 +11,7 @@ describe('reducer', () => {
       a: handler,
     });
 
-    const actualReturnValue = reducer(state, { action: 'a', value: actionValue });
+    const actualReturnValue = reducer(state, 'a', actionValue);
 
     expect(handler).toBeCalledTimes(1);
     expect(handler).toBeCalledWith(state, actionValue);
@@ -27,7 +27,7 @@ describe('reducer', () => {
       c: handlerC,
     });
 
-    reducer({}, { action: 'a', value: undefined });
+    reducer({}, 'a', undefined);
 
     expect(handlerB).not.toBeCalled();
     expect(handlerC).not.toBeCalled();
@@ -42,7 +42,7 @@ describe('reducer', () => {
       [action]: handler,
     });
 
-    reducer(state, { action, value });
+    reducer(state, action, value);
 
     expect(handler).toBeCalledTimes(1);
     expect(handler).toBeCalledWith(state, value);
@@ -54,7 +54,7 @@ describe('reducer', () => {
     });
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    expect(() => reducer({}, { action: 'b' as any, value: {} })).toThrow();
+    expect(() => reducer({}, 'b' as any, {})).toThrow();
   });
 
   it('throws for undefined handler', () => {
