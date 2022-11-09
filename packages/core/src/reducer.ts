@@ -16,7 +16,7 @@ export function createReducer<TState>() {
     }
 
     return (state, { action, value }) => {
-      if (!(action in handlers)) {
+      if (!handlers[action]) {
         throw new Error(`Unknown action: '${String(action)}'`);
       }
 
