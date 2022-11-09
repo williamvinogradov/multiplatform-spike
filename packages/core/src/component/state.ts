@@ -12,8 +12,8 @@ export interface State<TModel, TDictionary>
   commitUpdates: (rollback?: boolean) => void;
 }
 
-export const createState = <TModel, TDictionary>(
-  initialState: StateValue<ObjectType<TModel>, ObjectType<TDictionary>>,
+export const createState = <TModel extends ObjectType, TDictionary extends ObjectType>(
+  initialState: StateValue<TModel, TDictionary>,
 ): State<TModel, TDictionary> => {
   let stateValue = initialState;
   let updatedStateValue = initialState;
