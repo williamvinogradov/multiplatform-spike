@@ -5,28 +5,29 @@ describe('reducer', () => {
   it('calls event handler', () => {
     const expectedReturnValue = {};
     const actionValue = {};
+    const state = {};
     const handler = fn().mockReturnValue(expectedReturnValue);
-    const reducer = createReducer({
+    const reducer = createReducer()({
       a: handler,
     });
 
-    const actualReturnValue = reducer({ action: 'a', value: actionValue });
+    const actualReturnValue = reducer(state, { action: 'a', value: actionValue });
 
     expect(handler).toBeCalledTimes(1);
-    expect(handler).toBeCalledWith(actionValue);
+    expect(handler).toBeCalledWith(state, actionValue);
     expect(actualReturnValue).toBe(expectedReturnValue);
   });
 
   it('does not call other events handlers', () => {
     const handlerB = fn();
     const handlerC = fn();
-    const reducer = createReducer({
+    const reducer = createReducer()({
       a: fn(),
       b: handlerB,
       c: handlerC,
     });
 
-    reducer({ action: 'a', value: undefined });
+    reducer({}, { action: 'a', value: undefined });
 
     expect(handlerB).not.toBeCalled();
     expect(handlerC).not.toBeCalled();
@@ -36,22 +37,24 @@ describe('reducer', () => {
     const action = Symbol('action');
     const handler = fn();
     const value = {};
-    const reducer = createReducer({
+    const state = {};
+    const reducer = createReducer()({
       [action]: handler,
     });
 
-    reducer({ action, value });
+    reducer(state, { action, value });
 
     expect(handler).toBeCalledTimes(1);
-    expect(handler).toBeCalledWith(value);
+    expect(handler).toBeCalledWith(state, value);
   });
 
   it('throws for unknown event', () => {
-    const reducer = createReducer({
+    const reducer = createReducer()({
       a: fn(),
-    } as Record<string, () => void >);
+    });
 
-    expect(() => reducer({ action: 'b', value: {} })).toThrow();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    expect(() => reducer({}, { action: 'b' as any, value: {} })).toThrow();
   });
 
   it('throws for undefined handler', () => {
@@ -59,7 +62,7 @@ describe('reducer', () => {
       a: undefined as any, // eslint-disable-line @typescript-eslint/no-explicit-any
     };
 
-    expect(() => createReducer(invalidHandlers)).toThrow();
+    expect(() => createReducer()(invalidHandlers)).toThrow();
   });
 
   it('throws for undefined handler of a Symbol action', () => {
@@ -68,6 +71,6 @@ describe('reducer', () => {
       [action]: undefined as any, // eslint-disable-line @typescript-eslint/no-explicit-any
     };
 
-    expect(() => createReducer(invalidHandlers)).toThrow();
+    expect(() => createReducer()(invalidHandlers)).toThrow();
   });
 });
