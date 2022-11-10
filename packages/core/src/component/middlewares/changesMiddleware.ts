@@ -11,16 +11,13 @@ export const changesMiddleware = <TModel extends ObjectType>(
 ): ModelChangesTuple<TModel> => {
   const result = { ...next };
   const changedKeys = getChangedKeys(prev, next);
-  let changesCount = changedKeys.length;
+  const controlledModeKeys = changedKeys
+    .filter((key) => config[key]?.controlledMode);
 
-  changedKeys.forEach((key) => {
-    const configItem = config[key];
-
-    if (configItem && configItem.controlledMode) {
-      result[key] = prev[key];
-      changesCount -= 1;
-    }
+  controlledModeKeys.forEach((controlledKey) => {
+    result[controlledKey] = prev[controlledKey];
   });
 
-  return [result, changesCount > 0];
+  const hasChanges = changedKeys.length - controlledModeKeys.length > 0;
+  return [result, hasChanges];
 };
