@@ -32,13 +32,13 @@ describe('Core: Component: state', () => {
     expect(result).toEqual(initialValue);
   });
 
-  it('Doesn\'t update the state value if updates was rolled back', () => {
+  it('Doesn\'t update the state value if updates were rolled back', () => {
     const initialValue = { model: { value: 'test' }, dictionary: { value: 'test' } };
     const expectedValue = { model: { value: 'updated' }, dictionary: { value: 'test' } };
     const state = createState(initialValue);
 
     state.addUpdateChunk({ model: expectedValue.model });
-    state.commitUpdates(true);
+    state.rollbackUpdates();
     const result = state.getValue();
 
     expect(result).toEqual(initialValue);
@@ -50,11 +50,21 @@ describe('Core: Component: state', () => {
     const state = createState(initialValue);
 
     state.addUpdateChunk({ model: { value: 'updated' } });
-    state.commitUpdates(true);
+    state.rollbackUpdates();
     state.addUpdateChunk({ dictionary: { value: 'updated' } });
     state.commitUpdates();
     const result = state.getValue();
 
     expect(result).toEqual(expectedValue);
+  });
+
+  it('Doesn\'t update the state if changes weren\'t added', () => {
+    const initialValue = { model: { value: 'test' }, dictionary: { value: 'test' } };
+    const state = createState(initialValue);
+
+    state.commitUpdates();
+    const result = state.getValue();
+
+    expect(result).toEqual(initialValue);
   });
 });
