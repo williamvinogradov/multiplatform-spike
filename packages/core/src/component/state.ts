@@ -7,7 +7,7 @@ export interface StateValue<TModel, TDictionary> {
 
 export interface State<TModel, TDictionary>
   extends Observable<StateValue<TModel, TDictionary>>{
-  getValue: () => StateValue<TModel, TDictionary>;
+  getCurrent: () => StateValue<TModel, TDictionary>;
   addUpdateChunk: (statePart: Partial<StateValue<Partial<TModel>, Partial<TDictionary>>>) => void;
   commitUpdates: () => void;
   rollbackUpdates: () => void;
@@ -21,7 +21,7 @@ export const createState = <TModel extends ObjectType, TDictionary extends Objec
 
   const { emit, subscribe } = createObservable<StateValue<TModel, TDictionary>>();
 
-  const getValue = () => current;
+  const getCurrent = () => current;
 
   const addUpdate = (
     statePart: Partial<StateValue<Partial<TModel>, Partial<TDictionary>>>,
@@ -49,7 +49,7 @@ export const createState = <TModel extends ObjectType, TDictionary extends Objec
   return {
     emit,
     subscribe,
-    getValue,
+    getCurrent,
     addUpdateChunk: addUpdate,
     commitUpdates,
     rollbackUpdates,

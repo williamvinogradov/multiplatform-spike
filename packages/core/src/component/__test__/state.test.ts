@@ -5,7 +5,7 @@ describe('Core: Component: state', () => {
     const initialValue = { model: { value: 'test' }, dictionary: { value: 'test' } };
     const state = createState(initialValue);
 
-    const result = state.getValue();
+    const result = state.getCurrent();
 
     expect(result).toEqual(initialValue);
   });
@@ -17,7 +17,7 @@ describe('Core: Component: state', () => {
 
     state.addUpdateChunk({ model: expectedValue.model });
     state.commitUpdates();
-    const result = state.getValue();
+    const result = state.getCurrent();
 
     expect(result).toEqual(expectedValue);
   });
@@ -27,7 +27,7 @@ describe('Core: Component: state', () => {
     const state = createState(initialValue);
 
     state.addUpdateChunk({ model: { value: 'updated' } });
-    const result = state.getValue();
+    const result = state.getCurrent();
 
     expect(result).toEqual(initialValue);
   });
@@ -39,7 +39,7 @@ describe('Core: Component: state', () => {
 
     state.addUpdateChunk({ model: expectedValue.model });
     state.rollbackUpdates();
-    const result = state.getValue();
+    const result = state.getCurrent();
 
     expect(result).toEqual(initialValue);
   });
@@ -53,7 +53,7 @@ describe('Core: Component: state', () => {
     state.rollbackUpdates();
     state.addUpdateChunk({ dictionary: { value: 'updated' } });
     state.commitUpdates();
-    const result = state.getValue();
+    const result = state.getCurrent();
 
     expect(result).toEqual(expectedValue);
   });
@@ -63,7 +63,7 @@ describe('Core: Component: state', () => {
     const state = createState(initialValue);
 
     state.commitUpdates();
-    const result = state.getValue();
+    const result = state.getCurrent();
 
     expect(result).toEqual(initialValue);
   });
