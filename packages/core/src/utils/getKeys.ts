@@ -1,3 +1,5 @@
 import { ObjectType } from './types';
 
-export const getKeys = <T>(object: ObjectType<T>) => Object.keys(object) as (keyof T)[];
+// TODO: Will be changed in middlewares PR.
+// https://github.com/williamvinogradov/multiplatform-spike/pull/11
+export const getKeys = <T extends ObjectType>(object: T) => Object.keys(object) as (keyof T)[];
