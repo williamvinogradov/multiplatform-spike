@@ -1,5 +1,5 @@
 import { getChangedKeys } from '../getChangedKeys';
-import { changesMiddleware } from '../changesMiddleware';
+import { controlledModeMiddleware } from '../controlledModeMiddleware';
 
 jest.mock('../getChangedKeys');
 const getChangedKeysMock = jest.mocked(getChangedKeys);
@@ -18,7 +18,7 @@ describe('Core: Component: Middlewares: changesMiddleware', () => {
     };
     getChangedKeysMock.mockReturnValue(['a', 'b']);
 
-    const [newModel] = changesMiddleware(prevObject, nextObject);
+    const [newModel] = controlledModeMiddleware(prevObject, nextObject);
 
     expect(newModel).toEqual(nextObject);
   });
@@ -44,7 +44,7 @@ describe('Core: Component: Middlewares: changesMiddleware', () => {
     };
     getChangedKeysMock.mockReturnValue(['a', 'b']);
 
-    const [newModel] = changesMiddleware(prevObject, nextObject, config);
+    const [newModel] = controlledModeMiddleware(prevObject, nextObject, config);
 
     expect(newModel).toEqual(nextObject);
   });
@@ -70,7 +70,7 @@ describe('Core: Component: Middlewares: changesMiddleware', () => {
     };
     getChangedKeysMock.mockReturnValue(['a', 'b']);
 
-    const [newModel] = changesMiddleware(prevObject, nextObject, config);
+    const [newModel] = controlledModeMiddleware(prevObject, nextObject, config);
 
     expect(newModel).toEqual(prevObject);
   });
@@ -100,7 +100,7 @@ describe('Core: Component: Middlewares: changesMiddleware', () => {
     };
     getChangedKeysMock.mockReturnValue(['a', 'b']);
 
-    const [newModel] = changesMiddleware(prevObject, nextObject, config);
+    const [newModel] = controlledModeMiddleware(prevObject, nextObject, config);
 
     expect(newModel).toEqual(expectedModel);
   });
@@ -110,7 +110,7 @@ describe('Core: Component: Middlewares: changesMiddleware', () => {
     const next = { a: 2 };
     getChangedKeysMock.mockReturnValue(['a']);
 
-    const [, hasChanges] = changesMiddleware(prev, next);
+    const [, hasChanges] = controlledModeMiddleware(prev, next);
 
     expect(hasChanges).toBeTruthy();
   });
@@ -126,7 +126,7 @@ describe('Core: Component: Middlewares: changesMiddleware', () => {
     };
     getChangedKeysMock.mockReturnValue(['a']);
 
-    const [, hasChanges] = changesMiddleware(prev, next, config);
+    const [, hasChanges] = controlledModeMiddleware(prev, next, config);
 
     expect(hasChanges).toBeFalsy();
   });

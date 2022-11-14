@@ -4,7 +4,7 @@ import { getChangedKeys } from './getChangedKeys';
 
 type ModelChangesTuple<TModel extends ObjectType> = [newModel: TModel, hasChanges: boolean];
 
-export const changesMiddleware = <TModel extends ObjectType>(
+export const controlledModeMiddleware = <TModel extends ObjectType>(
   prev: TModel,
   next: TModel,
   config: ModelConfigMap<TModel> = {},
