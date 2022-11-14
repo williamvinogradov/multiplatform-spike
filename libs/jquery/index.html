@@ -9,6 +9,43 @@
 
 <body>
     <style>
+        .example {
+            margin: 20px;
+            padding: 0 0 20px 0;
+        }
+
+        .example__title {
+            font-weight: 500;
+            font-size: 20px;
+            margin: 0 0 20px 0;
+        }
+
+        .example__info {
+            margin: 20px 0 0 0;
+        }
+
+        .example__play-part {
+            margin: 20px 0 0 0;
+        }
+
+        .example-input {
+            padding: 10px;
+            margin: 0 10px;
+            border: 1px solid #ececec;
+            border-radius: 4px;
+            outline: none;
+            font-size: 16px;
+        }
+
+        .example-input:focus {
+            border: 1px solid #f05b41;
+        }
+
+        .example:not(:last-of-type) {
+            border-bottom: 1px solid #ececec;
+        }
+    </style>
+    <style>
         .custom-pager-item {
             padding: 10px;
             background-color: #fff;
@@ -70,9 +107,32 @@
         }
     </style>
     <script type="text/javascript" src="./dest/bundle.debug.js" charset="utf-8"></script>
+    <div>Using selectbox from Devextreme example</div>
     <div id="button">Change readOnly</div>
     <div id="selectbox"></div>
-    <div id="pager"></div>
+    <div>Pager examples</div>
+    <div className="example">
+        <div className="example__title">
+            Customize pager options
+        </div>
+        <div className="example__control">
+            <div id="pager">
+            </div>
+        </div>
+        <div class="example__info">
+            <div class="example__play-part">
+                <span>Select page sizes:</span>
+                <select class="example-input page-sizes">
+                    <option value="0" selected="">[10, 20, 30]</option>
+                    <option value="1">[20, 40, 60]</option>
+                </select>
+            </div>
+            <div class="example__play-part">
+                <span>Set page count:</span>
+                <input class="example-input page-count" type="number" min="1" value="20">
+            </div>
+        </div>
+    </div>
     <div className="example">
         <div className="example__title">
             Customization items example
@@ -101,6 +161,10 @@
     </div>
     <script>
         (function() {
+            const PAGE_SIZES = [
+                [10, 20, 30],
+                [20, 40, 60],
+            ];
             const seelctBox = new window.DevExpress.ui.dxSelectBoxWrapper(document.querySelector('#selectbox'), {
                 itemTemplate: (item, index, container) => {
                     const el = document.createElement('div');
@@ -111,6 +175,14 @@
             });
             document.querySelector('#button').addEventListener('click', () => {
                 seelctBox.option('readOnly', !seelctBox.option('readOnly'))
+            })
+            const pager = new window.DevExpress.ui.dxPager(document.querySelector('#pager'), {});
+            document.querySelector('.page-sizes').addEventListener('change', ({ srcElement }) => {
+                pager.option('pageSizes', PAGE_SIZES[srcElement.selectedIndex]);
+                console.log(PAGE_SIZES[srcElement.selectedIndex]);
+            })
+            document.querySelector('.page-count').addEventListener('change', ({ srcElement }) => {
+                pager.option('pageCount', parseInt(srcElement.value));
             })
             const CustomPageNumberItem = (data) => {
                 const { item, selectPage } = data;
