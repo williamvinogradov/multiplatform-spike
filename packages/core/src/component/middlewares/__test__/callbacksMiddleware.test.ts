@@ -16,25 +16,32 @@ describe('Core: Component: Middlewares: callbacksMiddleware', () => {
   });
 
   it('Returns functions array of the changed values callbacks', () => {
-    const result: number[] = [];
-    const expectedResult = [4, 6];
-    const prev = { a: 1, b: 2, c: 3 };
-    const next = { a: 4, b: 5, c: 6 };
+    const expectedValue = 2;
+    const callbackMock = jest.fn();
+    const prev = { a: 1 };
+    const next = { a: expectedValue };
     const config = {
       a: {
         controlledMode: true,
-        changeCallback: (value: number) => { result.push(value); },
-      },
-      c: {
-        controlledMode: false,
-        changeCallback: (value: number) => { result.push(value); },
+        changeCallback: callbackMock,
       },
     };
-    getChangedKeysMock.mockReturnValue(['a', 'b', 'c']);
+    getChangedKeysMock.mockReturnValue(['a']);
 
     const funcArray = callbacksMiddleware(prev, next, config);
     funcArray.forEach((func) => func());
 
-    expect(result).toEqual(expectedResult);
+    expect(callbackMock).toHaveBeenCalledWith(expectedValue);
+  });
+
+  it('Returns functions array only for configured properties', () => {
+    const prev = { a: 1, b: 2, c: 3 };
+    const next = { a: 4, b: 5, c: 6 };
+    const config = {};
+    getChangedKeysMock.mockReturnValue(['a', 'b', 'c']);
+
+    const funcArray = callbacksMiddleware(prev, next, config);
+
+    expect(funcArray.length).toEqual(0);
   });
 });
