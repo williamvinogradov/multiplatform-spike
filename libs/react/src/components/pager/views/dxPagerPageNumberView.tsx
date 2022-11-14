@@ -18,6 +18,7 @@ const DxPagerPageNumberView = ({ data: { viewModel, selectPage } }: DxPagerPageN
     <div className="dx-pager-pages">
       {
         viewModel.items.map((item, key) => {
+          //TODO Vitik temporary solution for pass isEqual in to component (must remove any in future)
           const ItemComponent = item.template as any;
           return <ItemComponent key={key} data={{ item, selectPage }} isEqual={isEqual}></ItemComponent>
         }
