@@ -4,19 +4,20 @@ import {
   Disposable,
   dispose,
   getKeys,
-  Writeable,
   Observable,
 } from './utils';
 
-type ViewModel<TViewProps> = {
-  readonly [K in keyof TViewProps]: Observable<TViewProps[K]>
+type WriteableViewModel<TViewProps> = {
+  [K in keyof TViewProps]: Observable<TViewProps[K]>
 };
 
-type Selector<TState, TViewValue> = (state: TState | undefined) => TViewValue;
+type Selector<TState, TViewValue> = (state?: TState) => TViewValue;
 
 type ViewModelMap<TState, TProps> = {
   [K in keyof TProps]: Selector<TState, TProps[K]>
 };
+
+export type ViewModel<TViewProps> = Readonly<WriteableViewModel<TViewProps>>;
 
 export function createViewModel<TStateProps, TViewProps>(
   state: Observable<TStateProps>,
@@ -29,7 +30,7 @@ export function createViewModel<TStateProps, TViewProps>(
       // eslint-disable-next-line no-param-reassign
       vm[key] = disposableCollector.peel(createMappedObservable(state, viewModelMap[key]));
       return vm;
-    }, {} as Writeable<ViewModel<TViewProps>>);
+    }, {} as WriteableViewModel<TViewProps>);
 
   return {
     ...viewModel,
