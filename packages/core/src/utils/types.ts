@@ -5,3 +5,5 @@ export type ObjectType = Record<PropertyKey, any>;
 export type Comparer<T> = (prev: T, next: T) => boolean;
 
 export type PickPartial<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>> & Pick<Partial<T>, K>;
+
+export type Writeable<T> = { -readonly [K in keyof T]: T[K] };
