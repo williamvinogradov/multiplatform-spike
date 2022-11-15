@@ -19,8 +19,9 @@ export function createDisposableCollector(): Disposable<{
 }> {
   const functions: DisposeFunc[] = [];
   return {
-    peel<TDisposable extends Disposable<unknown>>(disposable: TDisposable) {
-      const { [dispose]: disposeFunc, ...rest } = disposable;
+    peel<TDisposable extends Disposable<unknown>>(
+      { [dispose]: disposeFunc, ...rest }: TDisposable,
+    ) {
       functions.push(disposeFunc);
       return rest as Peeled<TDisposable>;
     },
