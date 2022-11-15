@@ -41,11 +41,11 @@ export const createObservableEmitter = <T>(initialValue?: T): Emitter<T> & Obser
   };
 };
 
-export function createMappedObservable<T1, T2>(
-  source: PickPartial<Observable<T1>, 'getValue'>,
-  map: (x: T1 | undefined) => T2,
-): Disposable<Observable<T2>> {
-  const observable = createObservableEmitter<T2>(map(source.getValue?.()));
+export function createMappedObservable<TSource, TMapped>(
+  source: PickPartial<Observable<TSource>, 'getValue'>,
+  map: (x: TSource | undefined) => TMapped,
+): Disposable<Observable<TMapped>> {
+  const observable = createObservableEmitter<TMapped>(map(source.getValue?.()));
 
   const unsubscribe = source.subscribe((value) => observable.emit(map(value)));
 
