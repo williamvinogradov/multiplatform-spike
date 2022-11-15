@@ -1,4 +1,9 @@
-import { createObservable, ObjectType, Observable } from '../utils';
+import {
+  createObservableEmitter,
+  Emitter,
+  ObjectType,
+  ThinObservable,
+} from '../utils';
 
 export interface StateValue<TModel, TDictionary> {
   model: TModel;
@@ -6,7 +11,7 @@ export interface StateValue<TModel, TDictionary> {
 }
 
 export interface State<TModel, TDictionary>
-  extends Observable<StateValue<TModel, TDictionary>>{
+  extends Emitter<StateValue<TModel, TDictionary>>, ThinObservable<StateValue<TModel, TDictionary>>{
   getCurrent: () => StateValue<TModel, TDictionary>;
   addUpdateChunk: (statePart: Partial<StateValue<Partial<TModel>, Partial<TDictionary>>>) => void;
   commitUpdates: () => void;
@@ -19,7 +24,7 @@ export const createState = <TModel extends ObjectType, TDictionary extends Objec
   let current = initialState;
   let next = initialState;
 
-  const { emit, subscribe } = createObservable<StateValue<TModel, TDictionary>>();
+  const { emit, subscribe } = createObservableEmitter<StateValue<TModel, TDictionary>>();
 
   const getCurrent = () => current;
 
