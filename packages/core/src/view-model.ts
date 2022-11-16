@@ -1,11 +1,13 @@
 import {
   createMappedObservable,
-  createDisposableCollector,
   Disposable,
   dispose,
+  DisposeFunc,
   getKeys,
   Observable,
+  pipe,
 } from './utils';
+import { detach } from './utils/extension';
 
 type WriteableViewModel<TViewProps> = {
   [K in keyof TViewProps]: Observable<TViewProps[K]>
@@ -23,17 +25,22 @@ export function createViewModel<TStateProps, TViewProps>(
   state: Observable<TStateProps>,
   viewModelMap: ViewModelMap<TStateProps, TViewProps>,
 ): Disposable<ViewModel<TViewProps>> {
-  const disposableCollector = createDisposableCollector();
+  const disposeFunctions: DisposeFunc[] = [];
 
   const viewModel = getKeys(viewModelMap)
     .reduce((vm, key) => {
+      const [observable, disposeFunc] = detach(
+        createMappedObservable(state, viewModelMap[key]),
+        dispose,
+      );
+      disposeFunctions.push(disposeFunc);
       // eslint-disable-next-line no-param-reassign
-      vm[key] = disposableCollector.peel(createMappedObservable(state, viewModelMap[key]));
+      vm[key] = observable;
       return vm;
     }, {} as WriteableViewModel<TViewProps>);
 
   return {
     ...viewModel,
-    [dispose]: disposableCollector[dispose],
+    [dispose]: pipe(...disposeFunctions),
   };
 }
