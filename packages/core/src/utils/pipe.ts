@@ -1,8 +1,10 @@
 export type PipeFunc<T> = (value: T) => T;
 
-export const pipe = <T>(
+export function pipe<T>(
   ...funcArray: PipeFunc<T>[]
-): PipeFunc<T> => (value: T) => funcArray.reduce(
+): PipeFunc<T> {
+  return (value: T) => funcArray.reduce(
     (result, func) => func(result),
     value,
   );
+}
