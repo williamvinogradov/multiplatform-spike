@@ -2,14 +2,16 @@ type Extension<TSymbol extends symbol, TValue> = {
   [K in TSymbol]: TValue
 };
 
-type Split<
-  TExtended extends Extension<TSymbol, unknown>,
-  TSymbol extends symbol,
-> = TExtended extends Extended<infer T, TSymbol, TExtended[TSymbol]>
-  ? [T, TExtended[TSymbol]]
-  : never;
+type Extended<T, TExtension extends Extension<symbol, unknown>> = T & {
+  [K in keyof TExtension]: TExtension[K]
+};
 
-export type Extended<T, TSymbol extends symbol, TValue> = T & Extension<TSymbol, TValue>;
+type Split<
+  TObj extends Extension<TSymbol, unknown>,
+  TSymbol extends symbol,
+> = TObj extends Extended<infer T, Extension<TSymbol, TObj[TSymbol]> >
+  ? [T, TObj[TSymbol]]
+  : never;
 
 export function detach<TExtended extends Extension<TSymbol, unknown>, TSymbol extends symbol>(
   value: TExtended,
