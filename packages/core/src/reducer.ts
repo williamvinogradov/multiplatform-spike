@@ -1,16 +1,19 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type Handlers<TState> = Record<PropertyKey, (state: TState, value: any) => Partial<TState>>;
+import { StateValue } from './state';
 
-type Reducer<
-  TState,
+export type Handlers<TState extends StateValue<unknown, unknown>> =
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Record<PropertyKey, (state: TState, value: any) => Partial<TState['model']>>;
+
+export type Reducer<
+  TState extends StateValue<unknown, unknown>,
   THandlers extends Handlers<TState>,
 > = <TAction extends keyof THandlers>(
   state: TState,
   action: TAction,
   value: Parameters<THandlers[TAction]>[1]
-) => Partial<TState>;
+) => Partial<TState['model']>;
 
-export function createReducer<TState>() {
+export function createReducer<TState extends StateValue<unknown, unknown>>() {
   return <THandlers extends Handlers<TState>>(
     handlers: THandlers,
   ): Reducer<TState, THandlers> => {

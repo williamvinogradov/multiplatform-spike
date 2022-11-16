@@ -14,7 +14,7 @@ export interface State<TModel, TDictionary> extends
   Emitter<StateValue<TModel, TDictionary>>,
   ThinObservable<StateValue<TModel, TDictionary>> {
   getCurrent: () => StateValue<TModel, TDictionary>;
-  addUpdateChunk: (statePart: Partial<StateValue<Partial<TModel>, Partial<TDictionary>>>) => void;
+  addUpdate: (statePart: Partial<StateValue<Partial<TModel>, Partial<TDictionary>>>) => void;
   commitUpdates: () => void;
   rollbackUpdates: () => void;
 }
@@ -58,7 +58,7 @@ export function createState<TModel extends ObjectType, TDictionary extends Objec
     emit,
     subscribe,
     getCurrent,
-    addUpdateChunk: addUpdate,
+    addUpdate,
     commitUpdates,
     rollbackUpdates,
   };
