@@ -1,9 +1,8 @@
 import { memoize } from '../memoize';
-import fn = jest.fn;
 
 describe('Core: Utils: memoize', () => {
   it('Calls cached func on the first call', () => {
-    const spyFunc = fn();
+    const spyFunc = jest.fn();
     const cachedFunc = memoize(spyFunc, () => true);
 
     cachedFunc();
@@ -12,8 +11,8 @@ describe('Core: Utils: memoize', () => {
   });
 
   it('Shouldn\'t call comparer on the first call', () => {
-    const spyFunc = fn();
-    const spyComparer = fn();
+    const spyFunc = jest.fn();
+    const spyComparer = jest.fn();
     const cachedFunc = memoize(spyFunc, spyComparer);
 
     cachedFunc();
@@ -23,8 +22,8 @@ describe('Core: Utils: memoize', () => {
 
   it('Shouldn\'t call cached func if the arguments haven\'t changed', () => {
     const args: [number, number] = [2, 2];
-    const spyFunc = fn();
-    const spyComparer = fn().mockReturnValue(true);
+    const spyFunc = jest.fn();
+    const spyComparer = jest.fn().mockReturnValue(true);
     const cachedFunc = memoize(spyFunc, spyComparer);
 
     cachedFunc(...args);
@@ -36,8 +35,8 @@ describe('Core: Utils: memoize', () => {
 
   it('Calls cached func if the arguments have changed', () => {
     const args: [number, number] = [2, 2];
-    const spyComparer = fn().mockReturnValue(false);
-    const spyFunc = fn();
+    const spyComparer = jest.fn().mockReturnValue(false);
+    const spyFunc = jest.fn();
     const cachedFunc = memoize(spyFunc, spyComparer);
 
     cachedFunc(...args);
@@ -48,8 +47,8 @@ describe('Core: Utils: memoize', () => {
 
   it('Should always call comparer, except first call', () => {
     const args: [number, number] = [2, 2];
-    const spyFunc = fn();
-    const spyComparer = fn();
+    const spyFunc = jest.fn();
+    const spyComparer = jest.fn();
     const cachedFunc = memoize(spyFunc, spyComparer);
 
     cachedFunc(...args);
@@ -62,8 +61,8 @@ describe('Core: Utils: memoize', () => {
 
   it('Returns cached result if the arguments haven\'t changed', () => {
     const args: [number, number] = [2, 2];
-    const spyFunc = fn().mockImplementation(() => ({ result: 4 }));
-    const spyComparer = fn().mockReturnValue(true);
+    const spyFunc = jest.fn().mockImplementation(() => ({ result: 4 }));
+    const spyComparer = jest.fn().mockReturnValue(true);
     const cachedFunc = memoize(spyFunc, spyComparer);
 
     const firstResult = cachedFunc(...args);
@@ -74,8 +73,8 @@ describe('Core: Utils: memoize', () => {
 
   it('Returns new result from cached func if the arguments have changed', () => {
     const args: [number, number] = [2, 2];
-    const spyFunc = fn().mockImplementation(() => ({ result: 4 }));
-    const spyComparer = fn().mockReturnValue(false);
+    const spyFunc = jest.fn().mockImplementation(() => ({ result: 4 }));
+    const spyComparer = jest.fn().mockReturnValue(false);
     const cachedFunc = memoize(spyFunc, spyComparer);
 
     const firstResult = cachedFunc(...args);

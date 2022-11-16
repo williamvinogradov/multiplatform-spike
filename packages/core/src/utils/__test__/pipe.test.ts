@@ -1,9 +1,8 @@
-import fn = jest.fn;
 import { pipe } from '../pipe';
 
 describe('Core: Utils: pipe', () => {
   it('Correctly handles one function', () => {
-    const spyFunc = fn();
+    const spyFunc = jest.fn();
 
     const pipeFunc = pipe(spyFunc);
     pipeFunc({});
@@ -12,7 +11,7 @@ describe('Core: Utils: pipe', () => {
   });
 
   it('Calls all passed functions', () => {
-    const spyFuncArray = [fn(), fn(), fn()];
+    const spyFuncArray = [jest.fn(), jest.fn(), jest.fn()];
 
     const pipeFunc = pipe(...spyFuncArray);
     pipeFunc({ });
@@ -23,9 +22,9 @@ describe('Core: Utils: pipe', () => {
   it('Calls passed functions in correct order', () => {
     const callOrder: number[] = [];
     const spyFuncArray = [
-      fn().mockImplementation(() => callOrder.push(0)),
-      fn().mockImplementation(() => callOrder.push(1)),
-      fn().mockImplementation(() => callOrder.push(2)),
+      jest.fn().mockImplementation(() => callOrder.push(0)),
+      jest.fn().mockImplementation(() => callOrder.push(1)),
+      jest.fn().mockImplementation(() => callOrder.push(2)),
     ];
 
     const pipeFunc = pipe(...spyFuncArray);
@@ -37,9 +36,9 @@ describe('Core: Utils: pipe', () => {
   it('Passes the results of a function to the next function in the chain', () => {
     const funcImplementation = (value: number) => value + 1;
     const spyNormalizeArray = [
-      fn().mockImplementation(funcImplementation),
-      fn().mockImplementation(funcImplementation),
-      fn().mockImplementation(funcImplementation),
+      jest.fn().mockImplementation(funcImplementation),
+      jest.fn().mockImplementation(funcImplementation),
+      jest.fn().mockImplementation(funcImplementation),
     ];
 
     const pipeFunc = pipe(...spyNormalizeArray);
