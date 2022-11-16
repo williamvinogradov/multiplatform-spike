@@ -1,11 +1,14 @@
 import {
+  Comparer,
   createMappedObservable,
   Disposable,
   dispose,
   DisposeFunc,
   getKeys,
+  memoize,
   Observable,
   pipe,
+  shadowComparer,
 } from './utils';
 import { detach } from './utils/extension';
 
@@ -43,4 +46,14 @@ export function createViewModel<TStateProps, TViewProps>(
     ...viewModel,
     [dispose]: pipe(...disposeFunctions),
   };
+}
+
+export function createSelector<TState, TParam extends Record<PropertyKey, unknown>, TViewProp>(
+  buildViewProp: (params: TParam) => TViewProp,
+  paramsGetter: (state: TState | undefined) => TParam,
+  paramsComparer: Comparer<[TParam]> = shadowComparer,
+): Selector<TState, TViewProp> {
+  const cached = memoize(buildViewProp, paramsComparer);
+
+  return (state: TState | undefined) => cached(paramsGetter(state));
 }
