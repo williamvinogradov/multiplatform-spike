@@ -1,7 +1,7 @@
-import { getKeys } from '../../../utils';
+import { getKeys } from '../../utils';
 import { getChangedKeys } from '../getChangedKeys';
 
-jest.mock('../../../utils');
+jest.mock('../../utils');
 const getKeysMock = jest.mocked(getKeys);
 
 describe('Core: Component: Middlewares: getChangedKeys', () => {

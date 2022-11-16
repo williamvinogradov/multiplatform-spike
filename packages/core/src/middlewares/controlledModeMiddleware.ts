@@ -1,4 +1,4 @@
-import { ObjectType } from '../../utils';
+import { ObjectType } from '../utils';
 import { ModelConfigMap } from './types';
 import { getChangedKeys } from './getChangedKeys';
 

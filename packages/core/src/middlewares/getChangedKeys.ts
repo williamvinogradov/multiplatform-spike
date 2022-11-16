@@ -1,4 +1,4 @@
-import { getKeys, ObjectType } from '../../utils';
+import { getKeys, ObjectType } from '../utils';
 
 export function getChangedKeys<TModel extends ObjectType>(
   prev: TModel,

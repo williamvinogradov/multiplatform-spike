@@ -1,4 +1,4 @@
-import { createObservable, ObjectType, Observable } from '../utils';
+import { createObservable, ObjectType, Observable } from './utils';
 
 export interface StateValue<TModel, TDictionary> {
   model: TModel;

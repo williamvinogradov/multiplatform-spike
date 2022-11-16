@@ -1,4 +1,4 @@
-import { ActionFunc, ObjectType } from '../../utils';
+import { ActionFunc, ObjectType } from '../utils';
 import { ModelConfigMap } from './types';
 import { getChangedKeys } from './getChangedKeys';
 

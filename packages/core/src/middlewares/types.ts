@@ -1,4 +1,4 @@
-import { ObjectType } from '../../utils';
+import { ObjectType } from '../utils';
 
 export interface ModelPropertyConfig<T> {
   controlledMode: boolean;
