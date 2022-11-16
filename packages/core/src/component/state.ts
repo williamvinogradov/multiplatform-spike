@@ -13,9 +13,9 @@ export interface State<TModel, TDictionary>
   rollbackUpdates: () => void;
 }
 
-export const createState = <TModel extends ObjectType, TDictionary extends ObjectType>(
+export function createState<TModel extends ObjectType, TDictionary extends ObjectType>(
   initialState: StateValue<TModel, TDictionary>,
-): State<TModel, TDictionary> => {
+): State<TModel, TDictionary> {
   let current = initialState;
   let next = initialState;
 
@@ -54,4 +54,4 @@ export const createState = <TModel extends ObjectType, TDictionary extends Objec
     commitUpdates,
     rollbackUpdates,
   };
-};
+}

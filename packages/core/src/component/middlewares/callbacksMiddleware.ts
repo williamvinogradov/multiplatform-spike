@@ -2,11 +2,12 @@ import { ActionFunc, ObjectType } from '../../utils';
 import { ModelConfigMap } from './types';
 import { getChangedKeys } from './getChangedKeys';
 
-export const callbacksMiddleware = <TModel extends ObjectType>(
+export function callbacksMiddleware<TModel extends ObjectType>(
   prev: TModel,
   next: TModel,
   config: ModelConfigMap<TModel> = {},
-): ActionFunc[] => getChangedKeys(prev, next).reduce((result, key) => {
+): ActionFunc[] {
+  return getChangedKeys(prev, next).reduce((result, key) => {
     const configItem = config[key];
 
     if (configItem) {
@@ -15,3 +16,4 @@ export const callbacksMiddleware = <TModel extends ObjectType>(
 
     return result;
   }, [] as ActionFunc[]);
+}

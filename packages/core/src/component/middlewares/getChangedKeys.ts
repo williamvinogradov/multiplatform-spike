@@ -1,6 +1,8 @@
 import { getKeys, ObjectType } from '../../utils';
 
-export const getChangedKeys = <TModel extends ObjectType>(
+export function getChangedKeys<TModel extends ObjectType>(
   prev: TModel,
   next: TModel,
-): (keyof TModel)[] => getKeys(next).filter((key) => next[key] !== prev[key]);
+): (keyof TModel)[] {
+  return getKeys(next).filter((key) => next[key] !== prev[key]);
+}

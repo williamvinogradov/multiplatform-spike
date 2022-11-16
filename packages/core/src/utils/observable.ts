@@ -5,7 +5,7 @@ export interface Observable<T> {
   subscribe: (listener: Listener<T>) => () => void;
 }
 
-export const createObservable = <T>(): Observable<T> => {
+export function createObservable<T>(): Observable<T> {
   const listeners = new Set<Listener<T>>();
 
   const emit = (value: T): void => {
@@ -22,4 +22,4 @@ export const createObservable = <T>(): Observable<T> => {
     emit,
     subscribe,
   };
-};
+}

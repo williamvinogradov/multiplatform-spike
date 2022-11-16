@@ -1,9 +1,9 @@
 import { Comparer, FunctionType } from './types';
 
-export const memoize = <TFunction extends FunctionType>(
+export function memoize<TFunction extends FunctionType>(
   func: TFunction,
   comparer: Comparer<Parameters<TFunction>>,
-): (...arg: Parameters<TFunction>) => ReturnType<TFunction> => {
+): (...arg: Parameters<TFunction>) => ReturnType<TFunction> {
   let cachedArg: Parameters<TFunction>;
   let cachedResult: ReturnType<TFunction>;
 
@@ -25,4 +25,4 @@ export const memoize = <TFunction extends FunctionType>(
   };
 
   return (...arg: Parameters<TFunction>) => decoratedFunc(...arg);
-};
+}
