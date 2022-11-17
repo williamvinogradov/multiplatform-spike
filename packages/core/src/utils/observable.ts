@@ -1,8 +1,3 @@
-import {
-  Disposable,
-  DISPOSE,
-} from './disposable';
-
 export type Listener<T> = (value: T) => void;
 
 export interface Emitter<T> {
@@ -39,21 +34,5 @@ export function createObservableEmitter<T>(initialValue: T): Emitter<T> & Observ
     emit,
     subscribe,
     getValue,
-  };
-}
-
-export function createMappedObservable<TSource, TMapped>(
-  initialValue: TSource,
-  subscribe: Subscriber<TSource>,
-  map: (x: TSource) => TMapped,
-): Disposable<Observable<TMapped>> {
-  const observable = createObservableEmitter<TMapped>(map(initialValue));
-
-  const unsubscribe = subscribe((value) => observable.emit(map(value)));
-
-  return {
-    subscribe: observable.subscribe,
-    getValue: observable.getValue,
-    [DISPOSE]: unsubscribe,
   };
 }

@@ -1,62 +1,116 @@
 import { createSelector, createViewModel } from '../view-model';
-import { createMappedObservable, DISPOSE, memoize } from '../utils';
+import { createObservableEmitter, DISPOSE, memoize } from '../utils';
+// import * as ViewModelModule from '../view-model';
 
 jest.mock('../utils/observable');
 jest.mock('../utils/disposable');
 jest.mock('../utils/memoize');
 
 describe('view-model', () => {
-  it('builds mapped observalbes from entries', () => {
-    const selector1 = jest.fn();
-    const subscribe = jest.fn();
-    const initialValue = {};
-    const expectedObservable = { a: 1, b: 2, c: 3 };
-    const viewModelMap = {
-      prop1: selector1,
+  it('returns observables', () => {
+    const initialState = {};
+    const mappedValue = {};
+    const selector = jest.fn().mockReturnValue(mappedValue);
+    const expected = {
+      subscribe: jest.fn(),
+      getValue: jest.fn(),
     };
-    const createMappedObservableMock = jest
-      .mocked(createMappedObservable)
-      .mockClear()
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .mockReturnValue(expectedObservable as any);
+    jest
+      .mocked(createObservableEmitter)
+      .mockReturnValueOnce({
+        ...expected,
+        emit: jest.fn(),
+      });
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const viewModel = createViewModel(initialValue, subscribe, viewModelMap);
+    const viewModel = createViewModel(initialState, jest.fn(), { prop1: selector });
 
-    expect(createMappedObservableMock).toBeCalledTimes(1);
-    expect(createMappedObservableMock).toBeCalledWith(initialValue, subscribe, selector1);
-
-    expect(viewModel.prop1).toEqual(expectedObservable);
+    expect(viewModel).toHaveProperty('prop1');
+    expect(viewModel.prop1).toEqual(expected);
   });
 
-  it('collects dispose functions', () => {
-    const disposeFunctions: jest.Mock[] = [];
-    // const disposables: Disposable<unknown>[] = [];
+  it('selects observalbes from inital state', () => {
+    const initialState = {};
+    const mappedValue = {};
+    const selector = jest.fn().mockReturnValue(mappedValue);
+    jest
+      .mocked(createObservableEmitter)
+      .mockReturnValue({
+        subscribe: jest.fn(),
+        getValue: jest.fn(),
+        emit: jest.fn(),
+      });
+
+    createViewModel(initialState, jest.fn(), { prop1: selector });
+
+    expect(selector).toBeCalledTimes(1);
+    expect(selector).toBeCalledWith(initialState);
+    expect(createObservableEmitter).toBeCalledTimes(1);
+    expect(createObservableEmitter).toBeCalledWith(mappedValue);
+  });
+
+  it('selects observalbes from updated state', () => {
+    const selector = jest.fn();
+    const subscribe = jest.fn();
+    const emit = jest.fn();
+    const mappedValue = {};
+    const value = {};
+    jest
+      .mocked(createObservableEmitter)
+      .mockReturnValue({
+        subscribe: jest.fn(),
+        getValue: jest.fn(),
+        emit,
+      });
+
+    // createMappedObservable({}, subscribe, mapFunc);
+    createViewModel({}, subscribe, { prop1: selector });
+
+    selector
+      .mockClear()
+      .mockReturnValue(mappedValue);
+
+    const listener = subscribe.mock.lastCall[0];
+    listener(value);
+
+    expect(selector).toBeCalledTimes(1);
+    expect(selector).toBeCalledWith(value);
+
+    expect(emit).toBeCalledTimes(1);
+    expect(emit).toBeCalledWith(mappedValue);
+  });
+
+  it('calls all unsubscribe functions on dispose', () => {
+    const unsubscribeFunctions: jest.Mock[] = [];
     const viewModelMap = {
       prop1: jest.fn(),
       prop2: jest.fn(),
     };
+    const subscribe = () => {
+      const unsubscribe = jest.fn();
+      unsubscribeFunctions.push(unsubscribe);
+      return unsubscribe;
+    };
     jest
-      .mocked(createMappedObservable)
-      .mockClear()
-      .mockImplementation(() => {
-        const disposeFunc = jest.fn();
-        disposeFunctions.push(disposeFunc);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return { [DISPOSE]: disposeFunc } as any;
+      .mocked(createObservableEmitter)
+      .mockReturnValue({
+        subscribe: jest.fn(),
+        getValue: jest.fn(),
+        emit: jest.fn(),
       });
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const viewModel = createViewModel({}, jest.fn(), viewModelMap);
+    const viewModel = createViewModel({}, subscribe, viewModelMap);
 
-    disposeFunctions.forEach((disposeFunc) => {
-      expect(disposeFunc).not.toBeCalled();
+    expect(subscribe).toBeCalledTimes(2);
+
+    unsubscribeFunctions.forEach((unsubscribe) => {
+      expect(unsubscribe).not.toBeCalled();
     });
 
     viewModel[DISPOSE]();
 
-    disposeFunctions.forEach((disposeFunc) => {
-      expect(disposeFunc).toBeCalledTimes(1);
+    unsubscribeFunctions.forEach((unsubscribe) => {
+      expect(unsubscribe).toBeCalledTimes(1);
     });
   });
 });
