@@ -1,4 +1,4 @@
-import { dispose } from '../../disposable';
+import { DISPOSE } from '../../disposable';
 import { createMappedObservable } from '../../observable';
 
 describe('mapped observable', () => {
@@ -88,7 +88,7 @@ describe('mapped observable', () => {
 
     const mappedObservable = createMappedObservable(source, jest.fn());
     expect(unsubscribe).not.toBeCalled();
-    mappedObservable[dispose]();
+    mappedObservable[DISPOSE]();
 
     expect(unsubscribe).toBeCalledTimes(1);
   });

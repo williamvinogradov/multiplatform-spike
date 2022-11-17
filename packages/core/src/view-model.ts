@@ -2,7 +2,7 @@ import {
   Comparer,
   createMappedObservable,
   Disposable,
-  dispose,
+  DISPOSE,
   DisposeFunc,
   getKeys,
   memoize,
@@ -34,7 +34,7 @@ export function createViewModel<TStateProps, TViewProps>(
     .reduce((vm, key) => {
       const [observable, disposeFunc] = detach(
         createMappedObservable(state, viewModelMap[key]),
-        dispose,
+        DISPOSE,
       );
       disposeFunctions.push(disposeFunc);
       // eslint-disable-next-line no-param-reassign
@@ -44,7 +44,7 @@ export function createViewModel<TStateProps, TViewProps>(
 
   return {
     ...viewModel,
-    [dispose]: pipe(...disposeFunctions),
+    [DISPOSE]: pipe(...disposeFunctions),
   };
 }
 

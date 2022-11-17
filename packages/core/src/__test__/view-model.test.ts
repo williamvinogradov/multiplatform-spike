@@ -1,5 +1,5 @@
 import { createSelector, createViewModel } from '../view-model';
-import { createMappedObservable, dispose, memoize } from '../utils';
+import { createMappedObservable, DISPOSE, memoize } from '../utils';
 
 jest.mock('../utils/observable');
 jest.mock('../utils/disposable');
@@ -43,7 +43,7 @@ describe('view-model', () => {
         const disposeFunc = jest.fn();
         disposeFunctions.push(disposeFunc);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return { [dispose]: disposeFunc } as any;
+        return { [DISPOSE]: disposeFunc } as any;
       });
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -53,7 +53,7 @@ describe('view-model', () => {
       expect(disposeFunc).not.toBeCalled();
     });
 
-    viewModel[dispose]();
+    viewModel[DISPOSE]();
 
     disposeFunctions.forEach((disposeFunc) => {
       expect(disposeFunc).toBeCalledTimes(1);

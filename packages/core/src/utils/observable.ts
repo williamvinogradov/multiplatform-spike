@@ -1,6 +1,6 @@
 import {
   Disposable,
-  dispose,
+  DISPOSE,
 } from './disposable';
 import { PickPartial } from './types';
 
@@ -52,6 +52,6 @@ export function createMappedObservable<TSource, TMapped>(
   return {
     subscribe: observable.subscribe,
     getValue: observable.getValue,
-    [dispose]: unsubscribe,
+    [DISPOSE]: unsubscribe,
   };
 }

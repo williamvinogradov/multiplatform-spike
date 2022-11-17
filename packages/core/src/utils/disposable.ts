@@ -1,7 +1,7 @@
-export const dispose = Symbol('dispose');
+export const DISPOSE = Symbol('dispose');
 
 export type DisposeFunc = () => void;
 
 export type Disposable<T> = T & {
-  [dispose]: DisposeFunc;
+  [DISPOSE]: DisposeFunc;
 };
