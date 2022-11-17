@@ -3,30 +3,21 @@ import { createMappedObservable } from '../../observable';
 
 describe('mapped observable', () => {
   it('forwards source value to map func on creation', () => {
-    const value = {};
+    const initialValue = {};
     const mapFunc = jest.fn();
-    const getValue = jest.fn().mockReturnValue(value);
-    const source = {
-      getValue,
-      subscribe: jest.fn(),
-    };
 
-    createMappedObservable(source, mapFunc);
+    createMappedObservable(initialValue, jest.fn(), mapFunc);
 
     expect(mapFunc).toBeCalledTimes(1);
-    expect(mapFunc).toBeCalledWith(value);
+    expect(mapFunc).toBeCalledWith(initialValue);
   });
 
   it('forwards updated source value to map function', () => {
     const mapFunc = jest.fn();
     const subscribe = jest.fn();
     const value = {};
-    const source = {
-      subscribe,
-      getValue: jest.fn(),
-    };
 
-    createMappedObservable(source, mapFunc);
+    createMappedObservable({}, subscribe, mapFunc);
     mapFunc.mockClear();
     const listener = subscribe.mock.lastCall[0];
     listener(value);
@@ -38,12 +29,8 @@ describe('mapped observable', () => {
   it('uses map function to store inital value', () => {
     const mappedValue = {};
     const mapFunc = jest.fn().mockReturnValue(mappedValue);
-    const source = {
-      subscribe: jest.fn(),
-      getValue: jest.fn(),
-    };
 
-    const observable = createMappedObservable(source, mapFunc);
+    const observable = createMappedObservable({}, jest.fn(), mapFunc);
 
     expect(observable.getValue()).toBe(mappedValue);
   });
@@ -51,12 +38,8 @@ describe('mapped observable', () => {
   it('uses map function if no inital value provided', () => {
     const mappedValue = {};
     const mapFunc = jest.fn().mockReturnValue(mappedValue);
-    const source = {
-      subscribe: jest.fn(),
-      getValue: jest.fn(),
-    };
 
-    const observable = createMappedObservable(source, mapFunc);
+    const observable = createMappedObservable({}, jest.fn(), mapFunc);
 
     expect(observable.getValue()).toBe(mappedValue);
   });
@@ -65,12 +48,8 @@ describe('mapped observable', () => {
     const mappedValue = {};
     const mapFunc = jest.fn();
     const subscribe = jest.fn();
-    const source = {
-      subscribe,
-      getValue: jest.fn(),
-    };
 
-    const observable = createMappedObservable(source, mapFunc);
+    const observable = createMappedObservable({}, subscribe, mapFunc);
     mapFunc.mockReturnValue(mappedValue);
     let actual;
     observable.subscribe((v) => { actual = v; });
@@ -85,12 +64,8 @@ describe('mapped observable', () => {
   it('unsubscribes on dispose', () => {
     const unsubscribe = jest.fn();
     const subscribe = jest.fn().mockReturnValue(unsubscribe);
-    const source = {
-      subscribe,
-      getValue: jest.fn(),
-    };
 
-    const mappedObservable = createMappedObservable(source, jest.fn());
+    const mappedObservable = createMappedObservable({}, subscribe, jest.fn());
     expect(unsubscribe).not.toBeCalled();
     mappedObservable[DISPOSE]();
 

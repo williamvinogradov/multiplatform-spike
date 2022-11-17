@@ -10,8 +10,9 @@ export interface StateValue<TModel, TDictionary> {
   dictionary: TDictionary;
 }
 
-export interface State<TModel, TDictionary>
-  extends Emitter<StateValue<TModel, TDictionary>>, ThinObservable<StateValue<TModel, TDictionary>>{
+export interface State<TModel, TDictionary> extends
+  Emitter<StateValue<TModel, TDictionary>>,
+  ThinObservable<StateValue<TModel, TDictionary>> {
   getCurrent: () => StateValue<TModel, TDictionary>;
   addUpdateChunk: (statePart: Partial<StateValue<Partial<TModel>, Partial<TDictionary>>>) => void;
   commitUpdates: () => void;
@@ -24,7 +25,9 @@ export function createState<TModel extends ObjectType, TDictionary extends Objec
   let current = initialState;
   let next = initialState;
 
-  const { emit, subscribe } = createObservableEmitter<StateValue<TModel, TDictionary>>();
+  const { emit, subscribe } = createObservableEmitter<StateValue<TModel, TDictionary>>(
+    initialState,
+  );
 
   const getCurrent = () => current;
 

@@ -9,8 +9,10 @@ export interface Emitter<T> {
   emit: (value: T) => void;
 }
 
+export type Subscriber<T> = (listener: Listener<T>) => () => void;
+
 export interface Observable<T> {
-  subscribe: (listener: Listener<T>) => () => void;
+  subscribe: Subscriber<T>;
   getValue(): T;
 }
 
@@ -41,12 +43,13 @@ export function createObservableEmitter<T>(initialValue: T): Emitter<T> & Observ
 }
 
 export function createMappedObservable<TSource, TMapped>(
-  source: Observable<TSource>,
+  initialValue: TSource,
+  subscribe: Subscriber<TSource>,
   map: (x: TSource) => TMapped,
 ): Disposable<Observable<TMapped>> {
-  const observable = createObservableEmitter<TMapped>(map(source.getValue()));
+  const observable = createObservableEmitter<TMapped>(map(initialValue));
 
-  const unsubscribe = source.subscribe((value) => observable.emit(map(value)));
+  const unsubscribe = subscribe((value) => observable.emit(map(value)));
 
   return {
     subscribe: observable.subscribe,

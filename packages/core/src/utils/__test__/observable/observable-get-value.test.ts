@@ -1,12 +1,6 @@
 import { createObservableEmitter } from '../../observable';
 
 describe('Core: Utils: Observable.getValue', () => {
-  it('caches undefined if no initial value provided', () => {
-    const observable = createObservableEmitter();
-
-    expect(observable.getValue()).toBeUndefined();
-  });
-
   it('caches initial value', () => {
     const initialValue = {};
 
@@ -17,7 +11,7 @@ describe('Core: Utils: Observable.getValue', () => {
 
   it('caches emitted value', () => {
     const emittedValue = {};
-    const observable = createObservableEmitter();
+    const observable = createObservableEmitter({});
 
     observable.emit(emittedValue);
 

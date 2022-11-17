@@ -8,8 +8,9 @@ jest.mock('../utils/memoize');
 describe('view-model', () => {
   it('builds mapped observalbes from entries', () => {
     const selector1 = jest.fn();
+    const subscribe = jest.fn();
+    const initialValue = {};
     const expectedObservable = { a: 1, b: 2, c: 3 };
-    const state = {};
     const viewModelMap = {
       prop1: selector1,
     };
@@ -20,10 +21,10 @@ describe('view-model', () => {
       .mockReturnValue(expectedObservable as any);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const viewModel = createViewModel(state as any, viewModelMap);
+    const viewModel = createViewModel(initialValue, subscribe, viewModelMap);
 
     expect(createMappedObservableMock).toBeCalledTimes(1);
-    expect(createMappedObservableMock).toBeCalledWith(state, selector1);
+    expect(createMappedObservableMock).toBeCalledWith(initialValue, subscribe, selector1);
 
     expect(viewModel.prop1).toEqual(expectedObservable);
   });
@@ -31,7 +32,6 @@ describe('view-model', () => {
   it('collects dispose functions', () => {
     const disposeFunctions: jest.Mock[] = [];
     // const disposables: Disposable<unknown>[] = [];
-    const state = {};
     const viewModelMap = {
       prop1: jest.fn(),
       prop2: jest.fn(),
@@ -47,7 +47,7 @@ describe('view-model', () => {
       });
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const viewModel = createViewModel(state as any, viewModelMap);
+    const viewModel = createViewModel({}, jest.fn(), viewModelMap);
 
     disposeFunctions.forEach((disposeFunc) => {
       expect(disposeFunc).not.toBeCalled();

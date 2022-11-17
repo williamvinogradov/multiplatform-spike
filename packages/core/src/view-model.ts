@@ -9,6 +9,7 @@ import {
   Observable,
   pipe,
   shadowComparer,
+  Subscriber,
 } from './utils';
 import { detach } from './utils/extension';
 
@@ -25,7 +26,8 @@ type ViewModelMap<TState, TProps> = {
 export type ViewModel<TViewProps> = Readonly<WriteableViewModel<TViewProps>>;
 
 export function createViewModel<TStateProps, TViewProps>(
-  state: Observable<TStateProps>,
+  initialState: TStateProps,
+  subscriber: Subscriber<TStateProps>,
   viewModelMap: ViewModelMap<TStateProps, TViewProps>,
 ): Disposable<ViewModel<TViewProps>> {
   const disposeFunctions: DisposeFunc[] = [];
@@ -33,7 +35,7 @@ export function createViewModel<TStateProps, TViewProps>(
   const viewModel = getKeys(viewModelMap)
     .reduce((vm, key) => {
       const [observable, disposeFunc] = detach(
-        createMappedObservable(state, viewModelMap[key]),
+        createMappedObservable(initialState, subscriber, viewModelMap[key]),
         DISPOSE,
       );
       disposeFunctions.push(disposeFunc);
