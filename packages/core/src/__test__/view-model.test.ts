@@ -80,7 +80,7 @@ describe('selector', () => {
     const selector = createSelector(jest.fn(), jest.fn(), jest.fn());
 
     expect(memoize).toBeCalledTimes(1);
-    expect(selector()).toBe(cachedValue);
+    expect(selector({})).toBe(cachedValue);
   });
 
   it('passes params to memoized', () => {
@@ -90,7 +90,7 @@ describe('selector', () => {
     jest.mocked(memoize).mockReturnValue(cached);
 
     const selector = createSelector(jest.fn(), getParams, jest.fn());
-    selector();
+    selector({});
 
     expect(cached).toBeCalledTimes(1);
     expect(cached).toBeCalledWith(param);

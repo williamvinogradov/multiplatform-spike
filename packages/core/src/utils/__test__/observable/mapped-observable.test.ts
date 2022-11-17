@@ -23,6 +23,7 @@ describe('mapped observable', () => {
     const value = {};
     const source = {
       subscribe,
+      getValue: jest.fn(),
     };
 
     createMappedObservable(source, mapFunc);
@@ -52,6 +53,7 @@ describe('mapped observable', () => {
     const mapFunc = jest.fn().mockReturnValue(mappedValue);
     const source = {
       subscribe: jest.fn(),
+      getValue: jest.fn(),
     };
 
     const observable = createMappedObservable(source, mapFunc);
@@ -65,6 +67,7 @@ describe('mapped observable', () => {
     const subscribe = jest.fn();
     const source = {
       subscribe,
+      getValue: jest.fn(),
     };
 
     const observable = createMappedObservable(source, mapFunc);
@@ -84,6 +87,7 @@ describe('mapped observable', () => {
     const subscribe = jest.fn().mockReturnValue(unsubscribe);
     const source = {
       subscribe,
+      getValue: jest.fn(),
     };
 
     const mappedObservable = createMappedObservable(source, jest.fn());

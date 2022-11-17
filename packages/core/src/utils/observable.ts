@@ -2,7 +2,6 @@ import {
   Disposable,
   DISPOSE,
 } from './disposable';
-import { PickPartial } from './types';
 
 export type Listener<T> = (value: T) => void;
 
@@ -12,14 +11,14 @@ export interface Emitter<T> {
 
 export interface Observable<T> {
   subscribe: (listener: Listener<T>) => () => void;
-  getValue(): T | undefined;
+  getValue(): T;
 }
 
 export type ThinObservable<T> = Pick<Observable<T>, 'subscribe'>;
 
-export function createObservableEmitter<T>(initialValue?: T): Emitter<T> & Observable<T> {
+export function createObservableEmitter<T>(initialValue: T): Emitter<T> & Observable<T> {
   const listeners = new Set<Listener<T>>();
-  let lastValue: T | undefined = initialValue;
+  let lastValue: T = initialValue;
 
   const emit = (value: T): void => {
     lastValue = value;
@@ -42,10 +41,10 @@ export function createObservableEmitter<T>(initialValue?: T): Emitter<T> & Obser
 }
 
 export function createMappedObservable<TSource, TMapped>(
-  source: PickPartial<Observable<TSource>, 'getValue'>,
-  map: (x: TSource | undefined) => TMapped,
+  source: Observable<TSource>,
+  map: (x: TSource) => TMapped,
 ): Disposable<Observable<TMapped>> {
-  const observable = createObservableEmitter<TMapped>(map(source.getValue?.()));
+  const observable = createObservableEmitter<TMapped>(map(source.getValue()));
 
   const unsubscribe = source.subscribe((value) => observable.emit(map(value)));
 

@@ -16,7 +16,7 @@ type WriteableViewModel<TViewProps> = {
   [K in keyof TViewProps]: Observable<TViewProps[K]>
 };
 
-type Selector<TState, TViewValue> = (state?: TState) => TViewValue;
+type Selector<TState, TViewValue> = (state: TState) => TViewValue;
 
 type ViewModelMap<TState, TProps> = {
   [K in keyof TProps]: Selector<TState, TProps[K]>

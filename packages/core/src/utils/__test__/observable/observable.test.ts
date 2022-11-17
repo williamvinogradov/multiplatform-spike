@@ -7,7 +7,7 @@ describe('Core: Utils: observable', () => {
 
   it('Emits same value to all subscribers', () => {
     const testValue: Observed = { value: 2 };
-    const observable = createObservableEmitter<Observed>();
+    const observable = createObservableEmitter<Observed>({ value: 0 });
 
     let firstResult;
     let secondResult;
@@ -20,7 +20,7 @@ describe('Core: Utils: observable', () => {
 
   it('Calls all subscribers on each emit', () => {
     const testValue: Observed = { value: 2 };
-    const observable = createObservableEmitter<Observed>();
+    const observable = createObservableEmitter<Observed>({ value: 0 });
     const spySubscribers = [jest.fn(), jest.fn(), jest.fn(), jest.fn()];
 
     observable.subscribe(spySubscribers[0]);
@@ -37,7 +37,7 @@ describe('Core: Utils: observable', () => {
 
   it('Shouldn\'t call subscribers after unsubscribe', () => {
     const testValue: Observed = { value: 2 };
-    const observable = createObservableEmitter<Observed>();
+    const observable = createObservableEmitter<Observed>({ value: 0 });
     const spySubscriber = jest.fn();
 
     const unsubscribe = observable.subscribe(spySubscriber);
@@ -50,7 +50,7 @@ describe('Core: Utils: observable', () => {
 
   it('Emits new values for not unsubscribed subscribers', () => {
     const testValue: Observed = { value: 2 };
-    const observable = createObservableEmitter<Observed>();
+    const observable = createObservableEmitter<Observed>({ value: 0 });
     const spySubscriberFirst = jest.fn();
     const spySubscriberSecond = jest.fn();
 
@@ -65,7 +65,7 @@ describe('Core: Utils: observable', () => {
 
   it('Handles the same function passed to subscribe multiple times', () => {
     const testValue: Observed = { value: 2 };
-    const observable = createObservableEmitter<Observed>();
+    const observable = createObservableEmitter<Observed>({ value: 0 });
     const spySubscriber = jest.fn();
 
     observable.subscribe(spySubscriber);
@@ -78,7 +78,7 @@ describe('Core: Utils: observable', () => {
 
   it('Should correctly unsubscribe the same function passed to subscribe multiple times', () => {
     const testValue: Observed = { value: 2 };
-    const observable = createObservableEmitter<Observed>();
+    const observable = createObservableEmitter<Observed>({ value: 0 });
     const spySubscriber = jest.fn();
 
     const unsubscribe = observable.subscribe(spySubscriber);
@@ -92,7 +92,7 @@ describe('Core: Utils: observable', () => {
 
   it('Emits new values to resubscribed function', () => {
     const testValue: Observed = { value: 2 };
-    const observable = createObservableEmitter<Observed>();
+    const observable = createObservableEmitter<Observed>({ value: 0 });
     const spySubscriber = jest.fn();
 
     const unsubscribe = observable.subscribe(spySubscriber);
