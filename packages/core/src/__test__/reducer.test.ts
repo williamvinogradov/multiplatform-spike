@@ -1,12 +1,11 @@
 import { createReducer } from '../reducer';
-import fn = jest.fn;
 
 describe('reducer', () => {
   it('calls event handler', () => {
     const expectedReturnValue = {};
     const actionValue = {};
     const state = {};
-    const handler = fn().mockReturnValue(expectedReturnValue);
+    const handler = jest.fn().mockReturnValue(expectedReturnValue);
     const reducer = createReducer()({
       a: handler,
     });
@@ -19,10 +18,10 @@ describe('reducer', () => {
   });
 
   it('does not call other events handlers', () => {
-    const handlerB = fn();
-    const handlerC = fn();
+    const handlerB = jest.fn();
+    const handlerC = jest.fn();
     const reducer = createReducer()({
-      a: fn(),
+      a: jest.fn(),
       b: handlerB,
       c: handlerC,
     });
@@ -35,7 +34,7 @@ describe('reducer', () => {
 
   it('can use Symbol actions', () => {
     const action = Symbol('action');
-    const handler = fn();
+    const handler = jest.fn();
     const value = {};
     const state = {};
     const reducer = createReducer()({
@@ -50,7 +49,7 @@ describe('reducer', () => {
 
   it('throws for unknown event', () => {
     const reducer = createReducer()({
-      a: fn(),
+      a: jest.fn(),
     });
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

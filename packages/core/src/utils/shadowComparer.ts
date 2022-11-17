@@ -1,8 +1,8 @@
 // shadow equality
-export const shadowComparer = <T>(
+export function shadowComparer<T>(
   firstValue: T,
   secondValue: T,
-): boolean => {
+): boolean {
   const differentTypes = typeof firstValue !== typeof secondValue;
 
   if (differentTypes) {
@@ -31,4 +31,4 @@ export const shadowComparer = <T>(
   }
 
   return !prevKeys.some((key) => prevObj[key] !== nextObj[key]);
-};
+}

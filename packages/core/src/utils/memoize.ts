@@ -1,9 +1,9 @@
 import { Comparer } from './types';
 
-export const memoize = <TArgs extends unknown[], TReturn>(
+export function memoize<TArgs extends unknown[], TReturn>(
   func: (...params: TArgs) => TReturn,
   comparer: Comparer<TArgs>,
-): (...arg: TArgs) => TReturn => {
+): (...arg: TArgs) => TReturn {
   let cachedArg: TArgs;
   let cachedResult: TReturn;
 
@@ -25,4 +25,4 @@ export const memoize = <TArgs extends unknown[], TReturn>(
   };
 
   return (...arg: TArgs) => decoratedFunc(...arg);
-};
+}

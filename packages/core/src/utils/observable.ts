@@ -17,7 +17,7 @@ export interface Observable<T> {
 
 export type ThinObservable<T> = Pick<Observable<T>, 'subscribe'>;
 
-export const createObservableEmitter = <T>(initialValue?: T): Emitter<T> & Observable<T> => {
+export function createObservableEmitter<T>(initialValue?: T): Emitter<T> & Observable<T> {
   const listeners = new Set<Listener<T>>();
   let lastValue: T | undefined = initialValue;
 
@@ -39,7 +39,7 @@ export const createObservableEmitter = <T>(initialValue?: T): Emitter<T> & Obser
     subscribe,
     getValue,
   };
-};
+}
 
 export function createMappedObservable<TSource, TMapped>(
   source: PickPartial<Observable<TSource>, 'getValue'>,
