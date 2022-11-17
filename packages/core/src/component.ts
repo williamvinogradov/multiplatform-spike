@@ -1,14 +1,13 @@
 import { callbacksMiddleware, controlledModeMiddleware, ModelConfigMap } from './middlewares';
 import { createReducer, Handlers } from './reducer';
 import { createState, StateValue } from './state';
-import { ObjectType } from './utils';
-import { pipe, PipeFunc } from './utils/pipe';
+import { ObjectType, pipe, PipeFunc } from './utils';
 
 export interface RootCoreComponent<TModel extends ObjectType, TDictionary extends ObjectType> {
   addUpdate: (statePart: Partial<StateValue<Partial<TModel>, Partial<TDictionary>>>) => void;
   commitUpdates: () => void;
   rollbackUpdates: () => void;
-  destroy: () => void;
+  dispose: () => void;
 }
 
 export interface ContainerCoreComponent<
@@ -40,16 +39,16 @@ export function createCoreComponent<
   initialState: StateValue<TModel, TDictionary>,
   stateConfig: ModelConfigMap<TModel>,
   actionHandlers: THandlers,
-  validation: PipeFunc<StateValue<TModel, TDictionary>>,
+  validation: PipeFunc<StateValue<TModel, TDictionary>>[] = [],
 ): CreateCoreResult<TModel, TDictionary, THandlers> {
   const state = createState(initialState);
   const reducer = createReducer<StateValue<TModel, TDictionary>>()(actionHandlers);
-  const validator = pipe(validation);
+  const validator = pipe(...validation);
 
   // view models will be here.
 
-  // internal methods.
-  const changeModel = (stateValue: StateValue<TModel, TDictionary>, forceEmit = false): void => {
+  // private methods.
+  const changeModel = (stateValue: StateValue<TModel, TDictionary>, forceRender = false): void => {
     const currentModel = state.getCurrent().model;
     const validatedStateValue = validator(stateValue);
 
@@ -69,8 +68,8 @@ export function createCoreComponent<
       state.commitUpdates();
     }
 
-    if (forceEmit || (!forceEmit && hasChanges)) {
-      state.emit(state.getCurrent());
+    if (forceRender || (!forceRender && hasChanges)) {
+      state.triggerRender(state.getCurrent());
     }
 
     pendingCallbacks.forEach((callback) => callback());
@@ -98,7 +97,7 @@ export function createCoreComponent<
     changeModel(newStateVersion);
   };
 
-  const destroy = () => {
+  const dispose = () => {
     // unsubscribe in view models will be here.
   };
 
@@ -107,7 +106,7 @@ export function createCoreComponent<
     addUpdate: state.addUpdate,
     commitUpdates,
     rollbackUpdates: state.rollbackUpdates,
-    destroy,
+    dispose,
   };
 
   const containerComponent: ContainerCoreComponent<TModel, TDictionary, THandlers> = {

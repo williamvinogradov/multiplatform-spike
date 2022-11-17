@@ -1,22 +1,25 @@
 import {
   createObservableEmitter,
-  Emitter,
   ObjectType,
-  ThinObservable,
 } from './utils';
 
-export interface StateValue<TModel, TDictionary> {
+export type StateValueFunc<
+  TModel extends ObjectType,
+  TDictionary extends ObjectType,
+  > = (state: StateValue<TModel, TDictionary>) => void;
+
+export interface StateValue<TModel extends ObjectType, TDictionary extends ObjectType> {
   model: TModel;
   dictionary: TDictionary;
 }
 
-export interface State<TModel, TDictionary> extends
-  Emitter<StateValue<TModel, TDictionary>>,
-  ThinObservable<StateValue<TModel, TDictionary>> {
+export interface State<TModel extends ObjectType, TDictionary extends ObjectType> {
   getCurrent: () => StateValue<TModel, TDictionary>;
   addUpdate: (statePart: Partial<StateValue<Partial<TModel>, Partial<TDictionary>>>) => void;
   commitUpdates: () => void;
   rollbackUpdates: () => void;
+  triggerRender: StateValueFunc<TModel, TDictionary>;
+  subscribeForRender: (listener: StateValueFunc<TModel, TDictionary>) => void;
 }
 
 export function createState<TModel extends ObjectType, TDictionary extends ObjectType>(
@@ -55,11 +58,11 @@ export function createState<TModel extends ObjectType, TDictionary extends Objec
   };
 
   return {
-    emit,
-    subscribe,
     getCurrent,
     addUpdate,
     commitUpdates,
     rollbackUpdates,
+    triggerRender: emit,
+    subscribeForRender: subscribe,
   };
 }
