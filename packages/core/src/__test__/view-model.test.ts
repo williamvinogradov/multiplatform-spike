@@ -85,11 +85,12 @@ describe('view-model', () => {
       prop1: jest.fn(),
       prop2: jest.fn(),
     };
-    const subscribe = () => {
-      const unsubscribe = jest.fn();
-      unsubscribeFunctions.push(unsubscribe);
-      return unsubscribe;
-    };
+    const subscribe = jest.fn()
+      .mockImplementation(() => {
+        const unsubscribe = jest.fn();
+        unsubscribeFunctions.push(unsubscribe);
+        return unsubscribe;
+      });
     jest
       .mocked(createObservableEmitter)
       .mockReturnValue({
