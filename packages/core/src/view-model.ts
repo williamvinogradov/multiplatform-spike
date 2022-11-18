@@ -34,15 +34,15 @@ export function createViewModel<TStateProps, TViewProps>(
   const viewModel = getKeys(viewModelMap)
     .reduce((vm, key) => {
       const map = viewModelMap[key];
-      const observable = createObservableEmitter(map(initialState));
-      const unsubscribe = subscriber((value) => observable.emit(map(value)));
+      const { emit, subscribe, getValue } = createObservableEmitter(map(initialState));
+      const unsubscribe = subscriber((value) => emit(map(value)));
 
       disposeFunctions.push(unsubscribe);
 
       // eslint-disable-next-line no-param-reassign
       vm[key] = {
-        subscribe: observable.subscribe,
-        getValue: observable.getValue,
+        subscribe,
+        getValue,
       };
       return vm;
     }, {} as WriteableViewModel<TViewProps>);

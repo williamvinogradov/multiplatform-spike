@@ -1,6 +1,5 @@
 import { createSelector, createViewModel } from '../view-model';
 import { createObservableEmitter, DISPOSE, memoize } from '../utils';
-// import * as ViewModelModule from '../view-model';
 
 jest.mock('../utils/observable');
 jest.mock('../utils/disposable');
@@ -28,7 +27,7 @@ describe('view-model', () => {
     expect(viewModel.prop1).toEqual(expected);
   });
 
-  it('selects observalbes from inital state', () => {
+  it('selects observables from initial state', () => {
     const initialState = {};
     const mappedValue = {};
     const selector = jest.fn().mockReturnValue(mappedValue);
@@ -48,7 +47,7 @@ describe('view-model', () => {
     expect(createObservableEmitter).toBeCalledWith(mappedValue);
   });
 
-  it('selects observalbes from updated state', () => {
+  it('selects observables from updated state', () => {
     const selector = jest.fn();
     const subscribe = jest.fn();
     const emit = jest.fn();
@@ -62,14 +61,13 @@ describe('view-model', () => {
         emit,
       });
 
-    // createMappedObservable({}, subscribe, mapFunc);
     createViewModel({}, subscribe, { prop1: selector });
 
     selector
       .mockClear()
       .mockReturnValue(mappedValue);
 
-    const listener = subscribe.mock.lastCall[0];
+    const [listener] = subscribe.mock.lastCall;
     listener(value);
 
     expect(selector).toBeCalledTimes(1);
@@ -99,19 +97,39 @@ describe('view-model', () => {
         emit: jest.fn(),
       });
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const viewModel = createViewModel({}, subscribe, viewModelMap);
-
-    expect(subscribe).toBeCalledTimes(2);
-
-    unsubscribeFunctions.forEach((unsubscribe) => {
-      expect(unsubscribe).not.toBeCalled();
-    });
 
     viewModel[DISPOSE]();
 
     unsubscribeFunctions.forEach((unsubscribe) => {
       expect(unsubscribe).toBeCalledTimes(1);
+    });
+  });
+
+  it('does not call unsubscribe functions before dispose', () => {
+    const unsubscribeFunctions: jest.Mock[] = [];
+    const viewModelMap = {
+      prop1: jest.fn(),
+      prop2: jest.fn(),
+    };
+    const subscribe = jest.fn()
+      .mockImplementation(() => {
+        const unsubscribe = jest.fn();
+        unsubscribeFunctions.push(unsubscribe);
+        return unsubscribe;
+      });
+    jest
+      .mocked(createObservableEmitter)
+      .mockReturnValue({
+        subscribe: jest.fn(),
+        getValue: jest.fn(),
+        emit: jest.fn(),
+      });
+
+    createViewModel({}, subscribe, viewModelMap);
+
+    unsubscribeFunctions.forEach((unsubscribe) => {
+      expect(unsubscribe).not.toBeCalled();
     });
   });
 });

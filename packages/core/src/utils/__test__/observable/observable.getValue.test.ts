@@ -1,7 +1,7 @@
 import { createObservableEmitter } from '../../observable';
 
 describe('Core: Utils: Observable.getValue', () => {
-  it('caches initial value', () => {
+  it('stores initial value', () => {
     const initialValue = {};
 
     const observable = createObservableEmitter(initialValue);
@@ -9,7 +9,7 @@ describe('Core: Utils: Observable.getValue', () => {
     expect(observable.getValue()).toBe(initialValue);
   });
 
-  it('caches emitted value', () => {
+  it('stores emitted value', () => {
     const emittedValue = {};
     const observable = createObservableEmitter({});
 
