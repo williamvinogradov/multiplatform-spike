@@ -33,8 +33,17 @@ export function createViewModel<TStateProps, TViewProps>(
 
   const viewModel = getKeys(viewModelMap)
     .reduce((vm, key) => {
-      // eslint-disable-next-line no-param-reassign, @typescript-eslint/no-use-before-define
-      vm[key] = buildObservable(viewModelMap[key]);
+      const map = viewModelMap[key];
+      const observable = createObservableEmitter(map(initialState));
+      const unsubscribe = subscriber((value) => observable.emit(map(value)));
+
+      disposeFunctions.push(unsubscribe);
+
+      // eslint-disable-next-line no-param-reassign
+      vm[key] = {
+        subscribe: observable.subscribe,
+        getValue: observable.getValue,
+      };
       return vm;
     }, {} as WriteableViewModel<TViewProps>);
 
@@ -42,19 +51,6 @@ export function createViewModel<TStateProps, TViewProps>(
     ...viewModel,
     [DISPOSE]: pipe(...disposeFunctions),
   };
-
-  function buildObservable<TMapped>(map: (x: TStateProps) => TMapped): Observable<TMapped> {
-    const observable = createObservableEmitter<TMapped>(map(initialState));
-
-    const unsubscribe = subscriber((value) => observable.emit(map(value)));
-
-    disposeFunctions.push(unsubscribe);
-
-    return {
-      subscribe: observable.subscribe,
-      getValue: observable.getValue,
-    };
-  }
 }
 
 export function createSelector<TState, TParam extends Record<PropertyKey, unknown>, TViewProp>(
