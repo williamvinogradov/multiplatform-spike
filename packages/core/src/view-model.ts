@@ -26,7 +26,7 @@ export type ViewModel<TViewProps> = Readonly<WriteableViewModel<TViewProps>>;
 
 export function createViewModel<TStateProps, TViewProps>(
   initialState: TStateProps,
-  subscriber: SubscribeFunc<TStateProps>,
+  subscribeToUpdates: SubscribeFunc<TStateProps>,
   viewModelMap: ViewModelMap<TStateProps, TViewProps>,
 ): Disposable<ViewModel<TViewProps>> {
   const disposeFunctions: DisposeFunc[] = [];
@@ -35,7 +35,7 @@ export function createViewModel<TStateProps, TViewProps>(
     .reduce((vm, key) => {
       const map = viewModelMap[key];
       const { emit, subscribe, getValue } = createObservableEmitter(map(initialState));
-      const unsubscribe = subscriber((value) => emit(map(value)));
+      const unsubscribe = subscribeToUpdates((value) => emit(map(value)));
 
       disposeFunctions.push(unsubscribe);
 
