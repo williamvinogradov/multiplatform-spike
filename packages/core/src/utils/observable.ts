@@ -4,10 +4,10 @@ export interface Emitter<T> {
   emit: (value: T) => void;
 }
 
-export type Subscriber<T> = (listener: Listener<T>) => () => void;
+export type SubscribeFunc<T> = (listener: Listener<T>) => () => void;
 
 export interface Observable<T> {
-  subscribe: Subscriber<T>;
+  subscribe: SubscribeFunc<T>;
   getValue(): T;
 }
 

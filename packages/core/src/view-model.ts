@@ -9,7 +9,7 @@ import {
   Observable,
   pipe,
   shadowComparer,
-  Subscriber,
+  SubscribeFunc,
 } from './utils';
 
 type WriteableViewModel<TViewProps> = {
@@ -26,7 +26,7 @@ export type ViewModel<TViewProps> = Readonly<WriteableViewModel<TViewProps>>;
 
 export function createViewModel<TStateProps, TViewProps>(
   initialState: TStateProps,
-  subscriber: Subscriber<TStateProps>,
+  subscriber: SubscribeFunc<TStateProps>,
   viewModelMap: ViewModelMap<TStateProps, TViewProps>,
 ): Disposable<ViewModel<TViewProps>> {
   const disposeFunctions: DisposeFunc[] = [];
