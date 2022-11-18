@@ -1,14 +1,24 @@
 export type Listener<T> = (value: T) => void;
 
-export interface Observable<T> {
+export interface Emitter<T> {
   emit: (value: T) => void;
-  subscribe: (listener: Listener<T>) => () => void;
 }
 
-export function createObservable<T>(): Observable<T> {
+export type SubscribeFunc<T> = (listener: Listener<T>) => () => void;
+
+export interface Observable<T> {
+  subscribe: SubscribeFunc<T>;
+  getValue(): T;
+}
+
+export type ThinObservable<T> = Pick<Observable<T>, 'subscribe'>;
+
+export function createObservableEmitter<T>(initialValue: T): Emitter<T> & Observable<T> {
   const listeners = new Set<Listener<T>>();
+  let lastValue: T = initialValue;
 
   const emit = (value: T): void => {
+    lastValue = value;
     listeners.forEach((listener) => listener(value));
   };
 
@@ -18,8 +28,11 @@ export function createObservable<T>(): Observable<T> {
     return () => { listeners.delete(newListener); };
   };
 
+  const getValue = () => lastValue;
+
   return {
     emit,
     subscribe,
+    getValue,
   };
 }

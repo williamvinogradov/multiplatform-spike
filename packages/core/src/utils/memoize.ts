@@ -1,28 +1,28 @@
-import { Comparer, FunctionType } from './types';
+import { Comparer } from './types';
 
-export function memoize<TFunction extends FunctionType>(
-  func: TFunction,
-  comparer: Comparer<Parameters<TFunction>>,
-): (...arg: Parameters<TFunction>) => ReturnType<TFunction> {
-  let cachedArg: Parameters<TFunction>;
-  let cachedResult: ReturnType<TFunction>;
+export function memoize<TArgs extends unknown[], TReturn>(
+  func: (...params: TArgs) => TReturn,
+  comparer: Comparer<TArgs>,
+): (...arg: TArgs) => TReturn {
+  let cachedArg: TArgs;
+  let cachedResult: TReturn;
 
-  const updateCache = (...arg: Parameters<TFunction>) => {
-    cachedArg = arg;
-    cachedResult = func(arg);
+  const updateCache = (...args: TArgs) => {
+    cachedArg = args;
+    cachedResult = func(...args);
     return cachedResult;
   };
 
-  const getCachedResult = (...arg: Parameters<TFunction>) => (
+  const getCachedResult = (...arg: TArgs) => (
     comparer(cachedArg, arg)
       ? cachedResult
       : updateCache(...arg)
   );
 
-  let decoratedFunc = (...arg: Parameters<TFunction>) => {
+  let decoratedFunc = (...arg: TArgs) => {
     decoratedFunc = getCachedResult;
     return updateCache(...arg);
   };
 
-  return (...arg: Parameters<TFunction>) => decoratedFunc(...arg);
+  return (...arg: TArgs) => decoratedFunc(...arg);
 }
