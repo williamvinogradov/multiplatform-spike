@@ -101,6 +101,7 @@ describe('view-model', () => {
 
     viewModel[DISPOSE]();
 
+    expect(unsubscribeFunctions).toHaveLength(2);
     unsubscribeFunctions.forEach((unsubscribe) => {
       expect(unsubscribe).toBeCalledTimes(1);
     });
