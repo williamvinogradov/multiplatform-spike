@@ -1,6 +1,7 @@
 import {
   createObservableEmitter,
   ObjectType,
+  SubscribeFunc,
 } from './utils';
 
 export type StateValueFunc<
@@ -19,7 +20,7 @@ export interface State<TModel extends ObjectType, TDictionary extends ObjectType
   commitUpdates: () => void;
   rollbackUpdates: () => void;
   triggerRender: StateValueFunc<TModel, TDictionary>;
-  subscribeForRender: (listener: StateValueFunc<TModel, TDictionary>) => void;
+  subscribeForRender: SubscribeFunc<StateValue<TModel, TDictionary>>;
 }
 
 export function createState<TModel extends ObjectType, TDictionary extends ObjectType>(

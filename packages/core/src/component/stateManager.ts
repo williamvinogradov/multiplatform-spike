@@ -1,37 +1,38 @@
-import { callbacksMiddleware, controlledModeMiddleware, ModelConfigMap } from './middlewares';
-import { createReducer, Handlers } from './reducer';
-import { createState, StateValue } from './state';
-import { ObjectType, pipe, PipeFunc } from './utils';
+import { callbacksMiddleware, controlledModeMiddleware, ModelConfigMap } from '../middlewares';
+import { createReducer, Handlers } from '../reducer';
+import { createState, StateValue } from '../state';
+import { ObjectType, pipe, PipeFunc } from '../utils';
 
-export interface RootCoreComponent<TModel extends ObjectType, TDictionary extends ObjectType> {
+export interface StateManager<
+  TModel extends ObjectType,
+  TDictionary extends ObjectType,
+  > {
   addUpdate: (statePart: Partial<StateValue<Partial<TModel>, Partial<TDictionary>>>) => void;
   commitUpdates: () => void;
   rollbackUpdates: () => void;
-  dispose: () => void;
 }
 
-export interface ContainerCoreComponent<
+export interface Dispatcher<
   TModel extends ObjectType,
   TDictionary extends ObjectType,
   THandlers extends Handlers<StateValue<TModel, TDictionary>>,
   > {
-  // view models will be here.
   dispatch: <TAction extends keyof THandlers>(
     action: TAction,
     value: Parameters<THandlers[TAction]>[1],
   ) => void;
 }
 
-export type CreateCoreResult<
+export type StateStoreTuple<
   TModel extends ObjectType,
   TDictionary extends ObjectType,
   THandlers extends Handlers<StateValue<TModel, TDictionary>>,
   > = [
-    rootComponent: RootCoreComponent<TModel, TDictionary>,
-    containerComponent: ContainerCoreComponent<TModel, TDictionary, THandlers>,
+  store: StateManager<TModel, TDictionary>,
+  dispatcher: Dispatcher<TModel, TDictionary, THandlers>,
   ];
 
-export function createCoreComponent<
+export function createStateManager<
   TModel extends ObjectType,
   TDictionary extends ObjectType,
   THandlers extends Handlers<StateValue<TModel, TDictionary>>,
@@ -40,12 +41,10 @@ export function createCoreComponent<
   stateConfig: ModelConfigMap<TModel>,
   actionHandlers: THandlers,
   validation: PipeFunc<StateValue<TModel, TDictionary>>[] = [],
-): CreateCoreResult<TModel, TDictionary, THandlers> {
+): StateStoreTuple<TModel, TDictionary, THandlers> {
   const state = createState(initialState);
   const reducer = createReducer<StateValue<TModel, TDictionary>>()(actionHandlers);
   const validator = pipe(...validation);
-
-  // view models will be here.
 
   // private methods.
   const changeModel = (stateValue: StateValue<TModel, TDictionary>, forceRender = false): void => {
@@ -97,24 +96,11 @@ export function createCoreComponent<
     changeModel(newStateVersion);
   };
 
-  const dispose = () => {
-    // unsubscribe in view models will be here.
-  };
-
-  // return section.
-  const rootComponent: RootCoreComponent<TModel, TDictionary> = {
+  return [{
     addUpdate: state.addUpdate,
     commitUpdates,
     rollbackUpdates: state.rollbackUpdates,
-    dispose,
-  };
-
-  const containerComponent: ContainerCoreComponent<TModel, TDictionary, THandlers> = {
+  }, {
     dispatch,
-  };
-
-  return [
-    rootComponent,
-    containerComponent,
-  ];
+  }];
 }
