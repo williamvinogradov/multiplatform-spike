@@ -2,7 +2,7 @@ import React, { ComponentType, ReactElement, useMemo } from 'react';
 
 export type PayloadType = string | ReactElement;
 
-export interface SelectionControlTemplateProps {
+export interface RadioTemplateProps {
   selected: boolean;
 }
 
@@ -14,14 +14,13 @@ export interface RadioButtonProps {
   selected: boolean;
   selectedChange: React.MouseEventHandler;
   payload: PayloadType;
-  selectionControlTemplate?: ComponentType<SelectionControlTemplateProps>;
+  radioTemplate?: ComponentType<RadioTemplateProps>;
   payloadTemplate?: ComponentType<PayloadTemplateProps>;
 }
 
-const DefaultSelectionControlTemplate =
-  React.memo<SelectionControlTemplateProps>(({ selected }) => {
-    return <span>{selected ? '◉' : '◎'}</span>;
-  });
+const DefaultRadioTemplate = React.memo<RadioTemplateProps>(({ selected }) => {
+  return <span>{selected ? '◉' : '◎'}</span>;
+});
 
 const DefaultPayloadTemplate = React.memo<PayloadTemplateProps>(
   ({ payload }) => {
@@ -33,12 +32,12 @@ export function RadioButton({
   selected,
   selectedChange,
   payload,
-  selectionControlTemplate,
+  radioTemplate,
   payloadTemplate,
 }: RadioButtonProps) {
   const SelectionControlComponent = useMemo(
-    () => selectionControlTemplate || DefaultSelectionControlTemplate,
-    [selectionControlTemplate]
+    () => radioTemplate || DefaultRadioTemplate,
+    [radioTemplate]
   );
   const PayloadComponent = useMemo(
     () => payloadTemplate || DefaultPayloadTemplate,

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import {
   RadioButton,
-  SelectionControlTemplateProps,
+  RadioTemplateProps,
   PayloadTemplateProps,
 } from '@devexpress/react';
 
-const CustomCheck: React.FC<SelectionControlTemplateProps> = ({ selected }) => (
+const CustomRadio: React.FC<RadioTemplateProps> = ({ selected }) => (
   <span>{selected ? '+' : '-'}</span>
 );
 
@@ -34,7 +34,7 @@ export function RadioButtonExample() {
             selected={selected2}
             payload={<i>component payload</i>}
             selectedChange={() => setSelected2((current) => !current)}
-            selectionControlTemplate={CustomCheck}
+            radioTemplate={CustomRadio}
             payloadTemplate={CustomPayload}
           />
         </div>
