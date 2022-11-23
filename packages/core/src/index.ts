@@ -15,4 +15,3 @@ export type {
 export {
   createCoreComponent,
 } from './component';
-export const TestCoreExport = 'TestCore';
