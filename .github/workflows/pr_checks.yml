@@ -9,29 +9,66 @@ jobs:
   detect-changes:
     runs-on: ubuntu-latest
     outputs:
-      changes-core: ${{ steps.filter.outputs.core }}
+      core-package: ${{ steps.filter.outputs.core-package }}
+      components-package: ${{ steps.filter.outputs.components-package }}
+      react-package: ${{ steps.filter.outputs.react-package }}
+      react-playground: ${{ steps.filter.outputs.react-playground }}
     steps:
       - uses: actions/checkout@v3
       - uses: dorny/paths-filter@v2
         id: filter
         with:
           filters: |
-            core:
+            core-package:
               - 'packages/core/**'
+            components-package:
+              - 'packages/components/**'
+            react-package:
+              - 'packages/react/**'
+            react-playground:
+              - 'playgrounds/react/**'
       - run: echo "${{ steps.filter.outputs }}"
 
   core:
     runs-on: ubuntu-latest
     needs: detect-changes
-    if: needs.detect-changes.outputs.changes-core == 'true'
+    if: needs.detect-changes.outputs.core-package == 'true'
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Install
-        run: "npm run lib:core:install"
-      - name: Build
-        run: "npm run lib:core:build"
-      - name: Lint
-        run: "npm run lib:core:lint"
-      - name: Test:unit
-        run: "npm run lib:core:test:unit"
+
+      - name: Checks
+        uses: ./.github/actions/steps/core-package
+
+  components:
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: needs.detect-changes.outputs.components-package == 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Checks
+        uses: ./.github/actions/steps/components-package
+
+  react-package:
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: needs.detect-changes.outputs.react-package == 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Checks
+        uses: ./.github/actions/steps/react-package
+
+  react-playground:
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: needs.detect-changes.outputs.react-package == 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Checks
+        uses: ./.github/actions/steps/react-playground
