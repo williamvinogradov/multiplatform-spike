@@ -63,23 +63,19 @@ describe('Core: Component: ViewManager', () => {
     expect(Object.keys(viewModels)).toEqual(expectedViewModelKeys);
   });
 
-  it('disposes view model before replace it with new one', () => {
-    const testViewModel = { ...viewModelMock };
-    const firstASelector = jest.fn();
-    createViewModelMock.mockImplementation(
-      (_, __, selector) => (selector === firstASelector ? testViewModel : { ...viewModelMock }),
-    );
+  it('throws error if adds view model with same key twice', () => {
+    createViewModelMock.mockReturnValue(viewModelMock);
 
     const manager = createViewModelManager();
-    manager.add({}, jest.fn(), {
-      A: firstASelector,
-    });
-    manager.add({}, jest.fn(), {
-      A: jest.fn(),
-      B: jest.fn(),
-    });
+    const addViewModel = () => {
+      manager.add({}, jest.fn(), {
+        A: jest.fn(),
+      });
+    };
 
-    expect(testViewModel[DISPOSE]).toHaveBeenCalledTimes(1);
+    addViewModel();
+
+    expect(addViewModel).toThrow();
   });
 
   it('deletes view models', () => {

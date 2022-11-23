@@ -11,7 +11,7 @@ export interface ViewModelManager<TState, TViewModels extends ObjectType> {
     subscribeToUpdates: SubscribeFunc<TState>,
     selectorMap: SelectorMap<TState, TViewModels>,
   ) => void;
-  remove: (...viewModelKeyArray: (keyof TViewModels)[]) => void;
+  remove: (...keys: (keyof TViewModels)[]) => void;
   get: () => Readonly<ViewModelMap<TViewModels>>;
 }
 
@@ -20,9 +20,9 @@ export function createViewModelManager<TState, TViewModels extends ObjectType>()
   const viewModelMap: ViewModelMap<TViewModels> = {};
 
   const remove = (
-    ...viewModelKeyArray: (keyof TViewModels)[]
+    ...keys: (keyof TViewModels)[]
   ): void => {
-    viewModelKeyArray.forEach((key) => {
+    keys.forEach((key) => {
       viewModelMap[key]?.[DISPOSE]();
       delete viewModelMap[key];
     });
@@ -35,7 +35,7 @@ export function createViewModelManager<TState, TViewModels extends ObjectType>()
   ) => {
     getKeys(selectorMap).forEach((selectorKey) => {
       if (viewModelMap[selectorKey]) {
-        remove(selectorKey);
+        throw Error(`View model with ${selectorKey.toString()} already exist.`);
       }
 
       const selector = selectorMap[selectorKey];
@@ -48,10 +48,11 @@ export function createViewModelManager<TState, TViewModels extends ObjectType>()
   const get = () => viewModelMap as Readonly<ViewModelMap<TViewModels>>;
 
   const dispose = () => {
-    getKeys(viewModelMap).forEach((key) => {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      viewModelMap[key]![DISPOSE]();
-    });
+    Object.values(viewModelMap)
+      .filter((viewModel) => !!viewModel)
+      .forEach((viewModel) => {
+        viewModel[DISPOSE]();
+      });
   };
 
   return {

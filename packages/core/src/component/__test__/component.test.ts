@@ -1,5 +1,5 @@
 import { DISPOSE } from '../../utils';
-import { createCoreComponent } from '../component';
+import { createCoreComponent } from '../index';
 import { createStateManager } from '../stateManager';
 import { createViewModelManager } from '../viewModelManager';
 
