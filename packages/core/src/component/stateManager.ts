@@ -1,7 +1,9 @@
 import { callbacksMiddleware, controlledModeMiddleware, ModelConfigMap } from '../middlewares';
 import { createReducer, Handlers } from '../reducer';
 import { createState, StateValue } from '../state';
-import { ObjectType, pipe, PipeFunc } from '../utils';
+import {
+  ActionFunc, ObjectType, pipe, PipeFunc,
+} from '../utils';
 
 export interface StateManager<
   TModel extends ObjectType,
@@ -46,8 +48,7 @@ export function createStateManager<
   const reducer = createReducer<StateValue<TModel, TDictionary>>()(actionHandlers);
   const validator = pipe(...validation);
 
-  // private methods.
-  const changeModel = (stateValue: StateValue<TModel, TDictionary>, forceRender = false): void => {
+  const changeState = (stateValue: StateValue<TModel, TDictionary>): [ActionFunc[], boolean] => {
     const currentModel = state.getCurrent().model;
     const validatedStateValue = validator(stateValue);
 
@@ -67,17 +68,15 @@ export function createStateManager<
       state.commitUpdates();
     }
 
-    if (forceRender || (!forceRender && hasChanges)) {
-      state.triggerRender(state.getCurrent());
-    }
-
-    pendingCallbacks.forEach((callback) => callback());
+    return [pendingCallbacks, hasChanges];
   };
 
-  // public methods.
   const commitUpdates = () => {
     state.commitUpdates();
-    changeModel(state.getCurrent(), true);
+    const [pendingCallbacks] = changeState(state.getCurrent());
+    state.triggerRender(state.getCurrent());
+
+    pendingCallbacks.forEach((callback) => callback());
   };
 
   const dispatch = <TAction extends keyof THandlers>(
@@ -93,7 +92,13 @@ export function createStateManager<
       },
     };
 
-    changeModel(newStateVersion);
+    const [pendingCallbacks, hasChanges] = changeState(newStateVersion);
+
+    if (hasChanges) {
+      state.triggerRender(state.getCurrent());
+    }
+
+    pendingCallbacks.forEach((callback) => callback());
   };
 
   return [{

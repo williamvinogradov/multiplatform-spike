@@ -1,4 +1,4 @@
-import { createSelector, createViewModel } from '../viewModel';
+import { createSelector, createViewModel } from '../view-model';
 import { createObservableEmitter, DISPOSE, memoize } from '../utils';
 
 jest.mock('../utils/observable');

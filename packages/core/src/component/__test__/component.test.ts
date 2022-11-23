@@ -21,9 +21,9 @@ describe('Core: Component', () => {
       dispatch: jest.fn(),
     }]);
     createViewModelStoreMock.mockReturnValue({
-      addViewModels: jest.fn(),
-      deleteViewModels: jest.fn(),
-      getViewModels: jest.fn(),
+      add: jest.fn(),
+      remove: jest.fn(),
+      get: jest.fn(),
       [DISPOSE]: jest.fn(),
     });
   });
@@ -43,9 +43,9 @@ describe('Core: Component', () => {
   it('calls view model dispose on dispose', () => {
     const disposeMock = jest.fn();
     createViewModelStoreMock.mockReturnValue({
-      addViewModels: jest.fn(),
-      deleteViewModels: jest.fn(),
-      getViewModels: jest.fn(),
+      add: jest.fn(),
+      remove: jest.fn(),
+      get: jest.fn(),
       [DISPOSE]: disposeMock,
     });
 

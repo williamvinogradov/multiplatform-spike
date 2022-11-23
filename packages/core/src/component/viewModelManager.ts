@@ -3,23 +3,23 @@ import {
 } from '../utils';
 import {
   createViewModel, SelectorMap, ViewModelMap,
-} from '../viewModel';
+} from '../view-model';
 
 export interface ViewModelManager<TState, TViewModels extends ObjectType> {
-  addViewModels: (
+  add: (
     stateValue: TState,
     subscribeToUpdates: SubscribeFunc<TState>,
     selectorMap: SelectorMap<TState, TViewModels>,
   ) => void;
-  deleteViewModels: (...viewModelKeyArray: (keyof TViewModels)[]) => void;
-  getViewModels: () => Readonly<ViewModelMap<TViewModels>>;
+  remove: (...viewModelKeyArray: (keyof TViewModels)[]) => void;
+  get: () => Readonly<ViewModelMap<TViewModels>>;
 }
 
 export function createViewModelManager<TState, TViewModels extends ObjectType>()
 : Disposable<ViewModelManager<TState, TViewModels>> {
   const viewModelMap: ViewModelMap<TViewModels> = {};
 
-  const deleteViewModels = (
+  const remove = (
     ...viewModelKeyArray: (keyof TViewModels)[]
   ): void => {
     viewModelKeyArray.forEach((key) => {
@@ -28,14 +28,14 @@ export function createViewModelManager<TState, TViewModels extends ObjectType>()
     });
   };
 
-  const addViewModels = (
+  const add = (
     stateValue: TState,
     subscribeToUpdates: SubscribeFunc<TState>,
     selectorMap: SelectorMap<TState, TViewModels>,
   ) => {
     getKeys(selectorMap).forEach((selectorKey) => {
       if (viewModelMap[selectorKey]) {
-        deleteViewModels(selectorKey);
+        remove(selectorKey);
       }
 
       const selector = selectorMap[selectorKey];
@@ -45,7 +45,7 @@ export function createViewModelManager<TState, TViewModels extends ObjectType>()
     });
   };
 
-  const getViewModels = () => viewModelMap as Readonly<ViewModelMap<TViewModels>>;
+  const get = () => viewModelMap as Readonly<ViewModelMap<TViewModels>>;
 
   const dispose = () => {
     getKeys(viewModelMap).forEach((key) => {
@@ -55,9 +55,9 @@ export function createViewModelManager<TState, TViewModels extends ObjectType>()
   };
 
   return {
-    addViewModels,
-    deleteViewModels,
-    getViewModels,
+    add,
+    remove,
+    get,
     [DISPOSE]: dispose,
   };
 }

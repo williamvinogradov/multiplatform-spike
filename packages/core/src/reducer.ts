@@ -1,23 +1,23 @@
-import { StateValue } from './state';
 import { ObjectType } from './utils';
 
-export type Handlers<TState extends StateValue<ObjectType, ObjectType>> =
+export type Handlers<TState extends ObjectType, TReducerResult = TState> =
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  Record<PropertyKey, (state: TState, value: any) => Partial<TState['model']>>;
+  Record<PropertyKey, (state: TState, value: any) => Partial<TReducerResult>>;
 
 export type Reducer<
-  TState extends StateValue<ObjectType, ObjectType>,
+  TState extends ObjectType,
   THandlers extends Handlers<TState>,
+  TReducerResult = TState,
 > = <TAction extends keyof THandlers>(
   state: TState,
   action: TAction,
   value: Parameters<THandlers[TAction]>[1]
-) => Partial<TState['model']>;
+) => Partial<TReducerResult>;
 
-export function createReducer<TState extends StateValue<ObjectType, ObjectType>>() {
+export function createReducer<TState extends ObjectType, TReducerResult = TState>() {
   return <THandlers extends Handlers<TState>>(
     handlers: THandlers,
-  ): Reducer<TState, THandlers> => {
+  ): Reducer<TState, THandlers, TReducerResult> => {
     const invalidActions = Reflect.ownKeys(handlers).filter((k) => handlers[k] === undefined);
     if (invalidActions.length > 0) {
       throw new Error(`Handlers for actions are not defined: ${invalidActions.join(', ')}`);
