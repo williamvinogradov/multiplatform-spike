@@ -43,7 +43,9 @@ jobs:
   components:
     runs-on: ubuntu-latest
     needs: detect-changes
-    if: needs.detect-changes.outputs.components-package == 'true'
+    if: | 
+      needs.detect-changes.outputs.components-package == 'true'
+      || needs.detect-changes.outputs.core-package == 'true'
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -54,7 +56,10 @@ jobs:
   react-package:
     runs-on: ubuntu-latest
     needs: detect-changes
-    if: needs.detect-changes.outputs.react-package == 'true'
+    if: | 
+      needs.detect-changes.outputs.react-package == 'true'
+      || needs.detect-changes.outputs.components-package == 'true'
+      || needs.detect-changes.outputs.core-package == 'true'
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -65,7 +70,11 @@ jobs:
   react-playground:
     runs-on: ubuntu-latest
     needs: detect-changes
-    if: needs.detect-changes.outputs.react-package == 'true'
+    if: |
+      needs.detect-changes.outputs.react-package == 'true'
+      || needs.detect-changes.outputs.react-package == 'true'
+      || needs.detect-changes.outputs.components-package == 'true'
+      || needs.detect-changes.outputs.core-package == 'true'
     steps:
       - name: Checkout
         uses: actions/checkout@v3
