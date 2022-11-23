@@ -1,26 +1,26 @@
 import { DISPOSE } from '../../utils';
-import { createCoreComponent } from '../index';
+import { createCore } from '../index';
 import { createStateManager } from '../stateManager';
 import { createViewModelManager } from '../viewModelManager';
 
 jest.mock('../stateManager');
 jest.mock('../viewModelManager');
 
-const createStateStoreMock = jest.mocked(createStateManager);
-const createViewModelStoreMock = jest.mocked(createViewModelManager);
+const createStateManagerMock = jest.mocked(createStateManager);
+const createViewModelManagerMock = jest.mocked(createViewModelManager);
 
 describe('Core: Component', () => {
   const stateMock = { model: {}, dictionary: {} };
 
   beforeEach(() => {
-    createStateStoreMock.mockReturnValue([{
+    createStateManagerMock.mockReturnValue([{
       addUpdate: jest.fn(),
       rollbackUpdates: jest.fn(),
       commitUpdates: jest.fn(),
     }, {
       dispatch: jest.fn(),
     }]);
-    createViewModelStoreMock.mockReturnValue({
+    createViewModelManagerMock.mockReturnValue({
       add: jest.fn(),
       remove: jest.fn(),
       get: jest.fn(),
@@ -31,25 +31,25 @@ describe('Core: Component', () => {
   afterAll(() => { jest.resetAllMocks(); });
 
   it('creates state manager', () => {
-    createCoreComponent()(stateMock, {}, {});
-    expect(createStateStoreMock).toHaveBeenCalledTimes(1);
+    createCore()(stateMock, {}, {});
+    expect(createStateManagerMock).toHaveBeenCalledTimes(1);
   });
 
   it('creates view model manager', () => {
-    createCoreComponent()(stateMock, {}, {});
-    expect(createViewModelStoreMock).toHaveBeenCalledTimes(1);
+    createCore()(stateMock, {}, {});
+    expect(createViewModelManagerMock).toHaveBeenCalledTimes(1);
   });
 
   it('calls view model dispose on dispose', () => {
     const disposeMock = jest.fn();
-    createViewModelStoreMock.mockReturnValue({
+    createViewModelManagerMock.mockReturnValue({
       add: jest.fn(),
       remove: jest.fn(),
       get: jest.fn(),
       [DISPOSE]: disposeMock,
     });
 
-    const [root] = createCoreComponent()(stateMock, {}, {});
+    const [root] = createCore()(stateMock, {}, {});
     root[DISPOSE]();
 
     expect(disposeMock).toHaveBeenCalledTimes(1);

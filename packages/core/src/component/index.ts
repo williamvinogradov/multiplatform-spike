@@ -2,15 +2,16 @@ import { ModelConfigMap } from '../middlewares';
 import { Handlers } from '../reducer';
 import { StateValue } from '../state';
 import {
+  detach,
   Disposable, DISPOSE, ObjectType, PipeFunc,
 } from '../utils';
 import { createStateManager, Dispatcher, StateManager } from './stateManager';
 import { createViewModelManager, ViewModelManager } from './viewModelManager';
 
-export type RootCoreComponent<TModel extends ObjectType, TDictionary extends ObjectType> =
+export type RootCore<TModel extends ObjectType, TDictionary extends ObjectType> =
   Disposable<StateManager<TModel, TDictionary>>;
 
-export type ContainerCoreComponent<
+export type ContainerCore<
   TModel extends ObjectType,
   TDictionary extends ObjectType,
   THandlers extends Handlers<StateValue<TModel, TDictionary>>,
@@ -23,11 +24,11 @@ export type CreateCoreResult<TModel extends ObjectType,
   THandlers extends Handlers<StateValue<TModel, TDictionary>>,
   TViewModels extends Record<PropertyKey, ObjectType>,
   > = [
-  rootComponent: RootCoreComponent<TModel, TDictionary>,
-  containerComponent: ContainerCoreComponent<TModel, TDictionary, THandlers, TViewModels>,
+  rootComponent: RootCore<TModel, TDictionary>,
+  containerComponent: ContainerCore<TModel, TDictionary, THandlers, TViewModels>,
   ];
 
-export function createCoreComponent<TViewModels extends ObjectType>() {
+export function createCore<TViewModels extends ObjectType>() {
   return <
     TModel extends ObjectType,
     TDictionary extends ObjectType,
@@ -50,11 +51,12 @@ export function createCoreComponent<TViewModels extends ObjectType>() {
       viewModelManager[DISPOSE]();
     };
 
+    const [publicViewModelManager] = detach(viewModelManager, DISPOSE);
     return [{
       ...stateManager,
       [DISPOSE]: dispose,
     }, {
-      ...viewModelManager,
+      ...publicViewModelManager,
       ...dispatcher,
     }];
   };

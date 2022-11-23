@@ -8,10 +8,10 @@ export type {
 } from './state';
 
 export type {
-  RootCoreComponent,
-  ContainerCoreComponent,
+  RootCore,
+  ContainerCore,
 } from './component';
 
 export {
-  createCoreComponent,
+  createCore,
 } from './component';
