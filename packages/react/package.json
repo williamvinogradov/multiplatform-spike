@@ -1,0 +1,46 @@
+{
+  "name": "@devexpress/react",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "scripts": {
+    "clean": "del-cli dist",
+    "build": "npm run clean && rollup -c rollup/rollup.mjs",
+    "watch": "npm run clean && rollup -c rollup/rollup.mjs --watch",
+    "lint": "eslint ./src"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "peerDependencies": {
+    "@devexpress/components": "^1.0.0",
+    "@devexpress/core": "^1.0.0",
+    "react": ">=17.x.x",
+    "react-dom": ">=17.x.x"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^13.3.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^16.11.45",
+    "@types/react": "^18.0.15",
+    "@types/react-dom": "^18.0.6",
+    "postcss": "^8.4.14",
+    "rollup": "^3.4.0",
+    "rollup-plugin-copy": "^3.4.0",
+    "rollup-plugin-delete": "^2.0.0",
+    "rollup-plugin-esbuild": "^5.0.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-postcss": "^4.0.2",
+    "sass": "^1.54.0",
+    "typescript": "^4.9.3",
+    "del-cli": "^5.0.0",
+    "eslint": "8.22.0"
+  },
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts"
+}

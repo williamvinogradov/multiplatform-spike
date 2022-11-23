@@ -1,0 +1,30 @@
+name: Components package step
+description: Components package PR checks step
+runs:
+  using: composite
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Restore npm cache
+      uses: actions/cache@v3
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
+    - name: Install
+      shell: bash
+      run: "npm install"
+
+    - name: Lint
+      shell: bash
+      run: "npm run lib:components:lint"
+
+    - name: Build
+      shell: bash
+      run: "npm run lib:components:build"
+
+    - name: Test:unit
+      shell: bash
+      run: "npm run lib:components:test:unit"

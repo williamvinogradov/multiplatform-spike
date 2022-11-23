@@ -1,22 +1,19 @@
-# Core framework alpha
+# Multiplatform spike prod version
+
+The demo project tests
+a hypothesis about the native way to develop web components.
 
 ## Installation
 
 ```bash
-# install general repo dependencies.
-npm run lib:core:install
+# install repo dependencies
+npm install
 ```
 
-## Lint
+## Usage
 
+To run react playground project with live-reloading:
 ```bash
-# lint the core package code.
-npm run lib:core:lint
-```
-
-## Tests
-
-```bash
-# run unit test for the core package.
-npm run lib:core:test:unit
+# run react demo
+npm run react:start
 ```

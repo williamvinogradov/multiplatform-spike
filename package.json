@@ -1,11 +1,31 @@
 {
   "name": "multiplatform-spike",
   "scripts": {
-    "lib:core:install": "npm install --prefix packages/core",
     "lib:core:build": "npm run build --prefix packages/core",
     "lib:core:watch": "npm run watch --prefix packages/core",
     "lib:core:lint": "npm run lint --prefix packages/core",
-    "lib:core:test:unit": "npm run test:unit --prefix packages/core"
+    "lib:core:test:unit": "npm run test:unit --prefix packages/core",
+
+    "prelib:components:build": "npm run lib:core:build",
+    "lib:components:build": "npm run build --prefix packages/components",
+    "lib:components:watch": "npm run watch --prefix packages/components",
+    "lib:components:lint": "npm run lint --prefix packages/components",
+    "lib:components:test:unit": "npm run test:unit --prefix packages/components",
+
+    "prelib:react:build": "npm run lib:components:build",
+    "lib:react:build": "npm run build --prefix packages/react",
+    "lib:react:watch": "npm run watch --prefix packages/react",
+    "lib:react:lint": "npm run lint --prefix packages/react",
+
+    "prereact:build": "npm run lib:react:build",
+    "react:build": "npm run build --prefix playgrounds/react",
+    "react:watch": "npm run start --prefix playgrounds/react",
+    "react:start:core": "npm run lib:core:watch",
+    "react:start:components": "wait-on packages/core/dist/package.json && npm run lib:components:watch",
+    "react:start:lib": "wait-on packages/components/dist/package.json && npm run lib:react:watch",
+    "react:start:app": "wait-on packages/react/dist/package.json && npm run react:watch",
+    "react:start": "concurrently --kill-others npm:react:start:core npm:react:start:components npm:react:start:lib npm:react:start:app",
+    "react:lint": "npm run lint --prefix packages/react"
   },
   "repository": {
     "type": "git",
@@ -16,5 +36,15 @@
   "bugs": {
     "url": "https://github.com/williamvinogradov/multiplatform-spike/issues"
   },
-  "homepage": "https://github.com/williamvinogradov/multiplatform-spike#readme"
+  "homepage": "https://github.com/williamvinogradov/multiplatform-spike#readme",
+  "workspaces": [
+    "packages/*",
+    "playgrounds/react"
+  ],
+  "devDependencies": {
+    "colors": "^1.4.0",
+    "concurrently": "^7.3.0",
+    "del-cli": "^5.0.0",
+    "wait-on": "^6.0.1"
+  }
 }
