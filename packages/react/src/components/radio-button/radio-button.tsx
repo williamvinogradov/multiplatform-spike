@@ -35,7 +35,7 @@ export function RadioButton({
   radioTemplate,
   payloadTemplate,
 }: RadioButtonProps) {
-  const SelectionControlComponent = useMemo(
+  const RadioComponent = useMemo(
     () => radioTemplate || DefaultRadioTemplate,
     [radioTemplate]
   );
@@ -51,7 +51,7 @@ export function RadioButton({
       role="radio"
       aria-checked={selected}
     >
-      <SelectionControlComponent selected={selected} />
+      <RadioComponent selected={selected} />
       <PayloadComponent payload={payload} />
     </span>
   );
