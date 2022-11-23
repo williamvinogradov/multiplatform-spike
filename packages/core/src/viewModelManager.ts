@@ -1,9 +1,9 @@
 import {
   Disposable, DISPOSE, getKeys, ObjectType, SubscribeFunc,
-} from '../utils';
+} from './utils';
 import {
   createViewModel, SelectorMap, ViewModelMap,
-} from '../view-model';
+} from './view-model';
 
 export interface ViewModelManager<TState, TViewModels extends ObjectType> {
   add: (

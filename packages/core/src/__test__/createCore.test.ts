@@ -1,5 +1,5 @@
-import { DISPOSE } from '../../utils';
-import { createCore } from '../index';
+import { DISPOSE } from '../utils';
+import { createCore } from '../createCore';
 import { createStateManager } from '../stateManager';
 import { createViewModelManager } from '../viewModelManager';
 
@@ -38,20 +38,5 @@ describe('Core: Component', () => {
   it('creates view model manager', () => {
     createCore()(stateMock, {}, {});
     expect(createViewModelManagerMock).toHaveBeenCalledTimes(1);
-  });
-
-  it('calls view model dispose on dispose', () => {
-    const disposeMock = jest.fn();
-    createViewModelManagerMock.mockReturnValue({
-      add: jest.fn(),
-      remove: jest.fn(),
-      get: jest.fn(),
-      [DISPOSE]: disposeMock,
-    });
-
-    const [root] = createCore()(stateMock, {}, {});
-    root[DISPOSE]();
-
-    expect(disposeMock).toHaveBeenCalledTimes(1);
   });
 });

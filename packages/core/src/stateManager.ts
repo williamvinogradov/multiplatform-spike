@@ -1,9 +1,9 @@
-import { callbacksMiddleware, controlledModeMiddleware, ModelConfigMap } from '../middlewares';
-import { createReducer, Handlers } from '../reducer';
-import { createState, StateValue } from '../state';
+import { callbacksMiddleware, controlledModeMiddleware, ModelConfigMap } from './middlewares';
+import { createReducer, Handlers } from './reducer';
+import { createState, StateValue } from './state';
 import {
   ObjectType, pipe, PipeFunc,
-} from '../utils';
+} from './utils';
 
 export interface StateManager<
   TModel extends ObjectType,

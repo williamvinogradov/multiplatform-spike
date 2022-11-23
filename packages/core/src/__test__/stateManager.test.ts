@@ -1,13 +1,13 @@
-import { callbacksMiddleware, controlledModeMiddleware } from '../../middlewares';
-import { createReducer } from '../../reducer';
-import { createState } from '../../state';
-import { pipe } from '../../utils';
+import { callbacksMiddleware, controlledModeMiddleware } from '../middlewares';
+import { createReducer } from '../reducer';
+import { createState } from '../state';
+import { pipe } from '../utils';
 import { createStateManager } from '../stateManager';
 
-jest.mock('../../utils');
-jest.mock('../../state');
-jest.mock('../../reducer');
-jest.mock('../../middlewares');
+jest.mock('../utils');
+jest.mock('../state');
+jest.mock('../reducer');
+jest.mock('../middlewares');
 
 const createStateMock = jest.mocked(createState);
 const stateMock = {

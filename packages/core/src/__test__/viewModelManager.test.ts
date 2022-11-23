@@ -1,8 +1,8 @@
-import { DISPOSE } from '../../utils';
-import { createViewModel } from '../../view-model';
+import { DISPOSE } from '../utils';
+import { createViewModel } from '../view-model';
 import { createViewModelManager } from '../viewModelManager';
 
-jest.mock('../../view-model');
+jest.mock('../view-model');
 
 const createViewModelMock = jest.mocked(createViewModel);
 const viewModelMock = {

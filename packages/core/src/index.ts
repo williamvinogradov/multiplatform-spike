@@ -8,10 +8,14 @@ export type {
 } from './state';
 
 export type {
-  RootCore,
-  ContainerCore,
-} from './component';
+  StateManager,
+  Dispatcher,
+} from './stateManager';
+
+export type {
+  ViewModelManager,
+} from './viewModelManager';
 
 export {
   createCore,
-} from './component';
+} from './createCore';
