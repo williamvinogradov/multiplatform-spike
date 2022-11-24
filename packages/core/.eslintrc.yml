@@ -1,6 +1,0 @@
-root: false
-extends:
-  - '../../.eslintrc.yml'
-parserOptions:
-  createDefaultProgram: true
-  project: './tsconfig.json'
