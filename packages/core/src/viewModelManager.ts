@@ -5,7 +5,7 @@ import {
   createViewModel, SelectorMap, ViewModelMap,
 } from './view-model';
 
-export interface ViewModelManager<TState, TViewModels extends ObjectType> {
+export interface ViewModelManager<TState extends ObjectType, TViewModels extends ObjectType> {
   add: (
     stateValue: TState,
     subscribeToUpdates: SubscribeFunc<TState>,
@@ -15,7 +15,7 @@ export interface ViewModelManager<TState, TViewModels extends ObjectType> {
   get: () => Readonly<ViewModelMap<TViewModels>>;
 }
 
-export function createViewModelManager<TState, TViewModels extends ObjectType>()
+export function createViewModelManager<TState extends ObjectType, TViewModels extends ObjectType>()
 : Disposable<ViewModelManager<TState, TViewModels>> {
   const viewModelMap: ViewModelMap<TViewModels> = {};
 

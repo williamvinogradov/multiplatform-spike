@@ -1,11 +1,7 @@
 export type {
-  ModelConfigMap,
-  ModelPropertyConfig,
+  StateConfigMap,
+  StatePropertyConfig,
 } from './middlewares';
-
-export type {
-  StateValue,
-} from './state';
 
 export type {
   StateManager,

@@ -1,40 +1,38 @@
-import { ModelConfigMap } from './middlewares';
+import { StateConfigMap } from './middlewares';
 import { Handlers } from './reducer';
-import { StateValue } from './state';
 import {
   Disposable, ObjectType, PipeFunc,
 } from './utils';
 import { createStateManager, Dispatcher, StateManager } from './stateManager';
 import { createViewModelManager, ViewModelManager } from './viewModelManager';
 
-export type CreateCoreResult<TModel extends ObjectType,
-  TDictionary extends ObjectType,
-  THandlers extends Handlers<StateValue<TModel, TDictionary>>,
+export type CreateCoreResult<
+  TState extends ObjectType,
+  THandlers extends Handlers<TState>,
   TViewModels extends Record<PropertyKey, ObjectType>,
   > = [
-    stateManager: StateManager<TModel, TDictionary>,
-    viewModelManager: Disposable<ViewModelManager<StateValue<TModel, TDictionary>, TViewModels>>,
-    dispatcher: Dispatcher<TModel, TDictionary, THandlers>,
+    stateManager: StateManager<TState>,
+    viewModelManager: Disposable<ViewModelManager<TState, TViewModels>>,
+    dispatcher: Dispatcher<TState, THandlers>,
   ];
 
 export function createCore<TViewModels extends ObjectType>() {
   return <
-    TModel extends ObjectType,
-    TDictionary extends ObjectType,
-    THandlers extends Handlers<StateValue<TModel, TDictionary>>,
+    TState extends ObjectType,
+    THandlers extends Handlers<TState>,
     >(
-    initialState: StateValue<TModel, TDictionary>,
-    stateConfig: ModelConfigMap<TModel>,
+    initialState: TState,
+    stateConfig: StateConfigMap<TState>,
     actionHandlers: THandlers,
-    validation: PipeFunc<StateValue<TModel, TDictionary>>[] = [],
-  ): CreateCoreResult<TModel, TDictionary, THandlers, TViewModels> => {
+    validation: PipeFunc<TState>[] = [],
+  ): CreateCoreResult<TState, THandlers, TViewModels> => {
     const [stateManager, dispatcher] = createStateManager(
       initialState,
       stateConfig,
       actionHandlers,
       validation,
     );
-    const viewModelManager = createViewModelManager<StateValue<TModel, TDictionary>, TViewModels>();
+    const viewModelManager = createViewModelManager<TState, TViewModels>();
 
     return [
       stateManager,

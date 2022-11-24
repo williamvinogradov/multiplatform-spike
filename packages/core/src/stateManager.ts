@@ -1,23 +1,19 @@
-import { callbacksMiddleware, controlledModeMiddleware, ModelConfigMap } from './middlewares';
+import { callbacksMiddleware, controlledModeMiddleware, StateConfigMap } from './middlewares';
 import { createReducer, Handlers } from './reducer';
-import { createState, StateValue } from './state';
+import { createState } from './state';
 import {
   ObjectType, pipe, PipeFunc,
 } from './utils';
 
-export interface StateManager<
-  TModel extends ObjectType,
-  TDictionary extends ObjectType,
-  > {
-  addUpdate: (statePart: Partial<StateValue<Partial<TModel>, Partial<TDictionary>>>) => void;
+export interface StateManager<TState extends ObjectType> {
+  addUpdate: (statePart: Partial<TState>) => void;
   commitUpdates: () => void;
   rollbackUpdates: () => void;
 }
 
 export interface Dispatcher<
-  TModel extends ObjectType,
-  TDictionary extends ObjectType,
-  THandlers extends Handlers<StateValue<TModel, TDictionary>>,
+  TState extends ObjectType,
+  THandlers extends Handlers<TState>,
   > {
   dispatch: <TAction extends keyof THandlers>(
     action: TAction,
@@ -26,40 +22,38 @@ export interface Dispatcher<
 }
 
 export type StateStoreTuple<
-  TModel extends ObjectType,
-  TDictionary extends ObjectType,
-  THandlers extends Handlers<StateValue<TModel, TDictionary>>,
+  TState extends ObjectType,
+  THandlers extends Handlers<TState>,
   > = [
-  store: StateManager<TModel, TDictionary>,
-  dispatcher: Dispatcher<TModel, TDictionary, THandlers>,
+  stateManager: StateManager<TState>,
+  dispatcher: Dispatcher<TState, THandlers>,
   ];
 
 export function createStateManager<
-  TModel extends ObjectType,
-  TDictionary extends ObjectType,
-  THandlers extends Handlers<StateValue<TModel, TDictionary>>,
+  TState extends ObjectType,
+  THandlers extends Handlers<TState>,
   >(
-  initialState: StateValue<TModel, TDictionary>,
-  stateConfig: ModelConfigMap<TModel>,
+  initialState: TState,
+  stateConfig: StateConfigMap<TState>,
   actionHandlers: THandlers,
-  validation: PipeFunc<StateValue<TModel, TDictionary>>[] = [],
-): StateStoreTuple<TModel, TDictionary, THandlers> {
+  validation: PipeFunc<TState>[] = [],
+): StateStoreTuple<TState, THandlers> {
   const state = createState(initialState);
-  const reducer = createReducer<StateValue<TModel, TDictionary>>()(actionHandlers);
+  const reducer = createReducer<TState>()(actionHandlers);
   const validator = pipe(...validation);
 
   const changeState = (
-    currentStateValue: StateValue<TModel, TDictionary>,
-    validatedStateValue: StateValue<TModel, TDictionary>,
+    currentState: TState,
+    validatedState: TState,
   ): boolean => {
-    const [newModel, hasChanges] = controlledModeMiddleware(
-      currentStateValue.model,
-      validatedStateValue.model,
+    const [newState, hasChanges] = controlledModeMiddleware(
+      currentState,
+      validatedState,
       stateConfig,
     );
 
     if (hasChanges) {
-      state.addUpdate({ model: newModel });
+      state.addUpdate(newState);
       state.commitUpdates();
     }
 
@@ -67,12 +61,12 @@ export function createStateManager<
   };
 
   const callCallbacks = (
-    currentStateValue: StateValue<TModel, TDictionary>,
-    validatedStateValue: StateValue<TModel, TDictionary>,
+    currentState: TState,
+    validatedState: TState,
   ): void => {
     const pendingCallbacks = callbacksMiddleware(
-      currentStateValue.model,
-      validatedStateValue.model,
+      currentState,
+      validatedState,
       stateConfig,
     );
 
@@ -82,36 +76,33 @@ export function createStateManager<
   const commitUpdates = () => {
     state.commitUpdates();
 
-    const currentStateValue = state.getCurrent();
-    const validatedStateValue = validator(currentStateValue);
+    const currentState = state.getCurrent();
+    const validatedState = validator(currentState);
 
-    changeState(currentStateValue, validatedStateValue);
+    changeState(currentState, validatedState);
     state.triggerRender(state.getCurrent());
 
-    callCallbacks(currentStateValue, validatedStateValue);
+    callCallbacks(currentState, validatedState);
   };
 
   const dispatch = <TAction extends keyof THandlers>(
     action: TAction,
     value: Parameters<THandlers[TAction]>[1],
   ) => {
-    const currentStateValue = state.getCurrent();
-    const newStateVersion = {
-      ...currentStateValue,
-      model: {
-        ...currentStateValue.model,
-        ...reducer(currentStateValue, action, value),
-      },
+    const currentState = state.getCurrent();
+    const newState = {
+      ...currentState,
+      ...reducer(currentState, action, value),
     };
-    const validatedStateValue = validator(newStateVersion);
+    const validatedState = validator(newState);
 
-    const hasChanges = changeState(currentStateValue, validatedStateValue);
+    const hasChanges = changeState(currentState, validatedState);
 
     if (hasChanges) {
       state.triggerRender(state.getCurrent());
     }
 
-    callCallbacks(currentStateValue, validatedStateValue);
+    callCallbacks(currentState, validatedState);
   };
 
   return [{

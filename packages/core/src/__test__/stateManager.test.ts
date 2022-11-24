@@ -18,8 +18,8 @@ const stateMock = {
   triggerRender: jest.fn(),
   subscribeForRender: jest.fn(),
 };
-const stateModelProp = 'propA';
-const stateValueMock = { model: { [stateModelProp]: 0 }, dictionary: {} };
+const stateProp = 'propA';
+const stateValueMock = { [stateProp]: 0 };
 
 const createReducerMock = jest.mocked(createReducer);
 const secondCreateReducerMock = jest.fn();
@@ -31,7 +31,7 @@ const validatorMock = jest.fn();
 const callbacksMiddlewareMock = jest.mocked(callbacksMiddleware);
 const controlledMiddlewareMock = jest.mocked(controlledModeMiddleware);
 
-describe('Core: Component', () => {
+describe('StateManager', () => {
   beforeEach(() => {
     createStateMock.mockReturnValue(stateMock);
     createReducerMock.mockReturnValue(secondCreateReducerMock);
@@ -44,254 +44,258 @@ describe('Core: Component', () => {
 
   afterAll(() => { jest.clearAllMocks(); });
 
-  describe('StateManager', () => {
-    describe('commitUpdates', () => {
-      it('calls state\'s base method', () => {
-        const [manager] = createStateManager(stateValueMock, {}, {});
-        manager.commitUpdates();
+  describe('commitUpdates', () => {
+    it('calls state base method', () => {
+      const [manager] = createStateManager(stateValueMock, {}, {});
+      manager.commitUpdates();
 
-        expect(stateMock.commitUpdates).toHaveBeenCalledTimes(1);
-      });
-
-      it('calls validator', () => {
-        const expectedToValidateState = {};
-        stateMock.getCurrent.mockReturnValue(expectedToValidateState);
-
-        const [manager] = createStateManager(stateValueMock, {}, {});
-        manager.commitUpdates();
-
-        expect(validatorMock).toHaveBeenCalledTimes(1);
-        expect(validatorMock).toHaveBeenCalledWith(expectedToValidateState);
-      });
-
-      it('calls all needed callbacks', () => {
-        const neededCallbacks = [jest.fn(), jest.fn(), jest.fn()];
-        callbacksMiddlewareMock.mockReturnValue(neededCallbacks);
-
-        const [manager] = createStateManager(stateValueMock, {}, {});
-        manager.commitUpdates();
-
-        neededCallbacks.forEach((callbackMock) => {
-          expect(callbackMock).toHaveBeenCalledTimes(1);
-        });
-      });
-
-      it('calls state\'s commitUpdates again and updates state\'s model'
-        + ' if model has changes after middleware', () => {
-        const expectedModel = {};
-        controlledMiddlewareMock.mockImplementation(() => {
-          stateMock.commitUpdates.mockReset();
-          return [expectedModel, true];
-        });
-
-        const [manager] = createStateManager(stateValueMock, {}, {});
-        manager.commitUpdates();
-
-        expect(stateMock.commitUpdates).toHaveBeenCalledTimes(1);
-        expect(stateMock.addUpdate).toHaveBeenCalledTimes(1);
-        const [[{ model }]] = stateMock.addUpdate.mock.calls;
-        expect(model).toBe(expectedModel);
-      });
-
-      it('doesn\'t call state\'s commitUpdates again and doesn\'t update state\'s model'
-        + ' if model hasn\'t changes after middleware', () => {
-        controlledMiddlewareMock.mockImplementation(() => {
-          stateMock.commitUpdates.mockReset();
-          return [{}, false];
-        });
-
-        const [manager] = createStateManager(stateValueMock, {}, {});
-        manager.commitUpdates();
-
-        expect(stateMock.commitUpdates).not.toHaveBeenCalled();
-        expect(stateMock.addUpdate).not.toHaveBeenCalled();
-      });
-
-      it('always call state\'s triggerRender independent of the model changes', () => {
-        const expectedStateCurrent = {};
-        const possibleHasChanges = [true, false];
-        stateMock.getCurrent.mockReturnValue(expectedStateCurrent);
-
-        const [manager] = createStateManager(stateValueMock, {}, {});
-
-        possibleHasChanges.forEach((hasChanges) => {
-          controlledMiddlewareMock.mockReturnValue([{}, hasChanges]);
-          manager.commitUpdates();
-
-          expect(stateMock.triggerRender).toHaveBeenCalledTimes(1);
-          expect(stateMock.triggerRender).toHaveBeenCalledWith(expectedStateCurrent);
-          stateMock.triggerRender.mockReset();
-        });
-      });
-    });
-
-    describe('addUpdate', () => {
-      it('calls state\'s base method', () => {
-        const expectedUpdate = {};
-        const [manager] = createStateManager(stateValueMock, {}, {});
-        manager.addUpdate(expectedUpdate);
-
-        expect(stateMock.addUpdate).toHaveBeenCalledTimes(1);
-        expect(stateMock.addUpdate).toBeCalledWith(expectedUpdate);
-      });
-    });
-
-    describe('rollbackUpdates', () => {
-      it('calls state\'s base method', () => {
-        const [manager] = createStateManager(stateValueMock, {}, {});
-        manager.rollbackUpdates();
-
-        expect(stateMock.rollbackUpdates).toHaveBeenCalledTimes(1);
-      });
-    });
-  });
-
-  describe('Dispatcher', () => {
-    it('calls reducer', () => {
-      const expectedState = {};
-      const expectedValue = {};
-      stateMock.getCurrent.mockReturnValue(expectedState);
-
-      const [, dispatcher] = createStateManager(
-        stateValueMock,
-        {},
-        { [stateModelProp]: jest.fn() },
-      );
-      dispatcher.dispatch(stateModelProp, expectedValue);
-
-      expect(reducerMock).toHaveBeenCalledTimes(1);
-      expect(reducerMock).toHaveBeenCalledWith(expectedState, stateModelProp, expectedValue);
+      expect(stateMock.commitUpdates).toHaveBeenCalledTimes(1);
     });
 
     it('calls validator', () => {
-      const [, dispatcher] = createStateManager(
-        stateValueMock,
-        {},
-        { [stateModelProp]: jest.fn() },
-      );
-      dispatcher.dispatch(stateModelProp, {});
+      const expectedToValidateState = {};
+      stateMock.getCurrent.mockReturnValue(expectedToValidateState);
+
+      const [manager] = createStateManager(stateValueMock, {}, {});
+      manager.commitUpdates();
 
       expect(validatorMock).toHaveBeenCalledTimes(1);
-    });
-
-    it('don\'t mutate existing state value with reducer', () => {
-      const expectedModel = { [stateModelProp]: 2 };
-      reducerMock.mockReturnValue(expectedModel);
-
-      const [, dispatcher] = createStateManager(
-        stateValueMock,
-        {},
-        { [stateModelProp]: jest.fn() },
-      );
-      dispatcher.dispatch(stateModelProp, {});
-
-      const [[{ model }]] = validatorMock.mock.calls;
-      expect(model).not.toBe(expectedModel);
-    });
-
-    it('applies reducer model changes to validator', () => {
-      const expectedModel = { [stateModelProp]: 2 };
-      reducerMock.mockReturnValue(expectedModel);
-
-      const [, dispatcher] = createStateManager(
-        stateValueMock,
-        {},
-        { [stateModelProp]: jest.fn() },
-      );
-      dispatcher.dispatch(stateModelProp, {});
-
-      const [[{ model }]] = validatorMock.mock.calls;
-      expect(model).toStrictEqual(expectedModel);
-    });
-
-    it('correctly merge reducer model changes and applies it to validator', () => {
-      const testStateValueMock = {
-        model: {
-          propA: 0,
-          probB: 0,
-        },
-        dictionary: {},
-      };
-      const reducerChanges = { propA: 2 };
-      const expectedModel = {
-        ...testStateValueMock.model,
-        ...reducerChanges,
-      };
-      reducerMock.mockReturnValue(reducerChanges);
-      stateMock.getCurrent.mockReturnValue(testStateValueMock);
-
-      const [, dispatcher] = createStateManager(
-        testStateValueMock,
-        {},
-        { [stateModelProp]: jest.fn() },
-      );
-      dispatcher.dispatch(stateModelProp, {});
-
-      const [[{ model }]] = validatorMock.mock.calls;
-      expect(model).toStrictEqual(expectedModel);
+      expect(validatorMock).toHaveBeenCalledWith(expectedToValidateState);
     });
 
     it('calls all needed callbacks', () => {
       const neededCallbacks = [jest.fn(), jest.fn(), jest.fn()];
       callbacksMiddlewareMock.mockReturnValue(neededCallbacks);
 
-      const [, dispatcher] = createStateManager(
-        stateValueMock,
-        {},
-        { [stateModelProp]: jest.fn() },
-      );
-      dispatcher.dispatch(stateModelProp, {});
+      const [manager] = createStateManager(stateValueMock, {}, {});
+      manager.commitUpdates();
 
       neededCallbacks.forEach((callbackMock) => {
         expect(callbackMock).toHaveBeenCalledTimes(1);
       });
     });
 
-    it('calls state\'s commitUpdates and updates state\'s model if model has changes after middleware', () => {
-      controlledMiddlewareMock.mockReturnValue([{}, true]);
+    it('calls state commitUpdates again and updates state model'
+      + ' if model has changes after middleware', () => {
+      const expectedStateValue = {};
+      controlledMiddlewareMock.mockImplementation(() => {
+        stateMock.commitUpdates.mockReset();
+        return [expectedStateValue, true];
+      });
 
-      const [, dispatcher] = createStateManager(
-        stateValueMock,
-        {},
-        { [stateModelProp]: jest.fn() },
-      );
-      dispatcher.dispatch(stateModelProp, {});
+      const [manager] = createStateManager(stateValueMock, {}, {});
+      manager.commitUpdates();
 
       expect(stateMock.commitUpdates).toHaveBeenCalledTimes(1);
       expect(stateMock.addUpdate).toHaveBeenCalledTimes(1);
+      expect(stateMock.addUpdate).toHaveBeenCalledWith(expectedStateValue);
     });
 
-    it('doesn\'t call state\'s commitUpdates and doesn\'t update state\'s model '
-      + 'if model has changes after middleware', () => {
-      controlledMiddlewareMock.mockReturnValue([{}, false]);
+    it('doesn\'t call state\'s commitUpdates again and doesn\'t update state\'s model'
+      + ' if model hasn\'t changes after middleware', () => {
+      controlledMiddlewareMock.mockImplementation(() => {
+        stateMock.commitUpdates.mockReset();
+        return [{}, false];
+      });
 
-      const [, dispatcher] = createStateManager(
-        stateValueMock,
-        {},
-        { [stateModelProp]: jest.fn() },
-      );
-      dispatcher.dispatch(stateModelProp, {});
+      const [manager] = createStateManager(stateValueMock, {}, {});
+      manager.commitUpdates();
 
       expect(stateMock.commitUpdates).not.toHaveBeenCalled();
       expect(stateMock.addUpdate).not.toHaveBeenCalled();
     });
 
-    it('calls state\'s triggerRender only if model has changes after middleware', () => {
-      const [, dispatcher] = createStateManager(
-        stateValueMock,
-        {},
-        { [stateModelProp]: jest.fn() },
-      );
+    it('always call state\'s triggerRender independent of the model changes', () => {
+      const expectedStateCurrent = {};
+      const possibleHasChanges = [true, false];
+      stateMock.getCurrent.mockReturnValue(expectedStateCurrent);
 
-      controlledMiddlewareMock.mockReturnValue([{}, false]);
-      dispatcher.dispatch(stateModelProp, {});
+      const [manager] = createStateManager(stateValueMock, {}, {});
 
-      expect(stateMock.triggerRender).not.toHaveBeenCalled();
+      possibleHasChanges.forEach((hasChanges) => {
+        controlledMiddlewareMock.mockReturnValue([{}, hasChanges]);
+        manager.commitUpdates();
 
-      controlledMiddlewareMock.mockReturnValue([{}, true]);
-      dispatcher.dispatch(stateModelProp, {});
-
-      expect(stateMock.triggerRender).toHaveBeenCalledTimes(1);
+        expect(stateMock.triggerRender).toHaveBeenCalledTimes(1);
+        expect(stateMock.triggerRender).toHaveBeenCalledWith(expectedStateCurrent);
+        stateMock.triggerRender.mockReset();
+      });
     });
+  });
+
+  describe('addUpdate', () => {
+    it('calls state\'s base method', () => {
+      const expectedUpdate = {};
+      const [manager] = createStateManager(stateValueMock, {}, {});
+      manager.addUpdate(expectedUpdate);
+
+      expect(stateMock.addUpdate).toHaveBeenCalledTimes(1);
+      expect(stateMock.addUpdate).toBeCalledWith(expectedUpdate);
+    });
+  });
+
+  describe('rollbackUpdates', () => {
+    it('calls state\'s base method', () => {
+      const [manager] = createStateManager(stateValueMock, {}, {});
+      manager.rollbackUpdates();
+
+      expect(stateMock.rollbackUpdates).toHaveBeenCalledTimes(1);
+    });
+  });
+});
+
+describe('Dispatcher', () => {
+  beforeEach(() => {
+    createStateMock.mockReturnValue(stateMock);
+    createReducerMock.mockReturnValue(secondCreateReducerMock);
+    secondCreateReducerMock.mockReturnValue(reducerMock);
+    pipeMock.mockReturnValue(validatorMock);
+    validatorMock.mockReturnValue({});
+    callbacksMiddlewareMock.mockReturnValue([]);
+    controlledMiddlewareMock.mockReturnValue([{}, false]);
+  });
+
+  afterAll(() => { jest.clearAllMocks(); });
+
+  it('calls reducer', () => {
+    const expectedState = {};
+    const expectedValue = {};
+    stateMock.getCurrent.mockReturnValue(expectedState);
+
+    const [, dispatcher] = createStateManager(
+      stateValueMock,
+      {},
+      { [stateProp]: jest.fn() },
+    );
+    dispatcher.dispatch(stateProp, expectedValue);
+
+    expect(reducerMock).toHaveBeenCalledTimes(1);
+    expect(reducerMock).toHaveBeenCalledWith(expectedState, stateProp, expectedValue);
+  });
+
+  it('calls validator', () => {
+    const [, dispatcher] = createStateManager(
+      stateValueMock,
+      {},
+      { [stateProp]: jest.fn() },
+    );
+    dispatcher.dispatch(stateProp, {});
+
+    expect(validatorMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('dont mutate existing state value with reducer', () => {
+    const expectedModel = { [stateProp]: 2 };
+    reducerMock.mockReturnValue(expectedModel);
+
+    const [, dispatcher] = createStateManager(
+      stateValueMock,
+      {},
+      { [stateProp]: jest.fn() },
+    );
+    dispatcher.dispatch(stateProp, {});
+
+    expect(validatorMock).toHaveBeenCalledWith(expectedModel);
+  });
+
+  it('applies reducer model changes to validator', () => {
+    const expectedState = { [stateProp]: 2 };
+    reducerMock.mockReturnValue(expectedState);
+
+    const [, dispatcher] = createStateManager(
+      stateValueMock,
+      {},
+      { [stateProp]: jest.fn() },
+    );
+    dispatcher.dispatch(stateProp, {});
+
+    const [[result]] = validatorMock.mock.calls;
+    expect(result).toStrictEqual(expectedState);
+  });
+
+  it('correctly merge reducer model changes and applies it to validator', () => {
+    const testStateValueMock = {
+      propA: 0,
+      probB: 0,
+    };
+    const reducerChanges = { propA: 2 };
+    const expectedState = {
+      ...testStateValueMock,
+      ...reducerChanges,
+    };
+    reducerMock.mockReturnValue(reducerChanges);
+    stateMock.getCurrent.mockReturnValue(testStateValueMock);
+
+    const [, dispatcher] = createStateManager(
+      testStateValueMock,
+      {},
+      { [stateProp]: jest.fn() },
+    );
+    dispatcher.dispatch(stateProp, {});
+
+    expect(validatorMock).toHaveBeenCalledWith(expectedState);
+  });
+
+  it('calls all needed callbacks', () => {
+    const neededCallbacks = [jest.fn(), jest.fn(), jest.fn()];
+    callbacksMiddlewareMock.mockReturnValue(neededCallbacks);
+
+    const [, dispatcher] = createStateManager(
+      stateValueMock,
+      {},
+      { [stateProp]: jest.fn() },
+    );
+    dispatcher.dispatch(stateProp, {});
+
+    neededCallbacks.forEach((callbackMock) => {
+      expect(callbackMock).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  it('calls state\'s commitUpdates and updates state\'s model if model has changes after middleware', () => {
+    controlledMiddlewareMock.mockReturnValue([{}, true]);
+
+    const [, dispatcher] = createStateManager(
+      stateValueMock,
+      {},
+      { [stateProp]: jest.fn() },
+    );
+    dispatcher.dispatch(stateProp, {});
+
+    expect(stateMock.commitUpdates).toHaveBeenCalledTimes(1);
+    expect(stateMock.addUpdate).toHaveBeenCalledTimes(1);
+  });
+
+  it('doesn\'t call state\'s commitUpdates and doesn\'t update state\'s model '
+    + 'if model has changes after middleware', () => {
+    controlledMiddlewareMock.mockReturnValue([{}, false]);
+
+    const [, dispatcher] = createStateManager(
+      stateValueMock,
+      {},
+      { [stateProp]: jest.fn() },
+    );
+    dispatcher.dispatch(stateProp, {});
+
+    expect(stateMock.commitUpdates).not.toHaveBeenCalled();
+    expect(stateMock.addUpdate).not.toHaveBeenCalled();
+  });
+
+  it('calls state\'s triggerRender only if model has changes after middleware', () => {
+    const [, dispatcher] = createStateManager(
+      stateValueMock,
+      {},
+      { [stateProp]: jest.fn() },
+    );
+
+    controlledMiddlewareMock.mockReturnValue([{}, false]);
+    dispatcher.dispatch(stateProp, {});
+
+    expect(stateMock.triggerRender).not.toHaveBeenCalled();
+
+    controlledMiddlewareMock.mockReturnValue([{}, true]);
+    dispatcher.dispatch(stateProp, {});
+
+    expect(stateMock.triggerRender).toHaveBeenCalledTimes(1);
   });
 });
