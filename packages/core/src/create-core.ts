@@ -4,8 +4,8 @@ import { createState } from './state';
 import {
   Disposable, ObjectType, PipeFunc,
 } from './utils';
-import { createStateManager, Dispatcher, StateManager } from './stateManager';
-import { createViewModelManager, ViewModelManager } from './viewModelManager';
+import { createStateManager, Dispatcher, StateManager } from './state-manager';
+import { createViewModelManager, ViewModelManager } from './view-model-manager';
 
 export type CreateCoreResult<
   TState extends ObjectType,
