@@ -1,11 +1,14 @@
+import { createState } from '../state';
 import { DISPOSE } from '../utils';
 import { createCore } from '../createCore';
 import { createStateManager } from '../stateManager';
 import { createViewModelManager } from '../viewModelManager';
 
+jest.mock('../state');
 jest.mock('../stateManager');
 jest.mock('../viewModelManager');
 
+const createStateMock = jest.mocked(createState);
 const createStateManagerMock = jest.mocked(createStateManager);
 const createViewModelManagerMock = jest.mocked(createViewModelManager);
 
@@ -29,6 +32,11 @@ describe('Core: Component', () => {
   });
 
   afterAll(() => { jest.resetAllMocks(); });
+
+  it('creates state', () => {
+    createCore()(stateMock, {}, {});
+    expect(createStateMock).toHaveBeenCalledTimes(1);
+  });
 
   it('creates state manager', () => {
     createCore()(stateMock, {}, {});

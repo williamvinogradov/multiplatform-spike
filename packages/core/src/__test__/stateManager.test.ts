@@ -1,15 +1,12 @@
 import { callbacksMiddleware, controlledModeMiddleware } from '../middlewares';
 import { createReducer } from '../reducer';
-import { createState } from '../state';
 import { pipe } from '../utils';
 import { createStateManager } from '../stateManager';
 
 jest.mock('../utils');
-jest.mock('../state');
 jest.mock('../reducer');
 jest.mock('../middlewares');
 
-const createStateMock = jest.mocked(createState);
 const stateMock = {
   addUpdate: jest.fn(),
   commitUpdates: jest.fn(),
@@ -19,7 +16,6 @@ const stateMock = {
   subscribeForRender: jest.fn(),
 };
 const stateProp = 'propA';
-const stateValueMock = { [stateProp]: 0 };
 
 const createReducerMock = jest.mocked(createReducer);
 const secondCreateReducerMock = jest.fn();
@@ -33,7 +29,6 @@ const controlledMiddlewareMock = jest.mocked(controlledModeMiddleware);
 
 describe('StateManager', () => {
   beforeEach(() => {
-    createStateMock.mockReturnValue(stateMock);
     createReducerMock.mockReturnValue(secondCreateReducerMock);
     secondCreateReducerMock.mockReturnValue(reducerMock);
     pipeMock.mockReturnValue(validatorMock);
@@ -46,7 +41,7 @@ describe('StateManager', () => {
 
   describe('commitUpdates', () => {
     it('calls state base method', () => {
-      const [manager] = createStateManager(stateValueMock, {}, {});
+      const [manager] = createStateManager(stateMock, {}, {});
       manager.commitUpdates();
 
       expect(stateMock.commitUpdates).toHaveBeenCalledTimes(1);
@@ -56,7 +51,7 @@ describe('StateManager', () => {
       const expectedToValidateState = {};
       stateMock.getCurrent.mockReturnValue(expectedToValidateState);
 
-      const [manager] = createStateManager(stateValueMock, {}, {});
+      const [manager] = createStateManager(stateMock, {}, {});
       manager.commitUpdates();
 
       expect(validatorMock).toHaveBeenCalledTimes(1);
@@ -67,7 +62,7 @@ describe('StateManager', () => {
       const neededCallbacks = [jest.fn(), jest.fn(), jest.fn()];
       callbacksMiddlewareMock.mockReturnValue(neededCallbacks);
 
-      const [manager] = createStateManager(stateValueMock, {}, {});
+      const [manager] = createStateManager(stateMock, {}, {});
       manager.commitUpdates();
 
       neededCallbacks.forEach((callbackMock) => {
@@ -83,7 +78,7 @@ describe('StateManager', () => {
         return [expectedStateValue, true];
       });
 
-      const [manager] = createStateManager(stateValueMock, {}, {});
+      const [manager] = createStateManager(stateMock, {}, {});
       manager.commitUpdates();
 
       expect(stateMock.commitUpdates).toHaveBeenCalledTimes(1);
@@ -98,7 +93,7 @@ describe('StateManager', () => {
         return [{}, false];
       });
 
-      const [manager] = createStateManager(stateValueMock, {}, {});
+      const [manager] = createStateManager(stateMock, {}, {});
       manager.commitUpdates();
 
       expect(stateMock.commitUpdates).not.toHaveBeenCalled();
@@ -110,7 +105,7 @@ describe('StateManager', () => {
       const possibleHasChanges = [true, false];
       stateMock.getCurrent.mockReturnValue(expectedStateCurrent);
 
-      const [manager] = createStateManager(stateValueMock, {}, {});
+      const [manager] = createStateManager(stateMock, {}, {});
 
       possibleHasChanges.forEach((hasChanges) => {
         controlledMiddlewareMock.mockReturnValue([{}, hasChanges]);
@@ -126,7 +121,7 @@ describe('StateManager', () => {
   describe('addUpdate', () => {
     it('calls state\'s base method', () => {
       const expectedUpdate = {};
-      const [manager] = createStateManager(stateValueMock, {}, {});
+      const [manager] = createStateManager(stateMock, {}, {});
       manager.addUpdate(expectedUpdate);
 
       expect(stateMock.addUpdate).toHaveBeenCalledTimes(1);
@@ -136,7 +131,7 @@ describe('StateManager', () => {
 
   describe('rollbackUpdates', () => {
     it('calls state\'s base method', () => {
-      const [manager] = createStateManager(stateValueMock, {}, {});
+      const [manager] = createStateManager(stateMock, {}, {});
       manager.rollbackUpdates();
 
       expect(stateMock.rollbackUpdates).toHaveBeenCalledTimes(1);
@@ -146,7 +141,6 @@ describe('StateManager', () => {
 
 describe('Dispatcher', () => {
   beforeEach(() => {
-    createStateMock.mockReturnValue(stateMock);
     createReducerMock.mockReturnValue(secondCreateReducerMock);
     secondCreateReducerMock.mockReturnValue(reducerMock);
     pipeMock.mockReturnValue(validatorMock);
@@ -163,7 +157,7 @@ describe('Dispatcher', () => {
     stateMock.getCurrent.mockReturnValue(expectedState);
 
     const [, dispatcher] = createStateManager(
-      stateValueMock,
+      stateMock,
       {},
       { [stateProp]: jest.fn() },
     );
@@ -175,7 +169,7 @@ describe('Dispatcher', () => {
 
   it('calls validator', () => {
     const [, dispatcher] = createStateManager(
-      stateValueMock,
+      stateMock,
       {},
       { [stateProp]: jest.fn() },
     );
@@ -189,7 +183,7 @@ describe('Dispatcher', () => {
     reducerMock.mockReturnValue(expectedModel);
 
     const [, dispatcher] = createStateManager(
-      stateValueMock,
+      stateMock,
       {},
       { [stateProp]: jest.fn() },
     );
@@ -203,7 +197,7 @@ describe('Dispatcher', () => {
     reducerMock.mockReturnValue(expectedState);
 
     const [, dispatcher] = createStateManager(
-      stateValueMock,
+      stateMock,
       {},
       { [stateProp]: jest.fn() },
     );
@@ -227,7 +221,7 @@ describe('Dispatcher', () => {
     stateMock.getCurrent.mockReturnValue(testStateValueMock);
 
     const [, dispatcher] = createStateManager(
-      testStateValueMock,
+      stateMock,
       {},
       { [stateProp]: jest.fn() },
     );
@@ -241,7 +235,7 @@ describe('Dispatcher', () => {
     callbacksMiddlewareMock.mockReturnValue(neededCallbacks);
 
     const [, dispatcher] = createStateManager(
-      stateValueMock,
+      stateMock,
       {},
       { [stateProp]: jest.fn() },
     );
@@ -256,7 +250,7 @@ describe('Dispatcher', () => {
     controlledMiddlewareMock.mockReturnValue([{}, true]);
 
     const [, dispatcher] = createStateManager(
-      stateValueMock,
+      stateMock,
       {},
       { [stateProp]: jest.fn() },
     );
@@ -271,7 +265,7 @@ describe('Dispatcher', () => {
     controlledMiddlewareMock.mockReturnValue([{}, false]);
 
     const [, dispatcher] = createStateManager(
-      stateValueMock,
+      stateMock,
       {},
       { [stateProp]: jest.fn() },
     );
@@ -283,7 +277,7 @@ describe('Dispatcher', () => {
 
   it('calls state\'s triggerRender only if model has changes after middleware', () => {
     const [, dispatcher] = createStateManager(
-      stateValueMock,
+      stateMock,
       {},
       { [stateProp]: jest.fn() },
     );

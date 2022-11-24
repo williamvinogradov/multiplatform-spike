@@ -11,7 +11,21 @@ const viewModelMock = {
   [DISPOSE]: jest.fn(),
 };
 
+const stateMock = {
+  addUpdate: jest.fn(),
+  commitUpdates: jest.fn(),
+  rollbackUpdates: jest.fn(),
+  getCurrent: jest.fn().mockReturnValue({}),
+  triggerRender: jest.fn(),
+  subscribeForRender: jest.fn(),
+};
+const stateValueMock = {};
+
 describe('Core: Component: ViewManager', () => {
+  beforeEach(() => {
+    stateMock.getCurrent.mockReturnValue(stateValueMock);
+  });
+
   afterAll(() => jest.resetAllMocks());
 
   it('adds new view model', () => {
@@ -21,8 +35,8 @@ describe('Core: Component: ViewManager', () => {
     const viewModelKey = 'viewModelA';
     createViewModelMock.mockReturnValue(expectedViewModel);
 
-    const manager = createViewModelManager();
-    manager.add({}, jest.fn(), {
+    const manager = createViewModelManager(stateMock);
+    manager.add({
       [viewModelKey]: jest.fn(),
     });
     const viewModels = manager.get();
@@ -31,29 +45,24 @@ describe('Core: Component: ViewManager', () => {
   });
 
   it('uses the createViewModel func for adding new view models', () => {
-    const stateValue = {};
-    const stateSubscribe = jest.fn();
-
-    const manager = createViewModelManager();
-    manager.add(stateValue, stateSubscribe, {
+    const manager = createViewModelManager(stateMock);
+    manager.add({
       A: jest.fn(),
       B: jest.fn(),
     });
 
     expect(createViewModelMock).toHaveBeenCalledTimes(2);
     expect(createViewModelMock)
-      .toHaveBeenNthCalledWith(1, stateValue, stateSubscribe, expect.anything());
+      .toHaveBeenNthCalledWith(1, stateValueMock, stateMock.subscribeForRender, expect.anything());
     expect(createViewModelMock)
-      .toHaveBeenNthCalledWith(2, stateValue, stateSubscribe, expect.anything());
+      .toHaveBeenNthCalledWith(2, stateValueMock, stateMock.subscribeForRender, expect.anything());
   });
 
   it('skips undefined selectors on the adding new view models', () => {
-    const stateValue = {};
-    const stateSubscribe = jest.fn();
     const expectedViewModelKeys = ['B'];
 
-    const manager = createViewModelManager();
-    manager.add(stateValue, stateSubscribe, {
+    const manager = createViewModelManager(stateMock);
+    manager.add({
       A: undefined,
       B: jest.fn(),
     });
@@ -66,9 +75,9 @@ describe('Core: Component: ViewManager', () => {
   it('throws error if adds view model with same key twice', () => {
     createViewModelMock.mockReturnValue(viewModelMock);
 
-    const manager = createViewModelManager();
+    const manager = createViewModelManager(stateMock);
     const addViewModel = () => {
-      manager.add({}, jest.fn(), {
+      manager.add({
         A: jest.fn(),
       });
     };
@@ -79,8 +88,8 @@ describe('Core: Component: ViewManager', () => {
   });
 
   it('deletes view models', () => {
-    const manager = createViewModelManager();
-    manager.add({}, jest.fn(), {
+    const manager = createViewModelManager(stateMock);
+    manager.add({
       A: jest.fn(),
       B: jest.fn(),
       C: jest.fn(),
@@ -109,8 +118,8 @@ describe('Core: Component: ViewManager', () => {
       }
     });
 
-    const manager = createViewModelManager();
-    manager.add({}, jest.fn(), {
+    const manager = createViewModelManager(stateMock);
+    manager.add({
       A: selectorA,
       B: jest.fn(),
       C: selectorC,
@@ -123,8 +132,8 @@ describe('Core: Component: ViewManager', () => {
   });
 
   it('does nothing on delete if view model with passed key doesn\'t exist', () => {
-    const manager = createViewModelManager();
-    manager.add({}, jest.fn(), {
+    const manager = createViewModelManager(stateMock);
+    manager.add({
       A: jest.fn(),
       B: jest.fn(),
     });
@@ -151,8 +160,8 @@ describe('Core: Component: ViewManager', () => {
       }
     });
 
-    const manager = createViewModelManager();
-    manager.add({}, jest.fn(), {
+    const manager = createViewModelManager(stateMock);
+    manager.add({
       A: selectorA,
       B: selectorB,
     });

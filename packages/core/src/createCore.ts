@@ -1,5 +1,6 @@
 import { StateConfigMap } from './middlewares';
 import { Handlers } from './reducer';
+import { createState } from './state';
 import {
   Disposable, ObjectType, PipeFunc,
 } from './utils';
@@ -26,13 +27,14 @@ export function createCore<TViewModels extends ObjectType>() {
     actionHandlers: THandlers,
     validation: PipeFunc<TState>[] = [],
   ): CreateCoreResult<TState, THandlers, TViewModels> => {
+    const state = createState(initialState);
     const [stateManager, dispatcher] = createStateManager(
-      initialState,
+      state,
       stateConfig,
       actionHandlers,
       validation,
     );
-    const viewModelManager = createViewModelManager<TState, TViewModels>();
+    const viewModelManager = createViewModelManager<TState, TViewModels>(state);
 
     return [
       stateManager,

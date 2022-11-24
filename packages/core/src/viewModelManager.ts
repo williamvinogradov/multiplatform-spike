@@ -1,38 +1,24 @@
+import { State } from './state';
 import {
-  Disposable, DISPOSE, getKeys, ObjectType, SubscribeFunc,
+  Disposable, DISPOSE, getKeys, ObjectType,
 } from './utils';
 import {
   createViewModel, SelectorMap, ViewModelMap,
 } from './view-model';
 
 export interface ViewModelManager<TState extends ObjectType, TViewModels extends ObjectType> {
-  add: (
-    stateValue: TState,
-    subscribeToUpdates: SubscribeFunc<TState>,
-    selectorMap: SelectorMap<TState, TViewModels>,
-  ) => void;
+  add: (selectorMap: SelectorMap<TState, TViewModels>) => void;
   remove: (...keys: (keyof TViewModels)[]) => void;
   get: () => Readonly<ViewModelMap<TViewModels>>;
 }
 
-export function createViewModelManager<TState extends ObjectType, TViewModels extends ObjectType>()
-: Disposable<ViewModelManager<TState, TViewModels>> {
+export function createViewModelManager<TState extends ObjectType, TViewModels extends ObjectType>(
+  state: State<TState>,
+)
+  : Disposable<ViewModelManager<TState, TViewModels>> {
   const viewModelMap: ViewModelMap<TViewModels> = {};
 
-  const remove = (
-    ...keys: (keyof TViewModels)[]
-  ): void => {
-    keys.forEach((key) => {
-      viewModelMap[key]?.[DISPOSE]();
-      delete viewModelMap[key];
-    });
-  };
-
-  const add = (
-    stateValue: TState,
-    subscribeToUpdates: SubscribeFunc<TState>,
-    selectorMap: SelectorMap<TState, TViewModels>,
-  ) => {
+  const add = (selectorMap: SelectorMap<TState, TViewModels>) => {
     getKeys(selectorMap).forEach((selectorKey) => {
       if (viewModelMap[selectorKey]) {
         throw Error(`View model with ${selectorKey.toString()} already exist.`);
@@ -40,8 +26,21 @@ export function createViewModelManager<TState extends ObjectType, TViewModels ex
 
       const selector = selectorMap[selectorKey];
       if (selector) {
-        viewModelMap[selectorKey] = createViewModel(stateValue, subscribeToUpdates, selector);
+        viewModelMap[selectorKey] = createViewModel(
+          state.getCurrent(),
+          state.subscribeForRender,
+          selector,
+        );
       }
+    });
+  };
+
+  const remove = (
+    ...keys: (keyof TViewModels)[]
+  ): void => {
+    keys.forEach((key) => {
+      viewModelMap[key]?.[DISPOSE]();
+      delete viewModelMap[key];
     });
   };
 

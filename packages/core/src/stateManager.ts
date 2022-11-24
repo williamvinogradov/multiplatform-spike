@@ -1,6 +1,6 @@
 import { callbacksMiddleware, controlledModeMiddleware, StateConfigMap } from './middlewares';
 import { createReducer, Handlers } from './reducer';
-import { createState } from './state';
+import { State } from './state';
 import {
   ObjectType, pipe, PipeFunc,
 } from './utils';
@@ -33,12 +33,11 @@ export function createStateManager<
   TState extends ObjectType,
   THandlers extends Handlers<TState>,
   >(
-  initialState: TState,
+  state: State<TState>,
   stateConfig: StateConfigMap<TState>,
   actionHandlers: THandlers,
   validation: PipeFunc<TState>[] = [],
 ): StateStoreTuple<TState, THandlers> {
-  const state = createState(initialState);
   const reducer = createReducer<TState>()(actionHandlers);
   const validator = pipe(...validation);
 
