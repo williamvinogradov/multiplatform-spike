@@ -12,9 +12,9 @@ const RADIO_BUTTON_ICON_DOT_CLASS = 'dx-radiobutton-icon-dot';
 const RADIO_BUTTON_CHECKED_CLASS = 'dx-radiobutton-checked';
 const RADIO_BUTTON_ICON_CHECKED_CLASS = 'dx-radiobutton-icon-checked';
 
-const DefaultRadioTemplate = React.memo<RadioTemplateProps>(({ selected }) => (
-  <span>{selected ? '◉' : '◎'}</span>
-));
+// const DefaultRadioTemplate = React.memo<RadioTemplateProps>(({ selected }) => (
+//   <span>{selected ? '◉' : '◎'}</span>
+// ));
 
 const DefaultDivRadioTemplate = React.memo<RadioTemplateProps>(
   ({ selected }) => {
