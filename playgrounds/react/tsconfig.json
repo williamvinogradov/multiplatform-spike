@@ -23,9 +23,4 @@
     "include": [
         "src"
     ],
-    "references": [
-        { "path": "../../packages/react/tsconfig.json"},
-        { "path": "../../packages/components/tsconfig.json"},
-        { "path": "../../packages/core/tsconfig.json"}
-    ]
 }

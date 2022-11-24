@@ -1,7 +1,7 @@
 {
   "name": "@devexpress/react",
   "version": "1.0.0",
-  "type": "module",
+  "sideEffects": false,
   "description": "",
   "scripts": {
     "clean": "del-cli dist",
