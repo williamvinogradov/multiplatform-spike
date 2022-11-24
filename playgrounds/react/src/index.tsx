@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import { BrowserRouter } from 'react-router-dom';
 import App from './app';
-import reportWebVitals from './reportWebVitals';
+import reportWebVitals from './report-web-vitals';
 
 const root = ReactDOM.createRoot(
   // eslint-disable-next-line no-undef

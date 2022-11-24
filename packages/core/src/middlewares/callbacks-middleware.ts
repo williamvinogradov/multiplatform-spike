@@ -1,6 +1,6 @@
 import { ActionFunc, ObjectType } from '../utils';
 import { StateConfigMap } from './types';
-import { getChangedKeys } from './getChangedKeys';
+import { getChangedKeys } from './get-changed-keys';
 
 export function callbacksMiddleware<TState extends ObjectType>(
   prev: TState,

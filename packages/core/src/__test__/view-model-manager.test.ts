@@ -1,6 +1,6 @@
 import { DISPOSE } from '../utils';
 import { createViewModel } from '../view-model';
-import { createViewModelManager } from '../viewModelManager';
+import { createViewModelManager } from '../view-model-manager';
 
 jest.mock('../view-model');
 

@@ -6,12 +6,12 @@ export type {
 export type {
   StateManager,
   Dispatcher,
-} from './stateManager';
+} from './state-manager';
 
 export type {
   ViewModelManager,
-} from './viewModelManager';
+} from './view-model-manager';
 
 export {
   createCore,
-} from './createCore';
+} from './create-core';

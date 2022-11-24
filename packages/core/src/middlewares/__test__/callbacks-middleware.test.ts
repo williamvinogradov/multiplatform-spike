@@ -1,5 +1,5 @@
-import { callbacksMiddleware } from '../callbacksMiddleware';
-import { getChangedKeys } from '../getChangedKeys';
+import { callbacksMiddleware } from '../callbacks-middleware';
+import { getChangedKeys } from '../get-changed-keys';
 
 jest.mock('../getChangedKeys');
 const getChangedKeysMock = jest.mocked(getChangedKeys);

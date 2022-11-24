@@ -1,7 +1,7 @@
 import { callbacksMiddleware, controlledModeMiddleware } from '../middlewares';
 import { createReducer } from '../reducer';
 import { pipe } from '../utils';
-import { createStateManager } from '../stateManager';
+import { createStateManager } from '../state-manager';
 
 jest.mock('../utils');
 jest.mock('../reducer');
