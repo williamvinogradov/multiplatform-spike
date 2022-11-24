@@ -1,7 +1,6 @@
 {
   "name": "@devexpress/components",
   "version": "1.0.0",
-  "type": "module",
   "sideEffects": false,
   "scripts": {
     "clean": "del-cli dist",
