@@ -5,6 +5,8 @@ import {
   PayloadTemplateProps,
 } from '@devexpress/react';
 
+import '@devexpress/react/dist/index.css';
+
 const CustomRadio: React.FC<RadioTemplateProps> = ({ selected }) => (
   <span>{selected ? '+' : '-'}</span>
 );
