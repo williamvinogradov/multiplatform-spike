@@ -1,6 +1,7 @@
 {
   "name": "@devexpress/core",
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
     "clean": "del-cli dist",
     "build": "npm run clean && rollup -c rollup/rollup.mjs",
