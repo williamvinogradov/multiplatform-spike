@@ -5,8 +5,8 @@ import { createStateManager } from '../state-manager';
 import { createViewModelManager } from '../view-model-manager';
 
 jest.mock('../state');
-jest.mock('../stateManager');
-jest.mock('../viewModelManager');
+jest.mock('../state-manager');
+jest.mock('../view-model-manager');
 
 const createStateMock = jest.mocked(createState);
 const createStateManagerMock = jest.mocked(createStateManager);
