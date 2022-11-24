@@ -23,6 +23,7 @@ export function RadioButtonExample() {
         <div className="example__play-part">
           <span>Default templates, text payload: </span>
           <RadioButton
+            value="string payload"
             selected={selected1}
             payload="string payload"
             selectedChange={() => setSelected1((current) => !current)}
@@ -31,6 +32,7 @@ export function RadioButtonExample() {
         <div className="example__play-part">
           <span>Custom templates, component payload: </span>
           <RadioButton
+            value="component payload"
             selected={selected2}
             payload={<i>component payload</i>}
             selectedChange={() => setSelected2((current) => !current)}
