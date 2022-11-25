@@ -2,42 +2,42 @@ import React, { useState } from 'react';
 import {
   RadioButton,
   RadioTemplateProps,
-  PayloadTemplateProps,
+  LabelTemplateProps,
 } from '@devexpress/react';
 
-const CustomRadio: React.FC<RadioTemplateProps> = ({ selected }) => (
-  <span>{selected ? '+' : '-'}</span>
+const CustomRadio: React.FC<RadioTemplateProps> = ({ checked }) => (
+  <span>{checked ? '+' : '-'}</span>
 );
 
-const CustomPayload: React.FC<PayloadTemplateProps> = ({ payload }) => (
-  <b>{payload}</b>
+const CustomLabel: React.FC<LabelTemplateProps> = ({ label }) => (
+  <b>{label}</b>
 );
 
 export function RadioButtonExample() {
-  const [selected1, setSelected1] = useState(false);
-  const [selected2, setSelected2] = useState(false);
+  const [checked1, setChecked1] = useState(false);
+  const [checked2, setChecked2] = useState(false);
   return (
     <div className="example">
       <div className="example__title">Radio button example:</div>
       <div className="example__control">
         <div className="example__play-part">
-          <span>Default templates, text payload: </span>
+          <span>Default templates, text label: </span>
           <RadioButton
-            value="string payload"
-            selected={selected1}
-            payload="string payload"
-            onClick={() => setSelected1((current) => !current)}
+            value="string label"
+            checked={checked1}
+            label="string label"
+            onClick={() => setChecked1((current) => !current)}
           />
         </div>
         <div className="example__play-part">
-          <span>Custom templates, component payload: </span>
+          <span>Custom templates, component label: </span>
           <RadioButton
-            value="component payload"
-            selected={selected2}
-            payload={<i>component payload</i>}
-            onClick={() => setSelected2((current) => !current)}
+            value="component label"
+            checked={checked2}
+            label={<i>component label</i>}
+            onClick={() => setChecked2((current) => !current)}
             radioTemplate={CustomRadio}
-            payloadTemplate={CustomPayload}
+            labelTemplate={CustomLabel}
           />
         </div>
       </div>

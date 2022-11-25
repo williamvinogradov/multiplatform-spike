@@ -1,21 +1,21 @@
 import { ComponentType, ReactElement } from 'react';
 
-export type PayloadType = string | ReactElement;
+export type LabelType = string | ReactElement;
 
 export interface RadioTemplateProps {
-  selected: boolean;
+  checked: boolean;
 }
 
-export interface PayloadTemplateProps {
-  payload: PayloadType;
+export interface LabelTemplateProps {
+  label: LabelType;
 }
 
 export interface RadioButtonProps {
   value: string;
-  selected: boolean;
+  checked: boolean;
+  label: LabelType;
+  radioTemplate?: ComponentType<RadioTemplateProps>;
+  labelTemplate?: ComponentType<LabelTemplateProps>;
   onChange?: React.ChangeEventHandler;
   onClick?: React.MouseEventHandler;
-  payload: PayloadType;
-  radioTemplate?: ComponentType<RadioTemplateProps>;
-  payloadTemplate?: ComponentType<PayloadTemplateProps>;
 }

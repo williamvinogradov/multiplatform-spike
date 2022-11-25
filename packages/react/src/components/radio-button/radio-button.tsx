@@ -1,28 +1,22 @@
 import React, { useMemo, useId, forwardRef } from 'react';
 import {
   RadioButtonProps,
-  PayloadTemplateProps,
+  LabelTemplateProps,
   RadioTemplateProps,
 } from './types';
 
-const DefaultRadioTemplate = React.memo(({ selected }: RadioTemplateProps) => (
-  <span>{selected ? '◉' : '◎'}</span>
+const DefaultRadioTemplate = React.memo(({ checked }: RadioTemplateProps) => (
+  <span>{checked ? '◉' : '◎'}</span>
 ));
 
-const DefaultPayloadTemplate = React.memo(
-  ({ payload }: PayloadTemplateProps) => <span>{payload}</span>,
-);
+const DefaultLabelTemplate = React.memo(({ label }: LabelTemplateProps) => (
+  <span>{label}</span>
+));
 
 export const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
   (
     {
-      value,
-      selected,
-      onClick,
-      onChange,
-      payload,
-      radioTemplate,
-      payloadTemplate,
+      value, checked, onClick, onChange, label, radioTemplate, labelTemplate,
     },
     inputRef,
   ) => {
@@ -30,9 +24,9 @@ export const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
       () => radioTemplate || DefaultRadioTemplate,
       [radioTemplate],
     );
-    const PayloadComponent = useMemo(
-      () => payloadTemplate || DefaultPayloadTemplate,
-      [payloadTemplate],
+    const LabelComponent = useMemo(
+      () => labelTemplate || DefaultLabelTemplate,
+      [labelTemplate],
     );
 
     const inputId = useId();
@@ -49,12 +43,12 @@ export const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
             style={{ display: 'none' }}
             type="radio"
             value={value}
-            checked={selected}
+            checked={checked}
             onClick={onClick}
             onChange={onChange}
           />
-          <RadioComponent selected={selected} />
-          <PayloadComponent payload={payload} />
+          <RadioComponent checked={checked} />
+          <LabelComponent label={label} />
         </label>
       </span>
     );
