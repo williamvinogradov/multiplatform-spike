@@ -7,7 +7,7 @@ import {
 import { createStateManager, Dispatcher, StateManager } from './state-manager';
 import { createViewModelManager, ViewModelManager } from './view-model-manager';
 
-export type CreateCoreResult<
+export type Core<
   TState extends ObjectType,
   THandlers extends Handlers<TState>,
   TViewModels extends Record<PropertyKey, ObjectType>,
@@ -26,7 +26,7 @@ export function createCore<TViewModels extends ObjectType>() {
     stateConfig: StateConfigMap<TState>,
     actionHandlers: THandlers,
     validation: PipeFunc<TState>[] = [],
-  ): CreateCoreResult<TState, THandlers, TViewModels> => {
+  ): Core<TState, THandlers, TViewModels> => {
     const state = createState(initialState);
     const [stateManager, dispatcher] = createStateManager(
       state,
