@@ -9,38 +9,41 @@ import {
   SubscribeFunc,
 } from './utils';
 
-export type Selector<TState extends UnknownRecord, TViewProps> = (state: TState) => TViewProps;
+export type Selector<TState extends UnknownRecord, TValue> = (state: TState) => TValue;
 
-export type ViewModel<TViewProps> = Disposable<Observable<TViewProps>>;
+export type ViewModelValue<T> = Disposable<Observable<T>>;
 
-export type SelectorMap<TState extends UnknownRecord, TViewModels extends UnknownRecord> = {
-  [K in keyof TViewModels]?: Selector<TState, TViewModels[K]>
+export type SelectorMap<
+  TStateProps extends UnknownRecord,
+  TViewModelProps extends UnknownRecord,
+> = {
+  [K in keyof TViewModelProps]?: Selector<TStateProps, TViewModelProps[K]>
 };
 
-export type ViewModelMap<TViewModels extends UnknownRecord> = {
-  [K in keyof TViewModels]?: ViewModel<TViewModels[K]>
+export type ViewModel<TProps extends UnknownRecord> = {
+  [K in keyof TProps]?: ViewModelValue<TProps[K]>
 };
 
 export function createSelector<
-  TState extends UnknownRecord,
+  TStateProps extends UnknownRecord,
   TParam extends UnknownRecord,
-  TViewProp,
+  TValue,
 >(
-  buildViewProp: (params: TParam) => TViewProp,
-  paramsGetter: (state: TState | undefined) => TParam,
+  buildViewProp: (params: TParam) => TValue,
+  paramsGetter: (state: TStateProps | undefined) => TParam,
   paramsComparer: Comparer<[TParam]> = shadowComparer,
-): Selector<TState, TViewProp> {
+): Selector<TStateProps, TValue> {
   const cached = memoize(buildViewProp, paramsComparer);
 
-  return (state: TState | undefined) => cached(paramsGetter(state));
+  return (state: TStateProps | undefined) => cached(paramsGetter(state));
 }
 
-export function createViewModel<TState extends UnknownRecord, TViewProps>(
-  initialState: TState,
-  subscribeToUpdates: SubscribeFunc<TState>,
-  selector: Selector<TState, TViewProps>,
-): ViewModel<TViewProps> {
-  const { emit, subscribe, getValue } = createObservableEmitter(selector(initialState));
+export function createViewModelValue<TStateProps extends UnknownRecord, TValue>(
+  initialStateProps: TStateProps,
+  subscribeToUpdates: SubscribeFunc<TStateProps>,
+  selector: Selector<TStateProps, TValue>,
+): ViewModelValue<TValue> {
+  const { emit, subscribe, getValue } = createObservableEmitter(selector(initialStateProps));
   const unsubscribe = subscribeToUpdates((value) => emit(selector(value)));
 
   return {
