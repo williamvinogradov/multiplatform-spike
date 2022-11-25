@@ -2,7 +2,7 @@ import { ObjectType } from '../utils';
 
 export interface StatePropertyConfig<T> {
   controlledMode: boolean;
-  changeCallback: (value: T) => void;
+  changeCallback(value: T): void;
 }
 
 export type StateConfigMap<TState extends ObjectType> = {

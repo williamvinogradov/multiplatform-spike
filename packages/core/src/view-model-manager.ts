@@ -7,9 +7,9 @@ import {
 } from './view-model';
 
 export interface ViewModelManager<TState extends ObjectType, TViewModels extends ObjectType> {
-  add: (selectorMap: SelectorMap<TState, TViewModels>) => void;
-  remove: (...keys: (keyof TViewModels)[]) => void;
-  get: () => Readonly<ViewModelMap<TViewModels>>;
+  add(selectorMap: SelectorMap<TState, TViewModels>): void;
+  remove(...keys: (keyof TViewModels)[]): void;
+  get(): Readonly<ViewModelMap<TViewModels>>;
 }
 
 export function createViewModelManager<TState extends ObjectType, TViewModels extends ObjectType>(

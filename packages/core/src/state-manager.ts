@@ -6,9 +6,9 @@ import {
 } from './utils';
 
 export interface StateManager<TState extends ObjectType> {
-  addUpdate: (statePart: Partial<TState>) => void;
-  commitUpdates: () => void;
-  rollbackUpdates: () => void;
+  addUpdate(statePart: Partial<TState>): void;
+  commitUpdates(): void;
+  rollbackUpdates(): void;
 }
 
 export interface Dispatcher<
