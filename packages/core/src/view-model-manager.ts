@@ -1,18 +1,18 @@
 import { State } from './state';
 import {
-  Disposable, DISPOSE, getKeys, ObjectType,
+  Disposable, DISPOSE, getKeys, UnknownRecord,
 } from './utils';
 import {
   createViewModel, SelectorMap, ViewModelMap,
 } from './view-model';
 
-export interface ViewModelManager<TState extends ObjectType, TViewModels extends ObjectType> {
+export interface ViewModelManager<TState extends UnknownRecord, TViewModels extends UnknownRecord> {
   add(selectorMap: SelectorMap<TState, TViewModels>): void;
   remove(...keys: (keyof TViewModels)[]): void;
   get(): Readonly<ViewModelMap<TViewModels>>;
 }
 
-export function createViewModelManager<TState extends ObjectType, TViewModels extends ObjectType>(
+export function createViewModelManager<TState extends UnknownRecord, TViewModels extends UnknownRecord>(
   state: State<TState>,
 )
   : Disposable<ViewModelManager<TState, TViewModels>> {

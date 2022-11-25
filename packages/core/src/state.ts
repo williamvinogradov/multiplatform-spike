@@ -1,10 +1,10 @@
 import {
   createObservableEmitter,
-  ObjectType,
+  UnknownRecord,
   SubscribeFunc,
 } from './utils';
 
-export interface State<TState extends ObjectType> {
+export interface State<TState extends UnknownRecord> {
   getCurrent(): TState;
   addUpdate(statePart: Partial<TState>): void;
   commitUpdates(): void;
@@ -13,7 +13,7 @@ export interface State<TState extends ObjectType> {
   subscribeForRender: SubscribeFunc<TState>;
 }
 
-export function createState<TState extends ObjectType>(
+export function createState<TState extends UnknownRecord>(
   initialState: TState,
 ): State<TState> {
   let current = initialState;

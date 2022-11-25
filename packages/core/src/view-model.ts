@@ -3,25 +3,25 @@ import {
   createObservableEmitter,
   Disposable,
   DISPOSE,
-  memoize, ObjectType,
+  memoize, UnknownRecord,
   Observable,
   shadowComparer,
   SubscribeFunc,
 } from './utils';
 
-export type Selector<TState extends ObjectType, TViewProps> = (state: TState) => TViewProps;
+export type Selector<TState extends UnknownRecord, TViewProps> = (state: TState) => TViewProps;
 
 export type ViewModel<TViewProps> = Disposable<Observable<TViewProps>>;
 
-export type SelectorMap<TState extends ObjectType, TViewModels extends ObjectType> = {
+export type SelectorMap<TState extends UnknownRecord, TViewModels extends UnknownRecord> = {
   [K in keyof TViewModels]?: Selector<TState, TViewModels[K]>
 };
 
-export type ViewModelMap<TViewModels extends ObjectType> = {
+export type ViewModelMap<TViewModels extends UnknownRecord> = {
   [K in keyof TViewModels]?: ViewModel<TViewModels[K]>
 };
 
-export function createSelector<TState extends ObjectType, TParam extends ObjectType, TViewProp>(
+export function createSelector<TState extends UnknownRecord, TParam extends UnknownRecord, TViewProp>(
   buildViewProp: (params: TParam) => TViewProp,
   paramsGetter: (state: TState | undefined) => TParam,
   paramsComparer: Comparer<[TParam]> = shadowComparer,
@@ -31,7 +31,7 @@ export function createSelector<TState extends ObjectType, TParam extends ObjectT
   return (state: TState | undefined) => cached(paramsGetter(state));
 }
 
-export function createViewModel<TState extends ObjectType, TViewProps>(
+export function createViewModel<TState extends UnknownRecord, TViewProps>(
   initialState: TState,
   subscribeToUpdates: SubscribeFunc<TState>,
   selector: Selector<TState, TViewProps>,

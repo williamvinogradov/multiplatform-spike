@@ -2,24 +2,24 @@ import { StateConfigMap } from './middlewares';
 import { Handlers } from './reducer';
 import { createState } from './state';
 import {
-  Disposable, ObjectType, PipeFunc,
+  Disposable, UnknownRecord, PipeFunc, AnyRecord,
 } from './utils';
 import { createStateManager, Dispatcher, StateManager } from './state-manager';
 import { createViewModelManager, ViewModelManager } from './view-model-manager';
 
 export type Core<
-  TState extends ObjectType,
+  TState extends UnknownRecord,
   THandlers extends Handlers<TState>,
-  TViewModels extends Record<PropertyKey, ObjectType>,
+  TViewModels extends Record<PropertyKey, UnknownRecord>,
   > = [
     stateManager: StateManager<TState>,
     viewModelManager: Disposable<ViewModelManager<TState, TViewModels>>,
     dispatcher: Dispatcher<TState, THandlers>,
   ];
 
-export function createCore<TViewModels extends ObjectType>() {
+export function createCore<TViewModels extends AnyRecord>() {
   return <
-    TState extends ObjectType,
+    TState extends UnknownRecord,
     THandlers extends Handlers<TState>,
     >(
     initialState: TState,
