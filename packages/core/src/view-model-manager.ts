@@ -12,7 +12,10 @@ export interface ViewModelManager<TState extends UnknownRecord, TViewModels exte
   get(): Readonly<ViewModelMap<TViewModels>>;
 }
 
-export function createViewModelManager<TState extends UnknownRecord, TViewModels extends UnknownRecord>(
+export function createViewModelManager<
+  TState extends UnknownRecord,
+  TViewModels extends UnknownRecord,
+>(
   state: State<TState>,
 )
   : Disposable<ViewModelManager<TState, TViewModels>> {

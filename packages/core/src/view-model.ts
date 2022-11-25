@@ -21,7 +21,11 @@ export type ViewModelMap<TViewModels extends UnknownRecord> = {
   [K in keyof TViewModels]?: ViewModel<TViewModels[K]>
 };
 
-export function createSelector<TState extends UnknownRecord, TParam extends UnknownRecord, TViewProp>(
+export function createSelector<
+  TState extends UnknownRecord,
+  TParam extends UnknownRecord,
+  TViewProp,
+>(
   buildViewProp: (params: TParam) => TViewProp,
   paramsGetter: (state: TState | undefined) => TParam,
   paramsComparer: Comparer<[TParam]> = shadowComparer,
