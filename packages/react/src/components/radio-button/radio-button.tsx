@@ -5,8 +5,6 @@ import {
   RadioTemplateProps,
 } from './types';
 
-import './style.scss';
-
 const DefaultRadioTemplate = React.memo(({ selected }: RadioTemplateProps) => (
   <span>{selected ? '◉' : '◎'}</span>
 ));

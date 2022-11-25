@@ -5,8 +5,6 @@ import {
   PayloadTemplateProps,
 } from '@devexpress/react';
 
-import '@devexpress/react/dist/index.css';
-
 const CustomRadio: React.FC<RadioTemplateProps> = ({ selected }) => (
   <span>{selected ? '+' : '-'}</span>
 );
@@ -29,7 +27,6 @@ export function RadioButtonExample() {
             selected={selected1}
             payload="string payload"
             onClick={() => setSelected1((current) => !current)}
-            onChange={() => console.log('first radio changed')}
           />
         </div>
         <div className="example__play-part">
@@ -39,7 +36,6 @@ export function RadioButtonExample() {
             selected={selected2}
             payload={<i>component payload</i>}
             onClick={() => setSelected2((current) => !current)}
-            onChange={() => console.log('second radio changed')}
             radioTemplate={CustomRadio}
             payloadTemplate={CustomPayload}
           />
