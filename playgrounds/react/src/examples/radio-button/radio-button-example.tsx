@@ -28,7 +28,8 @@ export function RadioButtonExample() {
             value="string payload"
             selected={selected1}
             payload="string payload"
-            selectedChange={() => setSelected1((current) => !current)}
+            onClick={() => setSelected1((current) => !current)}
+            onChange={() => console.log('first radio changed')}
           />
         </div>
         <div className="example__play-part">
@@ -37,7 +38,8 @@ export function RadioButtonExample() {
             value="component payload"
             selected={selected2}
             payload={<i>component payload</i>}
-            selectedChange={() => setSelected2((current) => !current)}
+            onClick={() => setSelected2((current) => !current)}
+            onChange={() => console.log('second radio changed')}
             radioTemplate={CustomRadio}
             payloadTemplate={CustomPayload}
           />

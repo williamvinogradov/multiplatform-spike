@@ -13,7 +13,8 @@ export interface PayloadTemplateProps {
 export interface RadioButtonProps {
   value: string;
   selected: boolean;
-  selectedChange: React.MouseEventHandler;
+  onChange?: React.ChangeEventHandler;
+  onClick?: React.MouseEventHandler;
   payload: PayloadType;
   radioTemplate?: ComponentType<RadioTemplateProps>;
   payloadTemplate?: ComponentType<PayloadTemplateProps>;
