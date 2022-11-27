@@ -1,70 +1,148 @@
-import { createState } from '../state';
+import { createStateManager } from '../state-manager';
 
-describe('Core: Component: state', () => {
-  it('Returns state value', () => {
-    const initialValue = { model: { value: 'test' }, dictionary: { value: 'test' } };
-    const state = createState(initialValue);
+describe('Core: State', () => {
+  describe('getCurrent', () => {
+    it('returns the current state', () => {
+      const state = { a: 1 };
 
-    const result = state.getCurrent();
+      const manager = createStateManager(state);
+      const result = manager.getCurrent();
 
-    expect(result).toEqual(initialValue);
+      expect(result).toBe(state);
+    });
+
+    it('returns the same current state if updates were added', () => {
+      const state = { a: 1 };
+      const newState = { a: 2 };
+
+      const manager = createStateManager(state);
+      manager.addUpdate(() => newState);
+      const result = manager.getCurrent();
+
+      expect(result).toBe(state);
+    });
+
+    it('returns the current state after commitUpdates', () => {
+      const state = { a: 1 };
+      const newState = { a: 2 };
+
+      const manager = createStateManager(state);
+      manager.addUpdate(() => newState);
+      manager.commitUpdates();
+      const result = manager.getCurrent();
+
+      expect(result).toEqual(newState);
+    });
   });
 
-  it('Updates the state value', () => {
-    const initialValue = { model: { value: 'test' }, dictionary: { value: 'test' } };
-    const expectedValue = { model: { value: 'updated' }, dictionary: { value: 'test' } };
-    const state = createState(initialValue);
+  describe('getNext', () => {
+    it('returns the current state if no updates were added', () => {
+      const state = {};
 
-    state.addUpdate({ model: expectedValue.model });
-    state.commitUpdates();
-    const result = state.getCurrent();
+      const manager = createStateManager(state);
+      const result = manager.getNext();
 
-    expect(result).toEqual(expectedValue);
+      expect(result).toBe(state);
+    });
+
+    it('returns the updated state if updates were added', () => {
+      const state = { a: 1 };
+      const expectedState = { a: 2 };
+
+      const manager = createStateManager(state);
+      manager.addUpdate(() => expectedState);
+      const result = manager.getNext();
+
+      expect(result).toEqual(expectedState);
+    });
+
+    it('returns the current state after commitUpdates', () => {
+      const state = { a: 1 };
+      const expectedState = { a: 2 };
+
+      const manager = createStateManager(state);
+      manager.addUpdate(() => expectedState);
+      manager.commitUpdates();
+      const result = manager.getNext();
+
+      expect(result).toEqual(expectedState);
+    });
   });
 
-  it('Doesn\'t update the state value without committing updates', () => {
-    const initialValue = { model: { value: 'test' }, dictionary: { value: 'test' } };
-    const state = createState(initialValue);
+  describe('addUpdate', () => {
+    it('stores an added update in the next state', () => {
+      const state = { a: 1 };
+      const newState = { a: 2 };
 
-    state.addUpdate({ model: { value: 'updated' } });
-    const result = state.getCurrent();
+      const manager = createStateManager(state);
+      manager.addUpdate(() => newState);
+      const result = manager.getNext();
 
-    expect(result).toEqual(initialValue);
+      expect(result).toEqual(newState);
+    });
+
+    it('does a partial update of the current state', () => {
+      const state = { a: 1, b: 2 };
+      const updatePart = { b: 3 };
+      const expectedState = { ...state, ...updatePart };
+
+      const manager = createStateManager(state);
+      manager.addUpdate(() => updatePart);
+      manager.commitUpdates();
+      const result = manager.getCurrent();
+
+      expect(result).toEqual(expectedState);
+    });
+
+    it('does not affect the current state', () => {
+      const state = { a: 1 };
+      const newState = { a: 2 };
+
+      const manager = createStateManager(state);
+      manager.addUpdate(() => newState);
+      const result = manager.getCurrent();
+
+      expect(result).toEqual(state);
+    });
   });
 
-  it('Doesn\'t update the state value if updates were rolled back', () => {
-    const initialValue = { model: { value: 'test' }, dictionary: { value: 'test' } };
-    const expectedValue = { model: { value: 'updated' }, dictionary: { value: 'test' } };
-    const state = createState(initialValue);
+  describe('commitUpdates', () => {
+    it('writes updated state to the current state', () => {
+      const state = { a: 1 };
+      const newState = { a: 2 };
 
-    state.addUpdate({ model: expectedValue.model });
-    state.rollbackUpdates();
-    const result = state.getCurrent();
+      const manager = createStateManager(state);
+      manager.addUpdate(() => newState);
+      manager.commitUpdates();
+      const result = manager.getCurrent();
 
-    expect(result).toEqual(initialValue);
+      expect(result).toEqual(newState);
+    });
   });
 
-  it('Updates state value only for committed updates', () => {
-    const initialValue = { model: { value: 'test' }, dictionary: { value: 'test' } };
-    const expectedValue = { model: { value: 'test' }, dictionary: { value: 'updated' } };
-    const state = createState(initialValue);
+  describe('rollbackUpdates', () => {
+    it('rollbacks updated state to the current state', () => {
+      const state = { a: 1 };
+      const newState = { a: 2 };
 
-    state.addUpdate({ model: { value: 'updated' } });
-    state.rollbackUpdates();
-    state.addUpdate({ dictionary: { value: 'updated' } });
-    state.commitUpdates();
-    const result = state.getCurrent();
+      const manager = createStateManager(state);
+      manager.addUpdate(() => newState);
+      manager.rollbackUpdates();
+      const result = manager.getNext();
 
-    expect(result).toEqual(expectedValue);
-  });
+      expect(result).toEqual(state);
+    });
 
-  it('Doesn\'t update the state if changes weren\'t added', () => {
-    const initialValue = { model: { value: 'test' }, dictionary: { value: 'test' } };
-    const state = createState(initialValue);
+    it('does not affect the current state', () => {
+      const state = { a: 1 };
+      const newState = { a: 2 };
 
-    state.commitUpdates();
-    const result = state.getCurrent();
+      const manager = createStateManager(state);
+      manager.addUpdate(() => newState);
+      manager.rollbackUpdates();
+      const result = manager.getCurrent();
 
-    expect(result).toEqual(initialValue);
+      expect(result).toBe(state);
+    });
   });
 });

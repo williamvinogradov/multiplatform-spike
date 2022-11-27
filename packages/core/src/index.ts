@@ -4,14 +4,9 @@ export type {
 } from './middlewares';
 
 export type {
-  StateManager,
-  Dispatcher,
+  StateUpdateFunc,
 } from './state-manager';
 
-export type {
-  ViewModelManager,
-} from './view-model-manager';
-
-export {
-  createCore,
-} from './create-core';
+export * from './selectors';
+export * from './store';
+export * from './utils';

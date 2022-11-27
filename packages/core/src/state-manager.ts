@@ -1,114 +1,47 @@
-import { callbacksMiddleware, controlledModeMiddleware, StateConfigMap } from './middlewares';
-import { createReducer, Handlers } from './reducer';
-import { State } from './state';
-import {
-  ObjectType, pipe, PipeFunc,
-} from './utils';
+import { ObjectType } from './utils';
+
+export type StateUpdateFunc<TState> = (state: TState) => Partial<TState>;
 
 export interface StateManager<TState extends ObjectType> {
-  addUpdate: (statePart: Partial<TState>) => void;
-  commitUpdates: () => void;
-  rollbackUpdates: () => void;
+  getCurrent(): TState;
+  getNext(): TState,
+  addUpdate(updateFunc: StateUpdateFunc<TState>): void;
+  commitUpdates(): void;
+  rollbackUpdates(): void;
 }
 
-export interface Dispatcher<
-  TState extends ObjectType,
-  THandlers extends Handlers<TState>,
-  > {
-  dispatch: <TAction extends keyof THandlers>(
-    action: TAction,
-    value: Parameters<THandlers[TAction]>[1],
-  ) => void;
-}
+export function createStateManager<TState extends ObjectType>(
+  state: TState,
+): StateManager<TState> {
+  let currentState = state;
+  let nextState = state;
 
-export type StateStoreTuple<
-  TState extends ObjectType,
-  THandlers extends Handlers<TState>,
-  > = [
-  stateManager: StateManager<TState>,
-  dispatcher: Dispatcher<TState, THandlers>,
-  ];
+  const getCurrent = () => currentState;
 
-export function createStateManager<
-  TState extends ObjectType,
-  THandlers extends Handlers<TState>,
-  >(
-  state: State<TState>,
-  stateConfig: StateConfigMap<TState>,
-  actionHandlers: THandlers,
-  validation: PipeFunc<TState>[] = [],
-): StateStoreTuple<TState, THandlers> {
-  const reducer = createReducer<TState>()(actionHandlers);
-  const validator = pipe(...validation);
+  const getNext = () => nextState;
 
-  const changeState = (
-    currentState: TState,
-    validatedState: TState,
-  ): boolean => {
-    const [newState, hasChanges] = controlledModeMiddleware(
-      currentState,
-      validatedState,
-      stateConfig,
-    );
-
-    if (hasChanges) {
-      state.addUpdate(newState);
-      state.commitUpdates();
-    }
-
-    return hasChanges;
-  };
-
-  const callCallbacks = (
-    currentState: TState,
-    validatedState: TState,
+  const addUpdate = (
+    updateFunc: (state: TState) => Partial<TState>,
   ): void => {
-    const pendingCallbacks = callbacksMiddleware(
-      currentState,
-      validatedState,
-      stateConfig,
-    );
-
-    pendingCallbacks.forEach((callback) => callback());
+    nextState = {
+      ...nextState,
+      ...updateFunc(nextState),
+    };
   };
 
   const commitUpdates = () => {
-    state.commitUpdates();
-
-    const currentState = state.getCurrent();
-    const validatedState = validator(currentState);
-
-    changeState(currentState, validatedState);
-    state.triggerRender(state.getCurrent());
-
-    callCallbacks(currentState, validatedState);
+    currentState = nextState;
   };
 
-  const dispatch = <TAction extends keyof THandlers>(
-    action: TAction,
-    value: Parameters<THandlers[TAction]>[1],
-  ) => {
-    const currentState = state.getCurrent();
-    const newState = {
-      ...currentState,
-      ...reducer(currentState, action, value),
-    };
-    const validatedState = validator(newState);
-
-    const hasChanges = changeState(currentState, validatedState);
-
-    if (hasChanges) {
-      state.triggerRender(state.getCurrent());
-    }
-
-    callCallbacks(currentState, validatedState);
+  const rollbackUpdates = () => {
+    nextState = currentState;
   };
 
-  return [{
-    addUpdate: state.addUpdate,
+  return {
+    getCurrent,
+    getNext,
+    addUpdate,
     commitUpdates,
-    rollbackUpdates: state.rollbackUpdates,
-  }, {
-    dispatch,
-  }];
+    rollbackUpdates,
+  };
 }
