@@ -13,5 +13,5 @@ export function useSecondEffect(
     }
 
     func();
-  }, [deps]);
+  }, deps);
 }

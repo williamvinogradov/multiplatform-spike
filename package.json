@@ -25,7 +25,7 @@
     "react:start:lib": "wait-on packages/components/dist/package.json && npm run lib:react:watch",
     "react:start:app": "wait-on packages/react/dist/package.json && npm run react:watch",
     "react:start": "concurrently --kill-others npm:react:start:core npm:react:start:components npm:react:start:lib npm:react:start:app",
-    "react:lint": "npm run lint --prefix packages/react"
+    "react:lint": "npm run lint --prefix playgrounds/react"
   },
   "repository": {
     "type": "git",
