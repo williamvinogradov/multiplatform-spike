@@ -1,17 +1,17 @@
-import React, { useMemo, useId, forwardRef } from 'react';
+import React, { useId, forwardRef } from 'react';
 import {
   RadioButtonProps,
   LabelTemplateProps,
   RadioTemplateProps,
 } from './types';
 
-const DefaultRadioTemplate = React.memo(({ checked }: RadioTemplateProps) => (
+const DefaultRadioTemplate = ({ checked }: RadioTemplateProps) => (
   <span>{checked ? '◉' : '◎'}</span>
-));
+);
 
-const DefaultLabelTemplate = React.memo(({ label }: LabelTemplateProps) => (
+const DefaultLabelTemplate = ({ label }: LabelTemplateProps) => (
   <span>{label}</span>
-));
+);
 
 export const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
   (
@@ -20,15 +20,8 @@ export const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
     },
     inputRef,
   ) => {
-    const RadioComponent = useMemo(
-      () => radioTemplate || DefaultRadioTemplate,
-      [radioTemplate],
-    );
-    const LabelComponent = useMemo(
-      () => labelTemplate || DefaultLabelTemplate,
-      [labelTemplate],
-    );
-
+    const RadioComponent = radioTemplate || DefaultRadioTemplate;
+    const LabelComponent = labelTemplate || DefaultLabelTemplate;
     const inputId = useId();
 
     return (
