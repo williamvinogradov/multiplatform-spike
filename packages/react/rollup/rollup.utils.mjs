@@ -5,7 +5,6 @@ import nodeResolve from '@rollup/plugin-node-resolve';
 import esbuild from 'rollup-plugin-esbuild';
 import dts from 'rollup-plugin-dts';
 
-
 function getJsConfig(outputDir) {
   return {
     input: 'src/index.ts',
@@ -23,7 +22,7 @@ function getJsConfig(outputDir) {
       peerDepsExternal(),
       esbuild(),
       postcss({
-        extract: `index.css`,
+        extract: 'index.css',
       }),
     ],
   };
@@ -39,6 +38,7 @@ function getDtsConfig(outputDir) {
       preserveModulesRoot: 'src/components',
     },
     plugins: [
+      postcss({ inject: false, extract: false }),
       dts(),
       copy({
         targets: [
