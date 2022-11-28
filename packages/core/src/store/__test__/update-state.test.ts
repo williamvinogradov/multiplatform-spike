@@ -1,5 +1,5 @@
 import { controlledModeMiddleware } from '../../middlewares';
-import { changeState } from '../change-state';
+import { updateState } from '../update-state';
 
 jest.mock('../../middlewares');
 
@@ -14,7 +14,7 @@ const stateManagerMock = {
 const controlledModeMiddlewareMock = jest.mocked(controlledModeMiddleware);
 
 describe('Core: Store', () => {
-  describe('changeState', () => {
+  describe('updateState', () => {
     beforeEach(() => {
       controlledModeMiddlewareMock.mockReturnValue([{}, false]);
     });
@@ -24,7 +24,7 @@ describe('Core: Store', () => {
       const validatedState = {};
       const stateConfig = {};
 
-      changeState(currentState, validatedState, {
+      updateState(currentState, validatedState, {
         stateConfig,
         stateManager: stateManagerMock,
       });
@@ -40,7 +40,7 @@ describe('Core: Store', () => {
       it(`returns ${hasChanges} if the middleware returns hasChanges=${hasChanges}`, () => {
         controlledModeMiddlewareMock.mockReturnValue([{}, hasChanges]);
 
-        const result = changeState({}, {},
+        const result = updateState({}, {},
           { stateConfig: {}, stateManager: stateManagerMock });
 
         expect(result).toBe(hasChanges);
@@ -51,7 +51,7 @@ describe('Core: Store', () => {
       const newState = {};
       controlledModeMiddlewareMock.mockReturnValue([newState, true]);
 
-      changeState({}, {},
+      updateState({}, {},
         { stateConfig: {}, stateManager: stateManagerMock });
 
       const [updateFunc] = stateManagerMock.addUpdate.mock.calls[0];
@@ -62,7 +62,7 @@ describe('Core: Store', () => {
     it('does not update state if the middleware returns hasChanges = false', () => {
       controlledModeMiddlewareMock.mockReturnValue([{}, false]);
 
-      changeState({}, {},
+      updateState({}, {},
         { stateConfig: {}, stateManager: stateManagerMock });
 
       expect(stateManagerMock.addUpdate).not.toHaveBeenCalled();

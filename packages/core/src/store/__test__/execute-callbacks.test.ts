@@ -1,19 +1,19 @@
 import { callbacksMiddleware } from '../../middlewares';
-import { callCallbacks } from '../call-callbacks';
+import { executeCallbacks } from '../execute-callbacks';
 
 jest.mock('../../middlewares');
 
 const callbacksMiddlewareMock = jest.mocked(callbacksMiddleware);
 
 describe('Core: Store', () => {
-  describe('callCallbacks', () => {
+  describe('executeCallbacks', () => {
     it('calls callbacksMiddleware', () => {
       const currentState = {};
       const validatedState = {};
       const stateConfig = {};
       callbacksMiddlewareMock.mockReturnValue([]);
 
-      callCallbacks(currentState, validatedState, { stateConfig });
+      executeCallbacks(currentState, validatedState, { stateConfig });
 
       expect(callbacksMiddlewareMock).toHaveBeenCalledWith(
         currentState,
@@ -26,7 +26,7 @@ describe('Core: Store', () => {
       const callbacks = [jest.fn(), jest.fn(), jest.fn()];
       callbacksMiddlewareMock.mockReturnValue(callbacks);
 
-      callCallbacks({}, {}, { stateConfig: {} });
+      executeCallbacks({}, {}, { stateConfig: {} });
 
       callbacks.forEach((callback) => expect(callback).toHaveBeenCalled());
     });

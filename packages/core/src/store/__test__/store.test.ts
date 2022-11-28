@@ -1,13 +1,13 @@
 import { createStateManager } from '../../state-manager';
 import { createObservableEmitter, pipe } from '../../utils';
-import { callCallbacks } from '../call-callbacks';
-import { changeState } from '../change-state';
+import { executeCallbacks } from '../execute-callbacks';
+import { updateState } from '../update-state';
 import { createStore, UpdateSource } from '../index';
 
 jest.mock('../../state-manager');
 jest.mock('../../utils');
-jest.mock('../call-callbacks');
-jest.mock('../change-state');
+jest.mock('../execute-callbacks');
+jest.mock('../update-state');
 
 const stateManagerMock = {
   getCurrent: jest.fn(),
@@ -23,8 +23,8 @@ const validatorMock = jest.fn();
 const createStateManagerMock = jest.mocked(createStateManager);
 const createObservableMock = jest.mocked(createObservableEmitter);
 const pipeMock = jest.mocked(pipe);
-const callCallbacksMock = jest.mocked(callCallbacks);
-const changeStateMock = jest.mocked(changeState);
+const callCallbacksMock = jest.mocked(executeCallbacks);
+const changeStateMock = jest.mocked(updateState);
 
 describe('Core: Store', () => {
   beforeEach(() => {

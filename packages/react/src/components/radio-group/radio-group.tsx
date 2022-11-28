@@ -3,7 +3,7 @@ import {
   createRadioGroupStore, ReadonlyProps, TemplateProps, ValueProps,
 } from '@devexpress/components';
 import { UpdateSource } from '@devexpress/core';
-import React, { PropsWithChildren, useMemo } from 'react';
+import React, { memo, PropsWithChildren, useMemo } from 'react';
 import { useSecondEffect } from '../../internal/hooks';
 import { useCallbackRef } from '../../internal/hooks/use-callback-ref';
 import { Props } from '../../internal/props';
@@ -43,4 +43,4 @@ function RadioGroupInternal<T>(props: RadioGroupProps<T>) {
 export type RadioGroupProps<T> =
   PropsWithChildren<Props<ValueProps<T>, ReadonlyProps, TemplateProps>>;
 
-export const RadioGroup = RadioGroupInternal;
+export const RadioGroup = memo(RadioGroupInternal) as typeof RadioGroupInternal;

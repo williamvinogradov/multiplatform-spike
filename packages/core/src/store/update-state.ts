@@ -7,7 +7,7 @@ type MethodDeps<TState extends ObjectType> = {
   stateManager: StateManager<TState>,
 };
 
-export function changeState<TState extends ObjectType>(
+export function updateState<TState extends ObjectType>(
   currentState: TState,
   validatedState: TState,
   { stateConfig, stateManager } : MethodDeps<TState>,

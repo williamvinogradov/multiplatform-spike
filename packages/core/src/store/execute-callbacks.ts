@@ -5,7 +5,7 @@ type MethodDeps<TState extends ObjectType> = {
   stateConfig: StateConfigMap<TState>,
 };
 
-export function callCallbacks<TState extends ObjectType>(
+export function executeCallbacks<TState extends ObjectType>(
   currentState: TState,
   validatedState: TState,
   { stateConfig } : MethodDeps<TState>,

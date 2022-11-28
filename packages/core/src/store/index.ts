@@ -7,8 +7,8 @@ import {
   PipeFunc,
   SubscribeFunc,
 } from '../utils';
-import { callCallbacks } from './call-callbacks';
-import { changeState } from './change-state';
+import { executeCallbacks } from './execute-callbacks';
+import { updateState } from './update-state';
 
 export enum UpdateSource {
   props = 'props',
@@ -38,11 +38,11 @@ export function createStore<TState extends ObjectType>(
     const currentState = stateManager.getCurrent();
 
     const validatedState = validator(currentState);
-    changeState(currentState, validatedState, { stateConfig, stateManager });
+    updateState(currentState, validatedState, { stateConfig, stateManager });
 
     emit(stateManager.getCurrent());
 
-    callCallbacks(currentState, validatedState, { stateConfig });
+    executeCallbacks(currentState, validatedState, { stateConfig });
   };
 
   const commitUpdatesFromAction = (): void => {
@@ -50,13 +50,13 @@ export function createStore<TState extends ObjectType>(
     const nextState = stateManager.getNext();
 
     const validatedState = validator(nextState);
-    const hasChanges = changeState(currentState, validatedState, { stateConfig, stateManager });
+    const hasChanges = updateState(currentState, validatedState, { stateConfig, stateManager });
 
     if (hasChanges) {
       emit(stateManager.getCurrent());
     }
 
-    callCallbacks(currentState, validatedState, { stateConfig });
+    executeCallbacks(currentState, validatedState, { stateConfig });
   };
 
   const commitUpdates = (source = UpdateSource.action):void => {

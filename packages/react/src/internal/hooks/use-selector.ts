@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import {
   ObjectType,
   Selector,
-  shadowComparer,
+  shallowComparer,
   Store,
 } from '@devexpress/core';
 
@@ -14,7 +14,7 @@ export function useSelector<TState extends ObjectType, TResult>(
   const depsRef = useRef(deps);
   const [result, setResult] = useState(selector(store.getState()));
 
-  if (!shadowComparer(depsRef.current, deps)) {
+  if (!shallowComparer(depsRef.current, deps)) {
     depsRef.current = deps;
     setResult(selector(store.getState()));
   }

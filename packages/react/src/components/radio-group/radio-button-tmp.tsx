@@ -8,7 +8,7 @@ import { useCoreContext } from '../../internal/hooks/use-core-context';
 import { RadioGroupContext } from './radio-group-context';
 
 // NOTE: It's a temporary component for the RadioGroup development
-function RadioButtonInternal<T>(props: RadioButtonProps<T>) {
+function RadioButtonTmpInternal<T>(props: RadioButtonPropsTmp<T>) {
   const store = useCoreContext<Store<RadioGroupState<T>>>(RadioGroupContext);
 
   const viewModel = useSelector(
@@ -33,8 +33,8 @@ function RadioButtonInternal<T>(props: RadioButtonProps<T>) {
   );
 }
 
-export type RadioButtonProps<T> = {
+export type RadioButtonPropsTmp<T> = {
   value: T;
 };
 
-export const RadioButton = memo(RadioButtonInternal) as typeof RadioButtonInternal;
+export const RadioButtonTmp = memo(RadioButtonTmpInternal) as typeof RadioButtonTmpInternal;
