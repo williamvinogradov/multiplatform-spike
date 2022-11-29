@@ -19,7 +19,7 @@ export function updateState<TState extends ObjectType>(
   );
 
   if (hasChanges) {
-    stateManager.addUpdate(() => newState);
+    stateManager.scheduleUpdate(() => newState);
     stateManager.commitUpdates();
   }
 

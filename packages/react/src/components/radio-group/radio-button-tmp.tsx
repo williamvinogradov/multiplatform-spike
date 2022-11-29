@@ -18,7 +18,7 @@ function RadioButtonTmpInternal<T>(props: RadioButtonPropsTmp<T>) {
   );
 
   const selectOption = useCallback(() => {
-    store.addUpdate(createUpdateValueAction(props.value));
+    store.scheduleUpdate(createUpdateValueAction(props.value));
     store.commitUpdates();
   }, [props.value]);
 

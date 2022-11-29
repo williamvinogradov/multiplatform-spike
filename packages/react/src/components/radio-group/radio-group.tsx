@@ -25,7 +25,7 @@ function RadioGroupInternal<T>(props: RadioGroupProps<T>) {
 
   useSecondEffect(() => {
     if (controlledMode) {
-      store.addUpdate(() => ({ value: props.value }));
+      store.scheduleUpdate(() => ({ value: props.value }));
     }
 
     store.commitUpdates(UpdateSource.props);

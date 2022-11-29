@@ -17,7 +17,7 @@ describe('Core', () => {
         const newState = { a: 2 };
 
         const manager = createStateManager(state);
-        manager.addUpdate(() => newState);
+        manager.scheduleUpdate(() => newState);
         const result = manager.getCurrent();
 
         expect(result).toBe(state);
@@ -28,7 +28,7 @@ describe('Core', () => {
         const newState = { a: 2 };
 
         const manager = createStateManager(state);
-        manager.addUpdate(() => newState);
+        manager.scheduleUpdate(() => newState);
         manager.commitUpdates();
         const result = manager.getCurrent();
 
@@ -51,7 +51,7 @@ describe('Core', () => {
         const expectedState = { a: 2 };
 
         const manager = createStateManager(state);
-        manager.addUpdate(() => expectedState);
+        manager.scheduleUpdate(() => expectedState);
         const result = manager.getNext();
 
         expect(result).toEqual(expectedState);
@@ -62,7 +62,7 @@ describe('Core', () => {
         const expectedState = { a: 2 };
 
         const manager = createStateManager(state);
-        manager.addUpdate(() => expectedState);
+        manager.scheduleUpdate(() => expectedState);
         manager.commitUpdates();
         const result = manager.getNext();
 
@@ -70,13 +70,13 @@ describe('Core', () => {
       });
     });
 
-    describe('addUpdate', () => {
+    describe('scheduleUpdate', () => {
       it('stores an added update in the next state', () => {
         const state = { a: 1 };
         const newState = { a: 2 };
 
         const manager = createStateManager(state);
-        manager.addUpdate(() => newState);
+        manager.scheduleUpdate(() => newState);
         const result = manager.getNext();
 
         expect(result).toEqual(newState);
@@ -88,7 +88,7 @@ describe('Core', () => {
         const expectedState = { ...state, ...updatePart };
 
         const manager = createStateManager(state);
-        manager.addUpdate(() => updatePart);
+        manager.scheduleUpdate(() => updatePart);
         manager.commitUpdates();
         const result = manager.getCurrent();
 
@@ -100,7 +100,7 @@ describe('Core', () => {
         const newState = { a: 2 };
 
         const manager = createStateManager(state);
-        manager.addUpdate(() => newState);
+        manager.scheduleUpdate(() => newState);
         const result = manager.getCurrent();
 
         expect(result).toEqual(state);
@@ -113,7 +113,7 @@ describe('Core', () => {
         const newState = { a: 2 };
 
         const manager = createStateManager(state);
-        manager.addUpdate(() => newState);
+        manager.scheduleUpdate(() => newState);
         manager.commitUpdates();
         const result = manager.getCurrent();
 
@@ -127,7 +127,7 @@ describe('Core', () => {
         const newState = { a: 2 };
 
         const manager = createStateManager(state);
-        manager.addUpdate(() => newState);
+        manager.scheduleUpdate(() => newState);
         manager.rollbackUpdates();
         const result = manager.getNext();
 
@@ -139,7 +139,7 @@ describe('Core', () => {
         const newState = { a: 2 };
 
         const manager = createStateManager(state);
-        manager.addUpdate(() => newState);
+        manager.scheduleUpdate(() => newState);
         manager.rollbackUpdates();
         const result = manager.getCurrent();
 

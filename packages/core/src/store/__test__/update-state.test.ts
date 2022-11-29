@@ -6,7 +6,7 @@ jest.mock('../../middlewares');
 const stateManagerMock = {
   getCurrent: jest.fn(),
   getNext: jest.fn(),
-  addUpdate: jest.fn(),
+  scheduleUpdate: jest.fn(),
   commitUpdates: jest.fn(),
   rollbackUpdates: jest.fn(),
 };
@@ -54,7 +54,7 @@ describe('Core: Store', () => {
       updateState({}, {},
         { stateConfig: {}, stateManager: stateManagerMock });
 
-      const [updateFunc] = stateManagerMock.addUpdate.mock.calls[0];
+      const [updateFunc] = stateManagerMock.scheduleUpdate.mock.calls[0];
       expect(updateFunc()).toBe(newState);
       expect(stateManagerMock.commitUpdates).toHaveBeenCalledTimes(1);
     });
@@ -65,7 +65,7 @@ describe('Core: Store', () => {
       updateState({}, {},
         { stateConfig: {}, stateManager: stateManagerMock });
 
-      expect(stateManagerMock.addUpdate).not.toHaveBeenCalled();
+      expect(stateManagerMock.scheduleUpdate).not.toHaveBeenCalled();
       expect(stateManagerMock.commitUpdates).not.toHaveBeenCalled();
     });
   });

@@ -5,7 +5,7 @@ export type StateUpdateFunc<TState> = (state: TState) => Partial<TState>;
 export interface StateManager<TState extends ObjectType> {
   getCurrent(): TState;
   getNext(): TState,
-  addUpdate(updateFunc: StateUpdateFunc<TState>): void;
+  scheduleUpdate(updateFunc: StateUpdateFunc<TState>): void;
   commitUpdates(): void;
   rollbackUpdates(): void;
 }
@@ -20,7 +20,7 @@ export function createStateManager<TState extends ObjectType>(
 
   const getNext = () => nextState;
 
-  const addUpdate = (
+  const scheduleUpdate = (
     updateFunc: (state: TState) => Partial<TState>,
   ): void => {
     nextState = {
@@ -40,7 +40,7 @@ export function createStateManager<TState extends ObjectType>(
   return {
     getCurrent,
     getNext,
-    addUpdate,
+    scheduleUpdate,
     commitUpdates,
     rollbackUpdates,
   };

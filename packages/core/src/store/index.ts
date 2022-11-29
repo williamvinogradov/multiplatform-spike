@@ -18,7 +18,7 @@ export enum UpdateSource {
 export interface Store<TState extends ObjectType> {
   getState(): Readonly<TState>;
   subscribe: SubscribeFunc<TState>;
-  addUpdate(updateFunc: StateUpdateFunc<TState>): void;
+  scheduleUpdate(updateFunc: StateUpdateFunc<TState>): void;
   commitUpdates(source?: UpdateSource): void;
   rollbackUpdates(): void;
 }
@@ -74,7 +74,7 @@ export function createStore<TState extends ObjectType>(
   return {
     getState: stateManager.getCurrent,
     subscribe,
-    addUpdate: stateManager.addUpdate,
+    scheduleUpdate: stateManager.scheduleUpdate,
     commitUpdates,
     rollbackUpdates: stateManager.rollbackUpdates,
   };

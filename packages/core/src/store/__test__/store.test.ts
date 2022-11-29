@@ -12,7 +12,7 @@ jest.mock('../update-state');
 const stateManagerMock = {
   getCurrent: jest.fn(),
   getNext: jest.fn(),
-  addUpdate: jest.fn(),
+  scheduleUpdate: jest.fn(),
   commitUpdates: jest.fn(),
   rollbackUpdates: jest.fn(),
 };
@@ -176,11 +176,11 @@ describe('Core: Store', () => {
     });
   });
 
-  describe('addUpdate', () => {
+  describe('scheduleUpdate', () => {
     it('is state method', () => {
       const store = createStore({}, {});
 
-      expect(store.addUpdate).toBe(stateManagerMock.addUpdate);
+      expect(store.scheduleUpdate).toBe(stateManagerMock.scheduleUpdate);
     });
   });
 
