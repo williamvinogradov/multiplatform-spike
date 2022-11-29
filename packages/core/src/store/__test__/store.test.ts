@@ -1,5 +1,5 @@
 import { createStateManager } from '../../state-manager';
-import { createObservableEmitter, pipe } from '../../utils';
+import { createObservableEmitter } from '../../utils';
 import { executeCallbacks } from '../execute-callbacks';
 import { updateState } from '../update-state';
 import { createStore, UpdateSource } from '../index';
@@ -22,14 +22,12 @@ const validatorMock = jest.fn();
 
 const createStateManagerMock = jest.mocked(createStateManager);
 const createObservableMock = jest.mocked(createObservableEmitter);
-const pipeMock = jest.mocked(pipe);
 const callCallbacksMock = jest.mocked(executeCallbacks);
 const changeStateMock = jest.mocked(updateState);
 
 describe('Core: Store', () => {
   beforeEach(() => {
     createStateManagerMock.mockReturnValue(stateManagerMock);
-    pipeMock.mockReturnValue(validatorMock);
     createObservableMock
       .mockReturnValue({ emit: emitMock, subscribe: subscribeMock, getValue: jest.fn() });
   });
@@ -46,7 +44,7 @@ describe('Core: Store', () => {
       const currentState = {};
       stateManagerMock.getCurrent.mockReturnValue(currentState);
 
-      const store = createStore({}, {});
+      const store = createStore({}, {}, validatorMock);
       store.commitUpdates(UpdateSource.props);
 
       expect(validatorMock).toHaveBeenCalledWith(currentState);
@@ -58,7 +56,7 @@ describe('Core: Store', () => {
       stateManagerMock.getCurrent.mockReturnValue(currentState);
       validatorMock.mockReturnValue(validatedState);
 
-      const store = createStore({}, {});
+      const store = createStore({}, {}, validatorMock);
       store.commitUpdates(UpdateSource.props);
 
       expect(changeStateMock).toHaveBeenCalledWith(currentState, validatedState, expect.anything());
@@ -85,7 +83,7 @@ describe('Core: Store', () => {
       stateManagerMock.getCurrent.mockReturnValue(currentState);
       validatorMock.mockReturnValue(validatedState);
 
-      const store = createStore({}, {});
+      const store = createStore({}, {}, validatorMock);
       store.commitUpdates(UpdateSource.props);
 
       expect(callCallbacksMock)
@@ -98,7 +96,7 @@ describe('Core: Store', () => {
       const nextState = {};
       stateManagerMock.getNext.mockReturnValue(nextState);
 
-      const store = createStore({}, {});
+      const store = createStore({}, {}, validatorMock);
       store.commitUpdates();
 
       expect(validatorMock).toHaveBeenCalledWith(nextState);
@@ -110,7 +108,7 @@ describe('Core: Store', () => {
       stateManagerMock.getCurrent.mockReturnValue(currentState);
       validatorMock.mockReturnValue(validatedState);
 
-      const store = createStore({}, {});
+      const store = createStore({}, {}, validatorMock);
       store.commitUpdates();
 
       expect(changeStateMock).toHaveBeenCalledWith(currentState, validatedState, expect.anything());
@@ -144,7 +142,7 @@ describe('Core: Store', () => {
       stateManagerMock.getCurrent.mockReturnValue(currentState);
       validatorMock.mockReturnValue(validatedState);
 
-      const store = createStore({}, {});
+      const store = createStore({}, {}, validatorMock);
       store.commitUpdates();
 
       expect(callCallbacksMock)

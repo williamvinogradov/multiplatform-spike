@@ -1,12 +1,12 @@
-import { updateValueAction } from '../actions';
+import { createUpdateValueAction } from '../actions';
 
 describe('RadioGroup', () => {
   describe('Actions', () => {
-    describe('updateValueAction', () => {
+    describe('createUpdateValueAction', () => {
       it('returns function that returns the passed value', () => {
         const expectedValue = { a: 1 };
 
-        const updateFunc = updateValueAction(expectedValue);
+        const updateFunc = createUpdateValueAction(expectedValue);
         const result = updateFunc({});
 
         expect(result).toEqual({ value: expectedValue });

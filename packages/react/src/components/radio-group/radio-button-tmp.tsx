@@ -1,5 +1,5 @@
 /* eslint-disable react/destructuring-assignment */
-import { createRadioButtonSelector, updateValueAction } from '@devexpress/components';
+import { createRadioButtonVMSelector, createUpdateValueAction } from '@devexpress/components';
 import { RadioGroupState } from '@devexpress/components/dist/radio-group/state';
 import { Store } from '@devexpress/core';
 import React, { memo, useCallback } from 'react';
@@ -13,12 +13,12 @@ function RadioButtonTmpInternal<T>(props: RadioButtonPropsTmp<T>) {
 
   const viewModel = useSelector(
     store,
-    createRadioButtonSelector(props.value),
+    createRadioButtonVMSelector(props.value),
     [props.value],
   );
 
   const selectOption = useCallback(() => {
-    store.addUpdate(updateValueAction(props.value));
+    store.addUpdate(createUpdateValueAction(props.value));
     store.commitUpdates();
   }, [props.value]);
 

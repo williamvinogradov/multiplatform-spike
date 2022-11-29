@@ -5,7 +5,7 @@ export type RadioButtonVM = {
   selected: boolean;
 };
 
-export function createRadioButtonSelector<T>(
+export function createRadioButtonVMSelector<T>(
   value: T,
 ): Selector<RadioGroupState<T>, RadioButtonVM> {
   return (state) => ({

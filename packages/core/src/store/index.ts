@@ -3,12 +3,12 @@ import { createStateManager, StateUpdateFunc } from '../state-manager';
 import {
   createObservableEmitter,
   ObjectType,
-  pipe,
-  PipeFunc,
   SubscribeFunc,
 } from '../utils';
 import { executeCallbacks } from './execute-callbacks';
 import { updateState } from './update-state';
+
+const DEFAULT_VALIDATOR = <TState>(state: TState) => state;
 
 export enum UpdateSource {
   props = 'props',
@@ -26,11 +26,10 @@ export interface Store<TState extends ObjectType> {
 export function createStore<TState extends ObjectType>(
   state: TState,
   stateConfig: StateConfigMap<TState>,
-  validation: PipeFunc<TState>[] = [],
+  validator: (state:TState) => TState = DEFAULT_VALIDATOR,
 ): Store<TState> {
   const stateManager = createStateManager(state);
   const { emit, subscribe } = createObservableEmitter<TState>(state);
-  const validator = pipe(...validation);
 
   const commitUpdatesFromProps = (): void => {
     stateManager.commitUpdates();
