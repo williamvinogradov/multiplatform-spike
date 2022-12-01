@@ -2,7 +2,7 @@ import { StateConfigMap } from './middlewares';
 import { Handlers } from './reducer';
 import { createState } from './state';
 import {
-  Disposable, UnknownRecord, PipeFunc, AnyRecord,
+  AnyRecord, Disposable, PipeFunc, UnknownRecord,
 } from './utils';
 import { createStateManager, Dispatcher, StateManager } from './state-manager';
 import { createViewModelManager, ViewModelManager } from './view-model-manager';
@@ -11,11 +11,11 @@ export type Core<
   TState extends UnknownRecord,
   THandlers extends Handlers<TState>,
   TViewModels extends Record<PropertyKey, UnknownRecord>,
-  > = [
+  > = {
     stateManager: StateManager<TState>,
     viewModelManager: Disposable<ViewModelManager<TState, TViewModels>>,
     dispatcher: Dispatcher<TState, THandlers>,
-  ];
+  };
 
 export function createCore<TViewModels extends AnyRecord>() {
   return <
@@ -36,10 +36,10 @@ export function createCore<TViewModels extends AnyRecord>() {
     );
     const viewModelManager = createViewModelManager<TState, TViewModels>(state);
 
-    return [
+    return {
       stateManager,
       viewModelManager,
       dispatcher,
-    ];
+    };
   };
 }
