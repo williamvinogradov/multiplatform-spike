@@ -2,8 +2,8 @@
 import {
   createCore,
   Selector,
-  Handlers,
   StateConfigMap,
+  Handlers,
   StateManager,
   ViewModelManager,
   Dispatcher,
