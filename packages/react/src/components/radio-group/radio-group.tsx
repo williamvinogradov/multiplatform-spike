@@ -8,7 +8,7 @@ import { Props } from '../../internal/props';
 import { RadioGroupContext } from './radio-group-context';
 
 function RadioGroupInternal<T>(props: RadioGroupProps<T>) {
-  const controlledMode = useMemo(() => props.value !== undefined, []);
+  const controlledMode = useMemo(() => Object.hasOwnProperty.call(props, 'value'), []);
   const valueChange = useCallbackRef(props.valueChange);
 
   const [stateManager, viewModelManager, dispatcher] = useMemo(() => createRadioGroupCore<T>({

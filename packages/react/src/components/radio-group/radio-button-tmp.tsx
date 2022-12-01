@@ -4,12 +4,12 @@ import {
   RadioGroupCore,
 } from '@devexpress/components';
 import React, { memo, useCallback } from 'react';
-import { useCoreState, useCoreContext } from '../../internal/hooks';
+import { useCoreState, useCore } from '../../internal/hooks';
 import { RadioGroupContext } from './radio-group-context';
 
 // NOTE: It's a temporary component for the RadioGroup development
 function RadioButtonTmpInternal<T>(props: RadioButtonPropsTmp<T>) {
-  const [stateManager,, dispatcher] = useCoreContext<RadioGroupCore<T>>(RadioGroupContext);
+  const [stateManager,, dispatcher] = useCore<RadioGroupCore<T>>(RadioGroupContext);
   const state = useCoreState(stateManager);
 
   const selectOption = useCallback(() => {
