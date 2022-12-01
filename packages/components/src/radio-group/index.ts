@@ -1,3 +1,4 @@
+/* eslint-disable import/exports-last */
 import {
   createCore,
   Selector,
@@ -24,11 +25,12 @@ export type TemplateProps = {};
 export type RadioGroupState<T> = ValueProps<T>;
 
 // === actions ===
+
 export enum Actions {
   updateValue = 'updateValue',
 }
 
-export function updateValueHandler<T>(
+function updateValueHandler<T>(
   stateValue: RadioGroupState<T>,
   { value } : { value: T },
 ): Partial<RadioGroupState<T>> {
@@ -38,7 +40,7 @@ export function updateValueHandler<T>(
   };
 }
 
-export function createActionHandlers<T>(): Handlers<RadioGroupState<T>> {
+function createActionHandlers<T>(): Handlers<RadioGroupState<T>> {
   return {
     [Actions.updateValue]: updateValueHandler,
   };
@@ -65,12 +67,11 @@ export type RadioGroupViewModelManager<T> =
   Disposable<ViewModelManager<RadioGroupState<T>, {}>>;
 export type RadioGroupDispatcher<T> =
   Dispatcher<RadioGroupState<T>, Handlers<RadioGroupState<T>>>;
-export type RadioGroupCore<T> =
-  [
-    stateManager: RadioGroupStateManager<T>,
-    viewModelManager: RadioGroupViewModelManager<T>,
-    dispatcher: RadioGroupDispatcher<T>,
-  ];
+export type RadioGroupCore<T> = {
+  stateManager: RadioGroupStateManager<T>,
+  viewModelManager: RadioGroupViewModelManager<T>,
+  dispatcher: RadioGroupDispatcher<T>,
+};
 
 export function createRadioGroupCore<T>(
   initialState: RadioGroupState<T>,

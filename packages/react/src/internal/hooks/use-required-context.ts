@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 
-export function useCore<T>(
+export function useRequiredContext<T>(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   coreContext: React.Context<any | null>,
 ) {

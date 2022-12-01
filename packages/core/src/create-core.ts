@@ -11,11 +11,11 @@ export type CreateCoreResult<
   TState extends ObjectType,
   THandlers extends Handlers<TState>,
   TViewModels extends Record<PropertyKey, ObjectType>,
-  > = [
+  > = {
     stateManager: StateManager<TState>,
     viewModelManager: Disposable<ViewModelManager<TState, TViewModels>>,
     dispatcher: Dispatcher<TState, THandlers>,
-  ];
+  };
 
 export function createCore<TViewModels extends ObjectType>() {
   return <
@@ -36,10 +36,10 @@ export function createCore<TViewModels extends ObjectType>() {
     );
     const viewModelManager = createViewModelManager<TState, TViewModels>(state);
 
-    return [
+    return {
       stateManager,
       viewModelManager,
       dispatcher,
-    ];
+    };
   };
 }

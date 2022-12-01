@@ -11,7 +11,7 @@ function RadioGroupInternal<T>(props: RadioGroupProps<T>) {
   const controlledMode = useMemo(() => Object.hasOwnProperty.call(props, 'value'), []);
   const valueChange = useCallbackRef(props.valueChange);
 
-  const [stateManager, viewModelManager, dispatcher] = useMemo(() => createRadioGroupCore<T>({
+  const { stateManager, viewModelManager, dispatcher } = useMemo(() => createRadioGroupCore<T>({
     value: controlledMode ? props.value : props.defaultValue,
   }, {
     value: {
@@ -29,7 +29,7 @@ function RadioGroupInternal<T>(props: RadioGroupProps<T>) {
   }, [props.value]);
 
   return (
-    <RadioGroupContext.Provider value={[stateManager, viewModelManager, dispatcher]}>
+    <RadioGroupContext.Provider value={{ stateManager, viewModelManager, dispatcher }}>
       <div>
         {props.children}
       </div>
