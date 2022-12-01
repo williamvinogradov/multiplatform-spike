@@ -16,7 +16,7 @@ function RadioButtonTmpInternal<T>(props: RadioButtonPropsTmp<T>) {
     dispatcher.dispatch(Actions.updateValue, { value: props.value });
   }, [props.value]);
 
-  const checked = state.value === props.value;
+  const checked = state?.value === props.value;
   return (
     // eslint-disable-next-line
     <div

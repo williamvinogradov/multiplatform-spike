@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { RadioGroup, RadioButtonTmp } from '@devexpress/react';
+import { RadioGroup, RadioButton } from '@devexpress/react';
 
 type OptionType = { prop: number };
 const OPTIONS = [
@@ -27,7 +27,7 @@ export function RadioGroupControlledExample() {
           value={value}
           valueChange={handleChange}
         >
-          { OPTIONS.map((option) => <RadioButtonTmp key={option.prop} value={option} />)}
+          { OPTIONS.map((option) => <RadioButton key={option.prop} value={option.prop} />)}
         </RadioGroup>
       </div>
       <div className="example__info">
