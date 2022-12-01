@@ -2,13 +2,15 @@ import { callbacksMiddleware, controlledModeMiddleware, StateConfigMap } from '.
 import { createReducer, Handlers } from './reducer';
 import { State } from './state';
 import {
-  ObjectType, pipe, PipeFunc,
+  ObjectType, pipe, PipeFunc, SubscribeFunc,
 } from './utils';
 
 export interface StateManager<TState extends ObjectType> {
-  addUpdate: (statePart: Partial<TState>) => void;
-  commitUpdates: () => void;
-  rollbackUpdates: () => void;
+  getState(): TState;
+  subscribe: SubscribeFunc<TState>;
+  addUpdate(statePart: Partial<TState>): void;
+  commitUpdates(): void;
+  rollbackUpdates(): void;
 }
 
 export interface Dispatcher<
@@ -72,6 +74,8 @@ export function createStateManager<
     pendingCallbacks.forEach((callback) => callback());
   };
 
+  const getState = () => state.getCurrent();
+
   const commitUpdates = () => {
     state.commitUpdates();
 
@@ -105,6 +109,8 @@ export function createStateManager<
   };
 
   return [{
+    getState,
+    subscribe: state.subscribeForRender,
     addUpdate: state.addUpdate,
     commitUpdates,
     rollbackUpdates: state.rollbackUpdates,

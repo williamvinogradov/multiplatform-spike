@@ -116,6 +116,13 @@ describe('StateManager', () => {
         stateMock.triggerRender.mockReset();
       });
     });
+
+    it('returns the actual state value', () => {
+      const [manager] = createStateManager(stateMock, {}, {});
+      manager.getState();
+
+      expect(stateMock.getCurrent).toHaveBeenCalledTimes(1);
+    });
   });
 
   describe('addUpdate', () => {

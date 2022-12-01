@@ -49,7 +49,7 @@ function getDtsConfig(outputDir) {
   };
 }
 
-export function getRollupConfig(components, outputPath) {
+export function getRollupConfig(outputPath) {
   return [
     getJsConfig(outputPath),
     getDtsConfig(outputPath),
