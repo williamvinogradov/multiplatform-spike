@@ -2,10 +2,10 @@ import { callbacksMiddleware, controlledModeMiddleware, StateConfigMap } from '.
 import { createReducer, Handlers } from './reducer';
 import { State } from './state';
 import {
-  ObjectType, pipe, PipeFunc, SubscribeFunc,
+  pipe, PipeFunc, SubscribeFunc, UnknownRecord,
 } from './utils';
 
-export interface StateManager<TState extends ObjectType> {
+export interface StateManager<TState extends UnknownRecord> {
   getState(): TState;
   subscribe: SubscribeFunc<TState>;
   addUpdate(statePart: Partial<TState>): void;
@@ -14,7 +14,7 @@ export interface StateManager<TState extends ObjectType> {
 }
 
 export interface Dispatcher<
-  TState extends ObjectType,
+  TState extends UnknownRecord,
   THandlers extends Handlers<TState>,
   > {
   dispatch: <TAction extends keyof THandlers>(
@@ -24,7 +24,7 @@ export interface Dispatcher<
 }
 
 export type StateStoreTuple<
-  TState extends ObjectType,
+  TState extends UnknownRecord,
   THandlers extends Handlers<TState>,
   > = [
   stateManager: StateManager<TState>,
@@ -32,7 +32,7 @@ export type StateStoreTuple<
   ];
 
 export function createStateManager<
-  TState extends ObjectType,
+  TState extends UnknownRecord,
   THandlers extends Handlers<TState>,
   >(
   state: State<TState>,
