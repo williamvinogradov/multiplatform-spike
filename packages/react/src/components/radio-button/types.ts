@@ -1,4 +1,5 @@
 import { ComponentType, ReactElement } from 'react';
+import { RadioGroupValue } from '../radio-group';
 
 export type LabelType = string | ReactElement;
 
@@ -11,7 +12,7 @@ export interface LabelTemplateProps {
 }
 
 export interface RadioButtonProps {
-  value: string | number;
+  value: RadioGroupValue;
   name?: string;
   checked?: boolean;
   label?: LabelType;
