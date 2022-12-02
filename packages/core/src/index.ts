@@ -14,6 +14,7 @@ export type {
 
 export type {
   Selector,
+  ViewModelValue,
 } from './view-model';
 
 export type {
@@ -23,5 +24,7 @@ export type {
 export {
   createCore,
 } from './create-core';
-
+export {
+  createViewModelValue,
+} from './view-model';
 export * from './utils';

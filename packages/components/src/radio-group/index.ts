@@ -1,13 +1,14 @@
 /* eslint-disable import/exports-last */
 import {
   createCore,
-  Selector,
   StateConfigMap,
   Handlers,
   StateManager,
   ViewModelManager,
   Dispatcher,
   Disposable,
+  ViewModelValue,
+  createViewModelValue,
 } from '@devexpress/core';
 
 // === props ===
@@ -47,16 +48,13 @@ function createActionHandlers<T>(): Handlers<RadioGroupState<T>> {
 }
 
 // === selectors ===
-export type RadioButtonVM = {
-  selected: boolean;
-};
+interface RadioButtonViewMode {
+  checked: boolean;
+}
 
-export function createRadioButtonVMSelector<T>(
-  value: T,
-): Selector<RadioGroupState<T>, RadioButtonVM> {
-  return (state) => ({
-    selected: state.value === value,
-  });
+function radioValueSelector<T>(state: RadioGroupState<T>):
+(radioButtonValue: T) => RadioButtonViewMode {
+  return (radioButtonValue: T) => ({ checked: state.value === radioButtonValue });
 }
 
 // === component ===
@@ -68,14 +66,25 @@ export type RadioGroupViewModelManager<T> =
 export type RadioGroupDispatcher<T> =
   Dispatcher<RadioGroupState<T>, Handlers<RadioGroupState<T>>>;
 export type RadioGroupCore<T> = {
-  stateManager: RadioGroupStateManager<T>,
-  viewModelManager: RadioGroupViewModelManager<T>,
+  stateManager: RadioGroupStateManager<T>;
+  radioButtonViewModel: ViewModelValue<(radioButtonValue: T) => RadioButtonViewMode>;
   dispatcher: RadioGroupDispatcher<T>,
 };
 
 export function createRadioGroupCore<T>(
   initialState: RadioGroupState<T>,
-  config: StateConfigMap<RadioGroupState<T>>,
+  stateConfig: StateConfigMap<RadioGroupState<T>>,
 ): RadioGroupCore<T> {
-  return createCore()(initialState, config, createActionHandlers<T>());
+  const { stateManager, dispatcher } = createCore()(initialState,
+    stateConfig,
+    createActionHandlers<T>());
+  const radioButtonViewModel = createViewModelValue(
+    stateManager.getState(), stateManager.subscribe, radioValueSelector,
+  );
+
+  return {
+    stateManager,
+    radioButtonViewModel,
+    dispatcher,
+  };
 }
