@@ -1,5 +1,5 @@
 import React, {
-  useId, forwardRef, useContext, useCallback,
+  useId, forwardRef, useContext,
 } from 'react';
 import { Actions } from '@devexpress/components';
 import {
@@ -35,20 +35,16 @@ export const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
     const { stateManager, dispatcher } = useContext(RadioGroupContext) || {};
     const stateFromContext = useCoreState(stateManager);
 
-    const handleOnChange = useCallback(
-      (e: React.ChangeEvent) => {
-        dispatcher?.dispatch(Actions.updateValue, {
-          value,
-        });
-
-        onChange?.(e);
-      },
-      [dispatcher, onChange, value],
-    );
-
     const inputId = useId();
 
-    const checked = checkedProp !== undefined ? checkedProp : stateFromContext?.value === value;
+    const handleOnChange = dispatcher ? () => {
+      dispatcher.dispatch(Actions.updateValue, {
+        value,
+      });
+      return true;
+    } : onChange;
+
+    const checked = stateFromContext ? stateFromContext.value === value : checkedProp;
     const RadioComponent = radioTemplate || DefaultRadioTemplate;
     const LabelComponent = labelTemplate || DefaultLabelTemplate;
 
