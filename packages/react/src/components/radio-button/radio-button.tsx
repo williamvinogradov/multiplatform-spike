@@ -10,6 +10,15 @@ import {
 import { RadioGroupContext } from '../radio-group/radio-group-context';
 import { useCoreState } from '../../internal/hooks';
 
+function useOptionalRadioGroupContext() {
+  const { stateManager, dispatcher } = useContext(RadioGroupContext) || {};
+  const state = useCoreState(stateManager);
+  if (state && dispatcher) {
+    return { state, dispatcher };
+  }
+  return undefined;
+}
+
 const DefaultRadioTemplate = ({ checked = false }: RadioTemplateProps) => (
   <span>{checked ? '◉' : '◎'}</span>
 );
@@ -32,19 +41,18 @@ export const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
     },
     inputRef,
   ) => {
-    const { stateManager, dispatcher } = useContext(RadioGroupContext) || {};
-    const stateFromContext = useCoreState(stateManager);
+    const radioGroupContext = useOptionalRadioGroupContext();
 
     const inputId = useId();
 
-    const handleOnChange = dispatcher ? () => {
-      dispatcher.dispatch(Actions.updateValue, {
+    const handleOnChange = radioGroupContext ? () => {
+      radioGroupContext.dispatcher.dispatch(Actions.updateValue, {
         value,
       });
       return true;
     } : onChange;
 
-    const checked = stateFromContext ? stateFromContext.value === value : checkedProp;
+    const checked = radioGroupContext ? radioGroupContext.state.value === value : checkedProp;
     const RadioComponent = radioTemplate || DefaultRadioTemplate;
     const LabelComponent = labelTemplate || DefaultLabelTemplate;
 
