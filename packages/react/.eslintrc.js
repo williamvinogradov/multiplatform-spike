@@ -3,6 +3,12 @@ module.exports = {
   extends: [
     '../../.eslintrc.js',
   ],
+  plugins: [
+    'react-hooks',
+  ],
+  rules: {
+    'react-hooks/rules-of-hooks': 'error',
+  },
   parserOptions: {
     createDefaultProgram: true,
     project: './tsconfig.json',
