@@ -11,10 +11,10 @@ import { RadioGroupContext } from '../radio-group/radio-group-context';
 import { useCoreState } from '../../internal/hooks';
 
 function useOptionalRadioGroupContext() {
-  const { stateManager, dispatcher } = useContext(RadioGroupContext) || {};
-  const state = useCoreState(stateManager);
-  if (state && dispatcher) {
-    return { state, dispatcher };
+  const radioGroupContext = useContext(RadioGroupContext);
+  const state = useCoreState(radioGroupContext?.stateManager);
+  if (radioGroupContext && state) {
+    return { state, dispatcher: radioGroupContext.dispatcher };
   }
   return undefined;
 }
