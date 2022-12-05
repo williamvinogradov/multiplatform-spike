@@ -43,7 +43,6 @@ export function RadioButtonExample() {
           <RadioButton
             value="uncontrolled 1"
             label="uncontrolled 1"
-            onChange={(e) => console.log(e)}
             name="uncontrolled"
             defaultChecked
           />
@@ -51,7 +50,6 @@ export function RadioButtonExample() {
             value="uncontrolled 2"
             label="uncontrolled 2"
             name="uncontrolled"
-            onChange={(e) => console.log(e)}
           />
         </div>
       </div>
