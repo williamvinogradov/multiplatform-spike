@@ -1,4 +1,10 @@
-import React, { useId, forwardRef, useContext } from 'react';
+import React, {
+  useId,
+  forwardRef,
+  useContext,
+  useState,
+  ChangeEventHandler,
+} from 'react';
 import { Actions } from '@devexpress/components';
 import {
   RadioButtonProps,
@@ -18,10 +24,11 @@ const DefaultLabelTemplate = ({ label }: LabelTemplateProps) => (
   <span>{label}</span>
 );
 
-const renderRadioButton = ({
+const RadioButtonInternal = ({
   name,
   value,
   checked,
+  defaultChecked,
   onClick,
   onChange,
   label,
@@ -30,8 +37,20 @@ const renderRadioButton = ({
   inputId,
   inputRef,
 }: RadioButtonRenderProps) => {
+  const [internalChecked, setInternalChecked] = useState(defaultChecked);
+
   const RadioComponent = radioTemplate || DefaultRadioTemplate;
   const LabelComponent = labelTemplate || DefaultLabelTemplate;
+
+  const isUncontrolled = checked === undefined;
+
+  const handleChange: ChangeEventHandler<HTMLInputElement> | undefined = isUncontrolled
+    ? (e) => {
+      setInternalChecked(e.target.checked);
+      onChange?.(e);
+      return true;
+    }
+    : onChange;
 
   return (
     <span>
@@ -47,10 +66,11 @@ const renderRadioButton = ({
           type="radio"
           value={value}
           checked={checked}
+          defaultChecked={defaultChecked}
           onClick={onClick}
-          onChange={onChange}
+          onChange={handleChange}
         />
-        <RadioComponent checked={checked} />
+        <RadioComponent checked={isUncontrolled ? internalChecked : checked} />
         {label && <LabelComponent label={label} />}
       </label>
     </span>
@@ -59,18 +79,38 @@ const renderRadioButton = ({
 
 const CoreBoundRadioButton = ({
   radioGroupCore: { dispatcher, stateManager },
-  ...restProps
+  name,
+  value,
+  onClick,
+  label,
+  radioTemplate,
+  labelTemplate,
+  inputId,
+  inputRef,
 }: CoreBoundRadioButtonProps) => {
   const coreState = useCoreState(stateManager);
 
-  const checked = coreState.value === restProps.value;
+  const checked = coreState.value === value;
   const handleOnChange = () => {
     dispatcher.dispatch(Actions.updateValue, {
-      value: restProps.value,
+      value,
     });
     return true;
   };
-  return renderRadioButton({ ...restProps, checked, onChange: handleOnChange });
+  return (
+    <RadioButtonInternal
+      inputId={inputId}
+      inputRef={inputRef}
+      name={name}
+      value={value}
+      label={label}
+      radioTemplate={radioTemplate}
+      labelTemplate={labelTemplate}
+      checked={checked}
+      onClick={onClick}
+      onChange={handleOnChange}
+    />
+  );
 };
 
 export const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
@@ -91,11 +131,24 @@ export const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
             radioTemplate={props.radioTemplate}
             labelTemplate={props.labelTemplate}
             checked={props.checked}
+            defaultChecked={props.defaultChecked}
             onClick={props.onClick}
             onChange={props.onChange}
           />
         ) : (
-          renderRadioButton({ inputId, inputRef, ...props })
+          <RadioButtonInternal
+            inputId={inputId}
+            inputRef={inputRef}
+            name={props.name}
+            value={props.value}
+            label={props.label}
+            radioTemplate={props.radioTemplate}
+            labelTemplate={props.labelTemplate}
+            checked={props.checked}
+            defaultChecked={props.defaultChecked}
+            onClick={props.onClick}
+            onChange={props.onChange}
+          />
         )}
       </>
     );

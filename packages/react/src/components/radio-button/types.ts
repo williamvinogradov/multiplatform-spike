@@ -16,6 +16,7 @@ export interface RadioButtonProps {
   value: RadioGroupValue;
   name?: string;
   checked?: boolean;
+  defaultChecked?: boolean;
   label?: LabelType;
   radioTemplate?: ComponentType<RadioTemplateProps>;
   labelTemplate?: ComponentType<LabelTemplateProps>;
