@@ -1,23 +1,14 @@
-import React, {
-  useId, forwardRef, useContext,
-} from 'react';
+import React, { useId, forwardRef, useContext } from 'react';
 import { Actions } from '@devexpress/components';
 import {
   RadioButtonProps,
   LabelTemplateProps,
   RadioTemplateProps,
+  RadioButtonRenderProps,
+  CoreBoundRadioButtonProps,
 } from './types';
 import { RadioGroupContext } from '../radio-group/radio-group-context';
 import { useCoreState } from '../../internal/hooks';
-
-function useOptionalRadioGroupContext() {
-  const radioGroupContext = useContext(RadioGroupContext);
-  const state = useCoreState(radioGroupContext?.stateManager);
-  if (radioGroupContext && state) {
-    return { state, dispatcher: radioGroupContext.dispatcher };
-  }
-  return undefined;
-}
 
 const DefaultRadioTemplate = ({ checked = false }: RadioTemplateProps) => (
   <span>{checked ? '◉' : '◎'}</span>
@@ -27,56 +18,86 @@ const DefaultLabelTemplate = ({ label }: LabelTemplateProps) => (
   <span>{label}</span>
 );
 
-export const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
-  (
-    {
-      name,
-      value,
-      checked: checkedProp,
-      onClick,
-      onChange,
-      label,
-      radioTemplate,
-      labelTemplate,
-    },
-    inputRef,
-  ) => {
-    const radioGroupContext = useOptionalRadioGroupContext();
+const renderRadioButton = ({
+  name,
+  value,
+  checked,
+  onClick,
+  onChange,
+  label,
+  radioTemplate,
+  labelTemplate,
+  inputId,
+  inputRef,
+}: RadioButtonRenderProps) => {
+  const RadioComponent = radioTemplate || DefaultRadioTemplate;
+  const LabelComponent = labelTemplate || DefaultLabelTemplate;
 
+  return (
+    <span>
+      <label
+        htmlFor={inputId}
+        style={{ cursor: 'pointer', userSelect: 'none' }}
+      >
+        <input
+          ref={inputRef}
+          id={inputId}
+          name={name}
+          style={{ display: 'none' }}
+          type="radio"
+          value={value}
+          checked={checked}
+          onClick={onClick}
+          onChange={onChange}
+        />
+        <RadioComponent checked={checked} />
+        {label && <LabelComponent label={label} />}
+      </label>
+    </span>
+  );
+};
+
+const CoreBoundRadioButton = ({
+  radioGroupCore: { dispatcher, stateManager },
+  ...restProps
+}: CoreBoundRadioButtonProps) => {
+  const coreState = useCoreState(stateManager);
+
+  const checked = coreState.value === restProps.value;
+  const handleOnChange = () => {
+    dispatcher.dispatch(Actions.updateValue, {
+      value: restProps.value,
+    });
+    return true;
+  };
+  return renderRadioButton({ ...restProps, checked, onChange: handleOnChange });
+};
+
+export const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
+  (props, inputRef) => {
+    const radioGroupCore = useContext(RadioGroupContext);
     const inputId = useId();
 
-    const handleOnChange = radioGroupContext ? () => {
-      radioGroupContext.dispatcher.dispatch(Actions.updateValue, {
-        value,
-      });
-      return true;
-    } : onChange;
-
-    const checked = radioGroupContext ? radioGroupContext.state.value === value : checkedProp;
-    const RadioComponent = radioTemplate || DefaultRadioTemplate;
-    const LabelComponent = labelTemplate || DefaultLabelTemplate;
-
     return (
-      <span>
-        <label
-          htmlFor={inputId}
-          style={{ cursor: 'pointer', userSelect: 'none' }}
-        >
-          <input
-            ref={inputRef}
-            id={inputId}
-            name={name}
-            style={{ display: 'none' }}
-            type="radio"
-            value={value}
-            checked={checked}
-            onClick={onClick}
-            onChange={handleOnChange}
+      <>
+        {radioGroupCore ? (
+          <CoreBoundRadioButton
+            radioGroupCore={radioGroupCore}
+            inputId={inputId}
+            inputRef={inputRef}
+            name={props.name}
+            value={props.value}
+            label={props.label}
+            radioTemplate={props.radioTemplate}
+            labelTemplate={props.labelTemplate}
+            checked={props.checked}
+            onClick={props.onClick}
+            onChange={props.onChange}
           />
-          <RadioComponent checked={checked} />
-          {label && <LabelComponent label={label} />}
-        </label>
-      </span>
+        ) : (
+          renderRadioButton({ inputId, inputRef, ...props })
+        )}
+      </>
     );
   },
 );

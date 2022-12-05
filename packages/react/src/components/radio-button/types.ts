@@ -1,3 +1,4 @@
+import { RadioGroupCore } from '@devexpress/components';
 import { ComponentType, ReactElement } from 'react';
 import { RadioGroupValue } from '../radio-group';
 
@@ -20,4 +21,13 @@ export interface RadioButtonProps {
   labelTemplate?: ComponentType<LabelTemplateProps>;
   onChange?: React.ChangeEventHandler;
   onClick?: React.MouseEventHandler;
+}
+
+export interface RadioButtonRenderProps extends RadioButtonProps {
+  inputId: string;
+  inputRef: React.ForwardedRef<HTMLInputElement>;
+}
+
+export interface CoreBoundRadioButtonProps extends RadioButtonRenderProps {
+  radioGroupCore: RadioGroupCore<RadioGroupValue>;
 }
