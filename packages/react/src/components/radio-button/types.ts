@@ -32,3 +32,5 @@ export interface RadioButtonRenderProps extends RadioButtonProps {
 export interface CoreBoundRadioButtonProps extends RadioButtonRenderProps {
   radioGroupCore: RadioGroupCore<RadioGroupValue>;
 }
+
+export type RadioButtonRenderType = (props: RadioButtonRenderProps) => JSX.Element;

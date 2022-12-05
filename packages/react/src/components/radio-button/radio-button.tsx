@@ -12,6 +12,7 @@ import {
   RadioTemplateProps,
   RadioButtonRenderProps,
   CoreBoundRadioButtonProps,
+  RadioButtonRenderType,
 } from './types';
 import { RadioGroupContext } from '../radio-group/radio-group-context';
 import { useCoreState } from '../../internal/hooks';
@@ -77,41 +78,35 @@ function RadioButtonInternal({
   );
 }
 
-function CoreBoundRadioButton({
-  radioGroupCore: { dispatcher, stateManager },
-  name,
-  value,
-  onClick,
-  label,
-  radioTemplate,
-  labelTemplate,
-  inputId,
-  inputRef,
-}: CoreBoundRadioButtonProps) {
-  const coreState = useCoreState(stateManager);
+function withRadioGroup(RadioButton: RadioButtonRenderType) {
+  return ({
+    radioGroupCore: { dispatcher, stateManager },
+    value,
+    ...props
+  }: CoreBoundRadioButtonProps) => {
+    const coreState = useCoreState(stateManager);
 
-  const checked = coreState.value === value;
-  const handleOnChange = () => {
-    dispatcher.dispatch(Actions.updateValue, {
-      value,
-    });
-    return true;
+    const checked = coreState.value === value;
+    const handleOnChange = () => {
+      dispatcher.dispatch(Actions.updateValue, {
+        value,
+      });
+      return true;
+    };
+
+    return (
+      <RadioButton
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        {...props}
+        value={value}
+        checked={checked}
+        onChange={handleOnChange}
+      />
+    );
   };
-  return (
-    <RadioButtonInternal
-      inputId={inputId}
-      inputRef={inputRef}
-      name={name}
-      value={value}
-      label={label}
-      radioTemplate={radioTemplate}
-      labelTemplate={labelTemplate}
-      checked={checked}
-      onClick={onClick}
-      onChange={handleOnChange}
-    />
-  );
 }
+
+const CoreBoundRadioButton = withRadioGroup(RadioButtonInternal);
 
 export const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
   (props, inputRef) => {
@@ -125,29 +120,15 @@ export const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
             radioGroupCore={radioGroupCore}
             inputId={inputId}
             inputRef={inputRef}
-            name={props.name}
-            value={props.value}
-            label={props.label}
-            radioTemplate={props.radioTemplate}
-            labelTemplate={props.labelTemplate}
-            checked={props.checked}
-            defaultChecked={props.defaultChecked}
-            onClick={props.onClick}
-            onChange={props.onChange}
+            // eslint-disable-next-line react/jsx-props-no-spreading
+            {...props}
           />
         ) : (
           <RadioButtonInternal
             inputId={inputId}
             inputRef={inputRef}
-            name={props.name}
-            value={props.value}
-            label={props.label}
-            radioTemplate={props.radioTemplate}
-            labelTemplate={props.labelTemplate}
-            checked={props.checked}
-            defaultChecked={props.defaultChecked}
-            onClick={props.onClick}
-            onChange={props.onChange}
+            // eslint-disable-next-line react/jsx-props-no-spreading
+            {...props}
           />
         )}
       </>
