@@ -11,9 +11,7 @@ export function useCoreState<TState extends ObjectType>(
       setState(stateValue);
     });
 
-    return () => {
-      unsubscribe();
-    };
+    return unsubscribe;
   }, []);
 
   return state;
