@@ -24,7 +24,4 @@ export type {
 export {
   createCore,
 } from './create-core';
-export {
-  createViewModelValue,
-} from './view-model';
 export * from './utils';

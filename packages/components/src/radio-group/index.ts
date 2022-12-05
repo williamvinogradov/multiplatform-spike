@@ -7,8 +7,6 @@ import {
   ViewModelManager,
   Dispatcher,
   Disposable,
-  ViewModelValue,
-  createViewModelValue,
 } from '@devexpress/core';
 
 // === props ===
@@ -48,12 +46,12 @@ function createActionHandlers<T>(): Handlers<RadioGroupState<T>> {
 }
 
 // === selectors ===
-interface RadioButtonViewMode {
+interface RadioButtonViewModel {
   checked: boolean;
 }
 
 function radioValueSelector<T>(state: RadioGroupState<T>):
-(radioButtonValue: T) => RadioButtonViewMode {
+(radioButtonValue: T) => RadioButtonViewModel {
   return (radioButtonValue: T) => ({ checked: state.value === radioButtonValue });
 }
 
@@ -65,9 +63,13 @@ export type RadioGroupViewModelManager<T> =
   Disposable<ViewModelManager<RadioGroupState<T>, {}>>;
 export type RadioGroupDispatcher<T> =
   Dispatcher<RadioGroupState<T>, Handlers<RadioGroupState<T>>>;
+
+export type RadioGroupViewModel<T> = {
+  radioButtonViewModel: (radioButtonValue: T) => RadioButtonViewModel
+};
 export type RadioGroupCore<T> = {
   stateManager: RadioGroupStateManager<T>;
-  radioButtonViewModel: ViewModelValue<(radioButtonValue: T) => RadioButtonViewMode>;
+  viewModelManager: ViewModelManager<RadioGroupState<T>, RadioGroupViewModel<T>>;
   dispatcher: RadioGroupDispatcher<T>,
 };
 
@@ -75,16 +77,15 @@ export function createRadioGroupCore<T>(
   initialState: RadioGroupState<T>,
   stateConfig: StateConfigMap<RadioGroupState<T>>,
 ): RadioGroupCore<T> {
-  const { stateManager, dispatcher } = createCore()(initialState,
+  const { stateManager, dispatcher, viewModelManager } = createCore<RadioGroupViewModel<T>>()(
+    initialState,
     stateConfig,
-    createActionHandlers<T>());
-  const radioButtonViewModel = createViewModelValue(
-    stateManager.getState(), stateManager.subscribe, radioValueSelector,
+    createActionHandlers<T>(),
   );
-
+  viewModelManager.add({ radioButtonViewModel: radioValueSelector });
   return {
     stateManager,
-    radioButtonViewModel,
+    viewModelManager,
     dispatcher,
   };
 }

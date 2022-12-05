@@ -12,11 +12,13 @@ import { useViewModel } from '../../internal/hooks/use-view-model';
 // NOTE: It's a temporary component for the RadioGroup development
 function RadioButtonTmpInternal<T>(props: RadioButtonPropsTmp<T>) {
   const {
-    radioButtonViewModel,
+    viewModelManager,
     dispatcher,
   } = useRequiredContext<RadioGroupContextType<T>>(RadioGroupContext);
-
-  const isChecked = useViewModel(radioButtonViewModel);
+  const { radioButtonViewModel } = viewModelManager.get();
+  // Vitik: TODO improve typing radioButtonViewModel should be required
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const isChecked = useViewModel(radioButtonViewModel!);
   const { checked } = isChecked(props.value);
 
   const selectOption = useCallback(() => {
