@@ -16,15 +16,15 @@ import {
 import { RadioGroupContext } from '../radio-group/radio-group-context';
 import { useCoreState } from '../../internal/hooks';
 
-const DefaultRadioTemplate = ({ checked = false }: RadioTemplateProps) => (
-  <span>{checked ? '◉' : '◎'}</span>
-);
+function DefaultRadioTemplate({ checked = false }: RadioTemplateProps) {
+  return <span>{checked ? '◉' : '◎'}</span>;
+}
 
-const DefaultLabelTemplate = ({ label }: LabelTemplateProps) => (
-  <span>{label}</span>
-);
+function DefaultLabelTemplate({ label }: LabelTemplateProps) {
+  return <span>{label}</span>;
+}
 
-const RadioButtonInternal = ({
+function RadioButtonInternal({
   name,
   value,
   checked,
@@ -36,7 +36,7 @@ const RadioButtonInternal = ({
   labelTemplate,
   inputId,
   inputRef,
-}: RadioButtonRenderProps) => {
+}: RadioButtonRenderProps) {
   const [internalChecked, setInternalChecked] = useState(defaultChecked);
 
   const RadioComponent = radioTemplate || DefaultRadioTemplate;
@@ -75,9 +75,9 @@ const RadioButtonInternal = ({
       </label>
     </span>
   );
-};
+}
 
-const CoreBoundRadioButton = ({
+function CoreBoundRadioButton({
   radioGroupCore: { dispatcher, stateManager },
   name,
   value,
@@ -87,7 +87,7 @@ const CoreBoundRadioButton = ({
   labelTemplate,
   inputId,
   inputRef,
-}: CoreBoundRadioButtonProps) => {
+}: CoreBoundRadioButtonProps) {
   const coreState = useCoreState(stateManager);
 
   const checked = coreState.value === value;
@@ -111,7 +111,7 @@ const CoreBoundRadioButton = ({
       onChange={handleOnChange}
     />
   );
-};
+}
 
 export const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
   (props, inputRef) => {
