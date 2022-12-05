@@ -29,7 +29,7 @@ function RadioGroupInternal<T>(props: RadioGroupProps<T>) {
   }, [props.value]);
 
   return (
-    <RadioGroupContext.Provider value={{ stateManager, viewModelManager, dispatcher }}>
+    <RadioGroupContext.Provider value={{ viewModelManager, dispatcher }}>
       <div>
         {props.children}
       </div>
