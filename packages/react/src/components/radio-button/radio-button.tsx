@@ -4,6 +4,7 @@ import React, {
   useContext,
   useState,
   ChangeEventHandler,
+  ComponentType,
 } from 'react';
 import { Actions } from '@devexpress/components';
 import {
@@ -37,21 +38,10 @@ function RadioButtonInternal({
   labelTemplate,
   inputId,
   inputRef,
+  renderRadioComponent,
 }: RadioButtonRenderProps) {
-  const [internalChecked, setInternalChecked] = useState(defaultChecked);
-
   const RadioComponent = radioTemplate || DefaultRadioTemplate;
   const LabelComponent = labelTemplate || DefaultLabelTemplate;
-
-  const isUncontrolled = checked === undefined;
-
-  const handleChange: ChangeEventHandler<HTMLInputElement> | undefined = isUncontrolled
-    ? (e) => {
-      setInternalChecked(e.target.checked);
-      onChange?.(e);
-      return true;
-    }
-    : onChange;
 
   return (
     <span>
@@ -69,13 +59,39 @@ function RadioButtonInternal({
           checked={checked}
           defaultChecked={defaultChecked}
           onClick={onClick}
-          onChange={handleChange}
+          onChange={onChange}
         />
-        <RadioComponent checked={isUncontrolled ? internalChecked : checked} />
+        {renderRadioComponent ? (
+          renderRadioComponent(RadioComponent)
+        ) : (
+          <RadioComponent checked={checked} />
+        )}
         {label && <LabelComponent label={label} />}
       </label>
     </span>
   );
+}
+
+function withUncontrolledBehavior(RadioButton: RadioButtonRenderType) {
+  return ({ defaultChecked, ...props }: RadioButtonRenderProps) => {
+    const [internalChecked, setInternalChecked] = useState(defaultChecked);
+    const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+      setInternalChecked(e.target.checked);
+      props.onChange?.(e);
+      return true;
+    };
+    const renderRadioComponent = (
+      RadioComponent: ComponentType<RadioTemplateProps>,
+    ) => <RadioComponent checked={internalChecked} />;
+    return (
+      <RadioButton
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        {...props}
+        onChange={handleChange}
+        renderRadioComponent={renderRadioComponent}
+      />
+    );
+  };
 }
 
 function withRadioGroup(RadioButton: RadioButtonRenderType) {
@@ -87,7 +103,7 @@ function withRadioGroup(RadioButton: RadioButtonRenderType) {
     const coreState = useCoreState(stateManager);
 
     const checked = coreState.value === value;
-    const handleOnChange = () => {
+    const handleChange = () => {
       dispatcher.dispatch(Actions.updateValue, {
         value,
       });
@@ -100,18 +116,23 @@ function withRadioGroup(RadioButton: RadioButtonRenderType) {
         {...props}
         value={value}
         checked={checked}
-        onChange={handleOnChange}
+        onChange={handleChange}
       />
     );
   };
 }
 
 const CoreBoundRadioButton = withRadioGroup(RadioButtonInternal);
+const UncontrolledRadioButton = withUncontrolledBehavior(RadioButtonInternal);
 
 export const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
   (props, inputRef) => {
     const radioGroupCore = useContext(RadioGroupContext);
     const inputId = useId();
+
+    const RadioButtonComponent = props.checked === undefined
+      ? UncontrolledRadioButton
+      : RadioButtonInternal;
 
     return (
       <>
@@ -124,7 +145,7 @@ export const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
             {...props}
           />
         ) : (
-          <RadioButtonInternal
+          <RadioButtonComponent
             inputId={inputId}
             inputRef={inputRef}
             // eslint-disable-next-line react/jsx-props-no-spreading

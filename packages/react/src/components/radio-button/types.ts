@@ -27,6 +27,7 @@ export interface RadioButtonProps {
 export interface RadioButtonRenderProps extends RadioButtonProps {
   inputId: string;
   inputRef: React.ForwardedRef<HTMLInputElement>;
+  renderRadioComponent?: (radioComponent: ComponentType<RadioTemplateProps>) => JSX.Element
 }
 
 export interface CoreBoundRadioButtonProps extends RadioButtonRenderProps {
