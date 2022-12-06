@@ -1,6 +1,5 @@
 /* eslint-disable react/destructuring-assignment */
 import {
-  Actions,
   RadioGroupCore,
 } from '@devexpress/components';
 import React, { memo, useCallback } from 'react';
@@ -13,7 +12,7 @@ function RadioButtonTmpInternal<T>(props: RadioButtonPropsTmp<T>) {
   const state = useCoreState(stateManager);
 
   const selectOption = useCallback(() => {
-    dispatcher.dispatch(Actions.updateValue, { value: props.value });
+    dispatcher.dispatch('updateValue', { value: props.value });
   }, [props.value]);
 
   const checked = state.value === props.value;
