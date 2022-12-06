@@ -74,10 +74,11 @@ function RadioButtonInternal({
 function withUncontrolledBehavior(RadioButton: RadioButtonRenderType) {
   return ({ defaultChecked, ...props }: RadioButtonRenderProps) => {
     const [internalChecked, setInternalChecked] = useState(defaultChecked || false);
-    const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-      setInternalChecked(e.target.checked);
-      props.onChange?.(e);
-      return true;
+    const handleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+      setInternalChecked(event.target.checked);
+      event.preventDefault();
+      event.stopPropagation();
+      props.onChange?.(event);
     };
     const renderRadioComponent = (
       RadioComponent: ComponentType<RadioTemplateProps>,
