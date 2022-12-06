@@ -103,11 +103,12 @@ function withRadioGroup(RadioButton: RadioButtonRenderType) {
     const coreState = useCoreState(stateManager);
 
     const checked = coreState.value === value;
-    const handleChange = () => {
+    const handleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
       dispatcher.dispatch('updateValue', {
         value,
       });
-      return true;
     };
 
     return (
