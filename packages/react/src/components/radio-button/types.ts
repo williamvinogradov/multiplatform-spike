@@ -5,7 +5,7 @@ import { RadioGroupValue } from '../radio-group';
 export type LabelType = string | ReactElement;
 
 export interface RadioTemplateProps {
-  checked?: boolean;
+  checked: boolean;
 }
 
 export interface LabelTemplateProps {

@@ -64,7 +64,7 @@ function RadioButtonInternal({
         {renderRadioComponent ? (
           renderRadioComponent(RadioComponent)
         ) : (
-          <RadioComponent checked={checked} />
+          <RadioComponent checked={checked || false} />
         )}
         {label && <LabelComponent label={label} />}
       </label>
@@ -74,7 +74,7 @@ function RadioButtonInternal({
 
 function withUncontrolledBehavior(RadioButton: RadioButtonRenderType) {
   return ({ defaultChecked, ...props }: RadioButtonRenderProps) => {
-    const [internalChecked, setInternalChecked] = useState(defaultChecked);
+    const [internalChecked, setInternalChecked] = useState(defaultChecked || false);
     const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
       setInternalChecked(e.target.checked);
       props.onChange?.(e);
