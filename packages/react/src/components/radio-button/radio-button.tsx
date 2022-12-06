@@ -6,7 +6,6 @@ import React, {
   ChangeEventHandler,
   ComponentType,
 } from 'react';
-import { Actions } from '@devexpress/components';
 import {
   RadioButtonProps,
   LabelTemplateProps,
@@ -104,7 +103,7 @@ function withRadioGroup(RadioButton: RadioButtonRenderType) {
 
     const checked = coreState.value === value;
     const handleChange = () => {
-      dispatcher.dispatch(Actions.updateValue, {
+      dispatcher.dispatch('updateValue', {
         value,
       });
       return true;
